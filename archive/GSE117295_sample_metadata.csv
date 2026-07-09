@@ -1,0 +1,14 @@
+GSM,HM_HypoMap_label,HM_Species,HM_Technology,HM_Cells_or_nuclei,HM_Region,HM_Sex,HM_Age,HM_Condition,Title,Source_name,Description,age,sampling enviroment,strain,tissue,SRA,BioSample
+GSM3290582,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT14,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403360,SAMN09688207
+GSM3290583,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT18,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403361,SAMN09688220
+GSM3290584,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT22,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403362,SAMN09688219
+GSM3290585,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT26,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403363,SAMN09688218
+GSM3290586,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT30,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403364,SAMN09688217
+GSM3290587,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT34,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403365,SAMN09688216
+GSM3290588,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT38,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403366,SAMN09688215
+GSM3290589,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT42,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403367,SAMN09688214
+GSM3290590,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT46,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403368,SAMN09688213
+GSM3290591,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT50,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403369,SAMN09688212
+GSM3290592,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT54,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403370,SAMN09688211
+GSM3290593,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,CT58,suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX4403371,SAMN09688210
+GSM3290594,wenDropseq,Mus musculus,Drop-seq,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark followed 1hour light stimulate,flash,suprachiasmatic nucleus,,8 weeks,constant dark followed 1hour light stimulate,C57BL/6,suprachiasmatic nucleus,SRX4403372,SAMN09688209

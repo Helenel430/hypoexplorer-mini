@@ -1,0 +1,41 @@
+GSE132608 — Per-Sample Metadata (all 1 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132608&targ=gsm&form=text&view=quick
+Total samples: 1
+Fields shown verbatim from GEO.
+
+============================================================
+[1/1] GSM3880020
+============================================================
+Title: SCN, YJ-3_S1
+Source name: suprachiasmatic nucleus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6
+  - age: 8 weeks
+  - sampling enviroment: constant dark
+  - tissue: suprachiasmatic nucleus
+Extract protocol:
+  - Mice were sacrificed by acute cervical dislocation. Mice heads were chilled in the ice-cold dissection buffer for 10 seconds immediately. Brains were dissected out from the chilled head rapidly. The SCN region were microdissected in ice-cold dissection buffer by microsurgery forceps and knives according to the mice brain atlas .
+  - cDNA libraries were prepared according to 10X geomics V2 chemistry
+  - 10X geomics single cell trascriptome V2 chemistry
+Data processing:
+  - *I1_001.fastq.gz: contains the 8 nt sample index.
+  - *R1_001.fastq.gz: contains the cell barcode (first 16 nt) and UMI (next 10 nt)
+  - *R2_001.fastq.gz: contains the 98  nt RNA sequence.
+  - basecalling and mapping were done with Cellranger V3.
+  - sequenced reads were tagged with cell barcodes and molecular barcodes and aligned to GRCm38 whole genome with  with cellranger V3
+  - The DGEs were filtered into STAMPs DGEs (single-cell transcriptomes attached to microparticles) by  dropbead (R package)
+  - the digital gene expression matrix were generated with cellranger V3
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: barcodes.tsv, features.tsv, matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN12039425
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX6050379
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3880nnn/GSM3880020/suppl/GSM3880020_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3880nnn/GSM3880020/suppl/GSM3880020_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3880nnn/GSM3880020/suppl/GSM3880020_matrix.mtx.gz
+

@@ -1,0 +1,75 @@
+GSE125065 — Per-Sample Metadata (all 2 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE125065&targ=gsm&form=text&view=quick
+Total samples: 2
+Fields shown verbatim from GEO.
+
+============================================================
+[1/2] GSM3562050
+============================================================
+Title: LHA male
+Source name: lateral hypothalamic area
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: lateral hypothalamic area
+  - Sex: male
+  - strain: C57BL/6
+  - animal numbers: 3
+  - age: P30
+Description: freshly disscted mouse tissue, all 5 animals in study were littermates
+Extract protocol:
+  - tissue collection protocol:  LHA were microdissected from 225 μm thick brain slices, 3 to 4 slices per animal.
+  - cell dissociation protocol: Cells from slices were triturated with a series of small bore fire-polished glass Pasteur pipettes in a volume of 400-600 µL trypsin inhibitor/BSA sucrose dissociation solution. Single cell suspensions were passed through 60 μm nylon mesh filters to remove any cell aggregates, and kept on ice until loaded onto the Chromium system.
+  - Chromium System (10XGenomics) v2 chemistry
+Data processing:
+  - Fastqs were generated using 10X Genomics CellRanger mkfastq (version 1.3.0)
+  - R1 = 16bp cell barcode + 10bp UMI barcode.
+  - R2 = biological
+  - Digital expression matrices were generated using 10X Genomics CellRanger count (version 2.2.0) against the 10X Genomics mm10 reference build (version 2.1.0, GRCm38.84).
+  - Genome_build: GRCm38.84
+  - Supplementary_files_format_and_content: Counts matrices in Matrix Market CSR format.  Rows correspond to genes in the order provided in genes.tsv and columns correspond to cell-barcodes in the order provided in barcodes.tsv
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10741814
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5248794
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3562nnn/GSM3562050/suppl/GSM3562050_AJ17001_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3562nnn/GSM3562050/suppl/GSM3562050_AJ17001_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3562nnn/GSM3562050/suppl/GSM3562050_AJ17001_matrix.mtx.gz
+
+============================================================
+[2/2] GSM3562051
+============================================================
+Title: LHA female
+Source name: lateral hypothalamic area
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: lateral hypothalamic area
+  - Sex: female
+  - strain: C57BL/6
+  - animal numbers: 2
+  - age: P30
+Description: freshly disscted mouse tissue, all 5 animals in study were littermates
+Extract protocol:
+  - tissue collection protocol:  LHA were microdissected from 225 μm thick brain slices, 3 to 4 slices per animal.
+  - cell dissociation protocol: Cells from slices were triturated with a series of small bore fire-polished glass Pasteur pipettes in a volume of 400-600 µL trypsin inhibitor/BSA sucrose dissociation solution. Single cell suspensions were passed through 60 μm nylon mesh filters to remove any cell aggregates, and kept on ice until loaded onto the Chromium system.
+  - Chromium System (10XGenomics) v2 chemistry
+Data processing:
+  - Fastqs were generated using 10X Genomics CellRanger mkfastq (version 1.3.0)
+  - R1 = 16bp cell barcode + 10bp UMI barcode.
+  - R2 = biological
+  - Digital expression matrices were generated using 10X Genomics CellRanger count (version 2.2.0) against the 10X Genomics mm10 reference build (version 2.1.0, GRCm38.84).
+  - Genome_build: GRCm38.84
+  - Supplementary_files_format_and_content: Counts matrices in Matrix Market CSR format.  Rows correspond to genes in the order provided in genes.tsv and columns correspond to cell-barcodes in the order provided in barcodes.tsv
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10741813
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5248795
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3562nnn/GSM3562051/suppl/GSM3562051_AJ17002_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3562nnn/GSM3562051/suppl/GSM3562051_AJ17002_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3562nnn/GSM3562051/suppl/GSM3562051_AJ17002_matrix.mtx.gz
+

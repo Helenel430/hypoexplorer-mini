@@ -1,0 +1,2 @@
+GSM,HM_HypoMap_label,HM_Species,HM_Technology,HM_Cells_or_nuclei,HM_Region,HM_Sex,HM_Age,HM_Condition,Title,Source_name,Description,age,sampling enviroment,strain,tissue,SRA,BioSample
+GSM3880020,Wen10x,Mus musculus,10x v2,cells,Suprachiasmatic nucleus,M,8 weeks,constant dark,"SCN, YJ-3_S1",suprachiasmatic nucleus,,8 weeks,constant dark,C57BL/6,suprachiasmatic nucleus,SRX6050379,SAMN12039425

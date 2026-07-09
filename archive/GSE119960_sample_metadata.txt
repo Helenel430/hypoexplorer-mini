@@ -1,0 +1,205 @@
+GSE119960 — Per-Sample Metadata (all 6 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE119960&targ=gsm&form=text&view=quick
+Total samples: 6
+Fields shown verbatim from GEO.
+
+============================================================
+[1/6] GSM3389510
+============================================================
+Title: Mouse hypothalamus WT1 (Drop-Seq)
+Source name: Mus musculus hypothalamus WT, 8 weeks
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - genotype: WT
+  - tissue: hypothalamus
+  - age: 8 weeks
+  - barcode position: Bases 1 to 12 on R1
+  - umi position: Bases 13 to 20 on R1
+Description: Sample 1
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+  - Mouse hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation. Libraries were prepared following the latest drop-seq protcol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.
+  - Read 2 was aligned with Star v2.5.0c.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital gene expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.
+  - Samples 1-6 -- prepared from both WT and IDOL KO mouse hypothalami on multiple separate days -- were merged together into a single matrix. Merged DGE file from all 6 samples generated. Entries contain raw UMI counts.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital gene expression matrices (genes x cells). Compressed, flat text files with tab delimiters.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10059869
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX4680248
+Supplementary files:
+  - NONE
+
+============================================================
+[2/6] GSM3389511
+============================================================
+Title: Mouse hypothalamus WT2 (Drop-Seq)
+Source name: Mus musculus hypothalamus WT, 8 weeks
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - genotype: WT
+  - tissue: hypothalamus
+  - age: 8 weeks
+  - barcode position: Bases 1 to 12 on R1
+  - umi position: Bases 13 to 20 on R1
+Description: Sample 2
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+  - Mouse hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation. Libraries were prepared following the latest drop-seq protcol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.
+  - Read 2 was aligned with Star v2.5.0c.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital gene expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.
+  - Samples 1-6 -- prepared from both WT and IDOL KO mouse hypothalami on multiple separate days -- were merged together into a single matrix. Merged DGE file from all 6 samples generated. Entries contain raw UMI counts.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital gene expression matrices (genes x cells). Compressed, flat text files with tab delimiters.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10059874
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX4680249
+Supplementary files:
+  - NONE
+
+============================================================
+[3/6] GSM3389512
+============================================================
+Title: Mouse hypothalamus WT3 (Drop-Seq)
+Source name: Mus musculus hypothalamus WT, 8 weeks
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - genotype: WT
+  - tissue: hypothalamus
+  - age: 8 weeks
+  - barcode position: Bases 1 to 12 on R1
+  - umi position: Bases 13 to 20 on R1
+Description: Sample 3
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+  - Mouse hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation. Libraries were prepared following the latest drop-seq protcol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.
+  - Read 2 was aligned with Star v2.5.0c.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital gene expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.
+  - Samples 1-6 -- prepared from both WT and IDOL KO mouse hypothalami on multiple separate days -- were merged together into a single matrix. Merged DGE file from all 6 samples generated. Entries contain raw UMI counts.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital gene expression matrices (genes x cells). Compressed, flat text files with tab delimiters.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10059873
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX4680250
+Supplementary files:
+  - NONE
+
+============================================================
+[4/6] GSM3389513
+============================================================
+Title: Mouse hypothalamus KO1 (Drop-Seq)
+Source name: Mus musculus hypothalamus KO, 8 weeks
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - genotype: IDOL KO
+  - tissue: hypothalamus
+  - age: 8 weeks
+  - barcode position: Bases 1 to 12 on R1
+  - umi position: Bases 13 to 20 on R1
+Description: Sample 4
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+  - Mouse hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation. Libraries were prepared following the latest drop-seq protcol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.
+  - Read 2 was aligned with Star v2.5.0c.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital gene expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.
+  - Samples 1-6 -- prepared from both WT and IDOL KO mouse hypothalami on multiple separate days -- were merged together into a single matrix. Merged DGE file from all 6 samples generated. Entries contain raw UMI counts.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital gene expression matrices (genes x cells). Compressed, flat text files with tab delimiters.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10059872
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX4680251
+Supplementary files:
+  - NONE
+
+============================================================
+[5/6] GSM3389514
+============================================================
+Title: Mouse hypothalamus KO2 (Drop-Seq)
+Source name: Mus musculus hypothalamus KO, 8 weeks
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - genotype: IDOL KO
+  - tissue: hypothalamus
+  - age: 8 weeks
+  - barcode position: Bases 1 to 12 on R1
+  - umi position: Bases 13 to 20 on R1
+Description: Sample 5
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+  - Mouse hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation. Libraries were prepared following the latest drop-seq protcol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.
+  - Read 2 was aligned with Star v2.5.0c.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital gene expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.
+  - Samples 1-6 -- prepared from both WT and IDOL KO mouse hypothalami on multiple separate days -- were merged together into a single matrix. Merged DGE file from all 6 samples generated. Entries contain raw UMI counts.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital gene expression matrices (genes x cells). Compressed, flat text files with tab delimiters.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10059871
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX4680252
+Supplementary files:
+  - NONE
+
+============================================================
+[6/6] GSM3389515
+============================================================
+Title: Mouse hypothalamus KO3 (Drop-Seq)
+Source name: Mus musculus hypothalamus KO, 8 weeks
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - genotype: IDOL KO
+  - tissue: hypothalamus
+  - age: 8 weeks
+  - barcode position: Bases 1 to 12 on R1
+  - umi position: Bases 13 to 20 on R1
+Description: Sample 6
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+  - Mouse hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation. Libraries were prepared following the latest drop-seq protcol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.
+  - Read 2 was aligned with Star v2.5.0c.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital gene expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.
+  - Samples 1-6 -- prepared from both WT and IDOL KO mouse hypothalami on multiple separate days -- were merged together into a single matrix. Merged DGE file from all 6 samples generated. Entries contain raw UMI counts.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital gene expression matrices (genes x cells). Compressed, flat text files with tab delimiters.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN10059870
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX4680253
+Supplementary files:
+  - NONE
+

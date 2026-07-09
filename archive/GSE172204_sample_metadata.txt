@@ -1,0 +1,237 @@
+GSE172204 — Per-Sample Metadata (all 10 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE172204&targ=gsm&form=text&view=quick
+Total samples: 10
+Fields shown verbatim from GEO.
+
+============================================================
+[1/10] GSM5243949
+============================================================
+Title: Sample_A
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Sample_FVMN1
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754362
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614822
+Supplementary files:
+  - NONE
+
+============================================================
+[2/10] GSM5243950
+============================================================
+Title: Sample_B
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Run_2550_premrna
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754361
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614823
+Supplementary files:
+  - NONE
+
+============================================================
+[3/10] GSM5243951
+============================================================
+Title: Sample_C
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Run_2519_premrna
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754360
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614824
+Supplementary files:
+  - NONE
+
+============================================================
+[4/10] GSM5243952
+============================================================
+Title: Sample_D
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: 12172018
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754359
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614825
+Supplementary files:
+  - NONE
+
+============================================================
+[5/10] GSM5243953
+============================================================
+Title: Sample_E
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: 12182018nuc
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754358
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614816
+Supplementary files:
+  - NONE
+
+============================================================
+[6/10] GSM5243954
+============================================================
+Title: Sample_F
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: 12192018
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754357
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614817
+Supplementary files:
+  - NONE
+
+============================================================
+[7/10] GSM5243955
+============================================================
+Title: Sample_G
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Sample_127261
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754356
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614818
+Supplementary files:
+  - NONE
+
+============================================================
+[8/10] GSM5243956
+============================================================
+Title: Sample_H
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Sample_127262
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754355
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614819
+Supplementary files:
+  - NONE
+
+============================================================
+[9/10] GSM5243957
+============================================================
+Title: Sample_I
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Sample_C541
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754354
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614820
+Supplementary files:
+  - NONE
+
+============================================================
+[10/10] GSM5243958
+============================================================
+Title: Sample_J
+Source name: Ventromedial hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventromedial hypothalamus
+Description: Sample_C542
+Extract protocol:
+  - Mice were euthanized, the VMH was dissected, nuclei were isolated, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18754353
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10614821
+Supplementary files:
+  - NONE
+

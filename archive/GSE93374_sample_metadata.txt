@@ -1,0 +1,436 @@
+GSE93374 — Per-Sample Metadata (all 11 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE93374&targ=gsm&form=text&view=quick
+Total samples: 11
+Fields shown verbatim from GEO.
+
+============================================================
+[1/11] GSM2452122
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib Chow_1
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 34
+  - number of mice pooled: 7
+  - experimental condition: Ad lib fed chow diet
+  - batch: Batch 1
+Description: Arc1 | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215610
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481508
+Supplementary files:
+  - NONE
+
+============================================================
+[2/11] GSM2452123
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib Chow_2
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 28
+  - number of mice pooled: 7
+  - experimental condition: Ad lib fed chow diet
+  - batch: Batch 2
+Description: Arc2 | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215614
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481509
+Supplementary files:
+  - NONE
+
+============================================================
+[3/11] GSM2452124
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib Chow_3
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 30
+  - number of mice pooled: 7
+  - experimental condition: Ad lib fed chow diet
+  - batch: Batch 3
+Description: Arc3 | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215613
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481510
+Supplementary files:
+  - NONE
+
+============================================================
+[4/11] GSM2452125
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib 10% low fat diet_1
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 47
+  - number of mice pooled: 3
+  - experimental condition: Ad lib fed 10% Low fat diet
+  - batch: Batch 4
+Description: Chow10 | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215612
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481511
+Supplementary files:
+  - NONE
+
+============================================================
+[5/11] GSM2452126
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib 60% high fat diet fed_1
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 47
+  - number of mice pooled: 4
+  - experimental condition: Ad lib fed 60% High fat diet
+  - batch: Batch 4
+Description: HFD | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215611
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481512
+Supplementary files:
+  - NONE
+
+============================================================
+[6/11] GSM2452127
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_24 hour fast_1
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M and F
+  - average age: 64
+  - number of mice pooled: 8 ( 4 male, 4 female)
+  - experimental condition: 24 hour fast
+  - batch: Batch 5
+Description: Fasted | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215620
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481513
+Supplementary files:
+  - NONE
+
+============================================================
+[7/11] GSM2452128
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_24 hour fast_refed_1
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M and F
+  - average age: 75
+  - number of mice pooled: 7 (4 male, 3 female)
+  - experimental condition: 24 hour fast + 2 hour refeeding
+  - batch: Batch 5
+Description: Refed | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215619
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481514
+Supplementary files:
+  - NONE
+
+============================================================
+[8/11] GSM2452129
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib Chow_4
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 59
+  - number of mice pooled: 2
+  - experimental condition: Ad lib fed chow diet
+  - batch: Batch 6
+Description: M_Fed | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215618
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481515
+Supplementary files:
+  - NONE
+
+============================================================
+[9/11] GSM2452130
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_24 hour fast_2
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: M
+  - average age: 59
+  - number of mice pooled: 3
+  - experimental condition: 24 hour fast
+  - batch: Batch 6
+Description: M_Fasted | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215617
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481516
+Supplementary files:
+  - NONE
+
+============================================================
+[10/11] GSM2452131
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_ad lib Chow_5
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: F
+  - average age: 59
+  - number of mice pooled: 2
+  - experimental condition: Ad lib fed chow diet
+  - batch: Batch 6
+Description: F_Fed | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215616
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481517
+Supplementary files:
+  - NONE
+
+============================================================
+[11/11] GSM2452132
+============================================================
+Title: Drop-Seq analysis of Pooled Arc-ME single-cell suspension_24 hour fast_3
+Source name: Arcuate Nucleus/Median Eminence
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL6/J
+  - tissue: Arcuate-Median Eminence
+  - Sex: F
+  - average age: 59
+  - number of mice pooled: 3
+  - experimental condition: 24 hour fast
+  - batch: Batch 6
+Description: F_Fasted | Cell Barcodes are in read 1, gene sequence in read 2,
+Extract protocol:
+  - Single-cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.
+Data processing:
+  - Base calls performed with bcl2fastq2.15.0.4
+  - Read 2 was aligned with Star v2.4.0.
+  - Each aligned read was tagged with its mate-pair UMI and cell barcode.
+  - Each aligned exonic read was tagged with a gene name.
+  - A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes. The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample.
+  - Cells expressing >800 genes from Samples 1-11 were merged together into a single matrix. Merged DGE file from all 11 samples generated. log(1+10,000*(DGE normalized to total transcripts per cell)) calculated on DGE. This is the Merged_all_020816_DGE.txt.gz file containing 21,421 cell barcodes
+  - Genes showing expression in <50 cells were removed and batch effect correction was performed using the removeBatchEffect function of edgeR
+  - Data was Natural log transformed and cells were clustered using Seurat software (PCA followed by t-SNE and density clustering)
+  - Cell clusters containing markers for more than one other cluster were considered doublets and were removed. Remaining cells are presented in manuscript  and contained in Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt file
+  - Genome_build: Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: Digital expression matrices. Compressed, flat text files with tab delimiters.
+  - Supplementary_files_format_and_content: Merged_all_020816_DGE.txt: Digital Gene Expression Matrix of raw data
+  - Supplementary_files_format_and_content: Merged_all_020816_BatchCorrected_LNtransformed_doubletsremoved_Data.txt: Digital Gene Expression Matrix, Batch corrected,natural log transformed, cell doublets removed
+  - Supplementary_files_format_and_content: cell_metadata.txt: Metadata for individual cells based on final cluster assignments
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN06215615
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2481518
+Supplementary files:
+  - NONE
+

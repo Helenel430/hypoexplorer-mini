@@ -1,0 +1,11 @@
+GSM,HM_HypoMap_label,HM_Species,HM_Technology,HM_Cells_or_nuclei,HM_Region,HM_Sex,HM_Age,HM_Condition,Title,Source_name,Description,tissue,SRA,BioSample
+GSM5243949,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_A,Ventromedial hypothalamus,Sample_FVMN1,Ventromedial hypothalamus,SRX10614822,SAMN18754362
+GSM5243950,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_B,Ventromedial hypothalamus,Run_2550_premrna,Ventromedial hypothalamus,SRX10614823,SAMN18754361
+GSM5243951,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_C,Ventromedial hypothalamus,Run_2519_premrna,Ventromedial hypothalamus,SRX10614824,SAMN18754360
+GSM5243952,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_D,Ventromedial hypothalamus,12172018,Ventromedial hypothalamus,SRX10614825,SAMN18754359
+GSM5243953,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_E,Ventromedial hypothalamus,12182018nuc,Ventromedial hypothalamus,SRX10614816,SAMN18754358
+GSM5243954,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_F,Ventromedial hypothalamus,12192018,Ventromedial hypothalamus,SRX10614817,SAMN18754357
+GSM5243955,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_G,Ventromedial hypothalamus,Sample_127261,Ventromedial hypothalamus,SRX10614818,SAMN18754356
+GSM5243956,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_H,Ventromedial hypothalamus,Sample_127262,Ventromedial hypothalamus,SRX10614819,SAMN18754355
+GSM5243957,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_I,Ventromedial hypothalamus,Sample_C541,Ventromedial hypothalamus,SRX10614820,SAMN18754354
+GSM5243958,Affinati10x,Mus musculus,10x v3,nuclei,Ventromedial hypothalamus,M & F,adult (6+ wk),normal chow,Sample_J,Ventromedial hypothalamus,Sample_C542,Ventromedial hypothalamus,SRX10614821,SAMN18754353

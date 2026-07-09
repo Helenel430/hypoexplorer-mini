@@ -1,0 +1,127 @@
+GSE146692 — Per-Sample Metadata (all 4 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE146692&targ=gsm&form=text&view=quick
+Total samples: 4
+Fields shown verbatim from GEO.
+
+============================================================
+[1/4] GSM4404135
+============================================================
+Title: Male 1
+Source name: Ventroposterior hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventroposterior hypothalamus
+  - Sex: male
+  - age: P30-35
+  - strain: C57BL/6
+  - 10x chemistry: v2
+  - harvest: 1
+Extract protocol:
+  - Suspensions of dissociated cells were washed and suspended in PBS containing 0.04% BSA, and each suspension was processed as follows.  Cells were counted on Countess II automated cell counter (ThermoFisher), and 12,000 cells were loaded for capture onto an individual lane of a Chromium Controller (10X Genomics). Single cell capture, barcoding and library preparation were performed using the 10X Chromium platform according to the manufacturer’s protocol (#CG00052) using version 2 (V2) chemistry for the first set of male and female samples and version 3 (V3) chemistry for the second set. cDNA and libraries were checked for quality on Agilent 4200 Tapestation, quantified by KAPA qPCR.
+Data processing:
+  - FASTQ files for 10X V2 samples were generated and demultiplexed using Illumina bcl2fastq 2.18.0.12, and V3 samples were processed with bcl2fastq 2.20.0.422.
+  - In V2 samples, R1 (26p) corresponds to a 16bp cell barcode + 10bp UMI barcode and R2 (98bp) contains the biological read.  For V3 samples, R1 (28bp) contains a 16bp cell barcode + 12bp UMI barcode, and R2 is only 91bp.
+  - A filtered digital gene expression matrix was generated for each gene expression library against the 10X Genomics mm10 reference build (version 3.0.0, GRCm38.93) using 10X Genomics Cellranger count version 3.0.2
+  - Genome_build: GRCm38.93
+  - Supplementary_files_format_and_content: Counts matrices are in Matrix Market CSR format and gzipped.  Rows correspond to genes in the associated features.tsv.gz and columns correspond to cell-barcodes in associated barcodes.tsv.gz
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN14341538
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX7884272
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404135/suppl/GSM4404135_AJ18003_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404135/suppl/GSM4404135_AJ18003_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404135/suppl/GSM4404135_AJ18003_matrix.mtx.gz
+
+============================================================
+[2/4] GSM4404136
+============================================================
+Title: Female 1
+Source name: Ventroposterior hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventroposterior hypothalamus
+  - Sex: female
+  - age: P30-35
+  - strain: C57BL/6
+  - 10x chemistry: v2
+  - harvest: 1
+Extract protocol:
+  - Suspensions of dissociated cells were washed and suspended in PBS containing 0.04% BSA, and each suspension was processed as follows.  Cells were counted on Countess II automated cell counter (ThermoFisher), and 12,000 cells were loaded for capture onto an individual lane of a Chromium Controller (10X Genomics). Single cell capture, barcoding and library preparation were performed using the 10X Chromium platform according to the manufacturer’s protocol (#CG00052) using version 2 (V2) chemistry for the first set of male and female samples and version 3 (V3) chemistry for the second set. cDNA and libraries were checked for quality on Agilent 4200 Tapestation, quantified by KAPA qPCR.
+Data processing:
+  - FASTQ files for 10X V2 samples were generated and demultiplexed using Illumina bcl2fastq 2.18.0.12, and V3 samples were processed with bcl2fastq 2.20.0.422.
+  - In V2 samples, R1 (26p) corresponds to a 16bp cell barcode + 10bp UMI barcode and R2 (98bp) contains the biological read.  For V3 samples, R1 (28bp) contains a 16bp cell barcode + 12bp UMI barcode, and R2 is only 91bp.
+  - A filtered digital gene expression matrix was generated for each gene expression library against the 10X Genomics mm10 reference build (version 3.0.0, GRCm38.93) using 10X Genomics Cellranger count version 3.0.2
+  - Genome_build: GRCm38.93
+  - Supplementary_files_format_and_content: Counts matrices are in Matrix Market CSR format and gzipped.  Rows correspond to genes in the associated features.tsv.gz and columns correspond to cell-barcodes in associated barcodes.tsv.gz
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN14341537
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX7884273
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404136/suppl/GSM4404136_AJ18004_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404136/suppl/GSM4404136_AJ18004_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404136/suppl/GSM4404136_AJ18004_matrix.mtx.gz
+
+============================================================
+[3/4] GSM4404137
+============================================================
+Title: Female 2
+Source name: Ventroposterior hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventroposterior hypothalamus
+  - Sex: female
+  - age: P30-35
+  - strain: C57BL/6
+  - 10x chemistry: v3
+  - harvest: 2
+Extract protocol:
+  - Suspensions of dissociated cells were washed and suspended in PBS containing 0.04% BSA, and each suspension was processed as follows.  Cells were counted on Countess II automated cell counter (ThermoFisher), and 12,000 cells were loaded for capture onto an individual lane of a Chromium Controller (10X Genomics). Single cell capture, barcoding and library preparation were performed using the 10X Chromium platform according to the manufacturer’s protocol (#CG00052) using version 2 (V2) chemistry for the first set of male and female samples and version 3 (V3) chemistry for the second set. cDNA and libraries were checked for quality on Agilent 4200 Tapestation, quantified by KAPA qPCR.
+Data processing:
+  - FASTQ files for 10X V2 samples were generated and demultiplexed using Illumina bcl2fastq 2.18.0.12, and V3 samples were processed with bcl2fastq 2.20.0.422.
+  - In V2 samples, R1 (26p) corresponds to a 16bp cell barcode + 10bp UMI barcode and R2 (98bp) contains the biological read.  For V3 samples, R1 (28bp) contains a 16bp cell barcode + 12bp UMI barcode, and R2 is only 91bp.
+  - A filtered digital gene expression matrix was generated for each gene expression library against the 10X Genomics mm10 reference build (version 3.0.0, GRCm38.93) using 10X Genomics Cellranger count version 3.0.2
+  - Genome_build: GRCm38.93
+  - Supplementary_files_format_and_content: Counts matrices are in Matrix Market CSR format and gzipped.  Rows correspond to genes in the associated features.tsv.gz and columns correspond to cell-barcodes in associated barcodes.tsv.gz
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN14341536
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX7884274
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404137/suppl/GSM4404137_AJ19001_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404137/suppl/GSM4404137_AJ19001_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404137/suppl/GSM4404137_AJ19001_matrix.mtx.gz
+
+============================================================
+[4/4] GSM4404138
+============================================================
+Title: Male 2
+Source name: Ventroposterior hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: Ventroposterior hypothalamus
+  - Sex: male
+  - age: P30-35
+  - strain: C57BL/6
+  - 10x chemistry: v3
+  - harvest: 2
+Extract protocol:
+  - Suspensions of dissociated cells were washed and suspended in PBS containing 0.04% BSA, and each suspension was processed as follows.  Cells were counted on Countess II automated cell counter (ThermoFisher), and 12,000 cells were loaded for capture onto an individual lane of a Chromium Controller (10X Genomics). Single cell capture, barcoding and library preparation were performed using the 10X Chromium platform according to the manufacturer’s protocol (#CG00052) using version 2 (V2) chemistry for the first set of male and female samples and version 3 (V3) chemistry for the second set. cDNA and libraries were checked for quality on Agilent 4200 Tapestation, quantified by KAPA qPCR.
+Data processing:
+  - FASTQ files for 10X V2 samples were generated and demultiplexed using Illumina bcl2fastq 2.18.0.12, and V3 samples were processed with bcl2fastq 2.20.0.422.
+  - In V2 samples, R1 (26p) corresponds to a 16bp cell barcode + 10bp UMI barcode and R2 (98bp) contains the biological read.  For V3 samples, R1 (28bp) contains a 16bp cell barcode + 12bp UMI barcode, and R2 is only 91bp.
+  - A filtered digital gene expression matrix was generated for each gene expression library against the 10X Genomics mm10 reference build (version 3.0.0, GRCm38.93) using 10X Genomics Cellranger count version 3.0.2
+  - Genome_build: GRCm38.93
+  - Supplementary_files_format_and_content: Counts matrices are in Matrix Market CSR format and gzipped.  Rows correspond to genes in the associated features.tsv.gz and columns correspond to cell-barcodes in associated barcodes.tsv.gz
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN14341535
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX7884275
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404138/suppl/GSM4404138_AJ19002_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404138/suppl/GSM4404138_AJ19002_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4404nnn/GSM4404138/suppl/GSM4404138_AJ19002_matrix.mtx.gz
+

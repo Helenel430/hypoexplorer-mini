@@ -1,0 +1,181 @@
+GSE113576 — Per-Sample Metadata (all 6 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113576&targ=gsm&form=text&view=quick
+Total samples: 6
+Fields shown verbatim from GEO.
+
+============================================================
+[1/6] GSM3109253
+============================================================
+Title: scRNAseq of cells from the preoptic region of a pool of three female mice: Replicate 1
+Source name: Preoptic region of the hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: Preoptic region of the hypothalamus
+  - Sex: female
+Description: Processed data are contained with the matrix.mtx file and correspond to all cell names that end with -1
+Extract protocol:
+  - The preoptic region of the hypothalamus was dissected from freshly prepared brains, dissociated into individual cells via protease treatement, FACS sorted to enrich live cells, and then prepared using the 10X Chromium protocols.
+  - Libraries were constructed following the instructions of the 10xGenomics Chromium platform
+Data processing:
+  - Construction of fastq files using cellranger (v2.0.0) mkfastq command
+  - Alignment of files to reference genome using cellranger (v2.0.0) count
+  - Aggregation of multiple samples using cellranger (v2.0.0) aggr
+  - Genome_build: mm10-1.2.0
+  - Supplementary_files_format_and_content: matrix.mtx contains the aggreggated counts from all samples
+  - barcodes.tsv contains the name associated with each cell for all samples. The order is the same as the order of entries in matrix.mtx
+  - genes.tsv contains the name associated with each measured gene. The order is the same as the order of entries in matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN08975395
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX3989977
+Supplementary files:
+  - NONE
+
+============================================================
+[2/6] GSM3109254
+============================================================
+Title: scRNAseq of cells from the preoptic region of a pool of three female mice: Replicate 2
+Source name: Preoptic region of the hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: Preoptic region of the hypothalamus
+  - Sex: female
+Description: Processed data are contained with the matrix.mtx file and correspond to all cell names that end with -2
+Extract protocol:
+  - The preoptic region of the hypothalamus was dissected from freshly prepared brains, dissociated into individual cells via protease treatement, FACS sorted to enrich live cells, and then prepared using the 10X Chromium protocols.
+  - Libraries were constructed following the instructions of the 10xGenomics Chromium platform
+Data processing:
+  - Construction of fastq files using cellranger (v2.0.0) mkfastq command
+  - Alignment of files to reference genome using cellranger (v2.0.0) count
+  - Aggregation of multiple samples using cellranger (v2.0.0) aggr
+  - Genome_build: mm10-1.2.0
+  - Supplementary_files_format_and_content: matrix.mtx contains the aggreggated counts from all samples
+  - barcodes.tsv contains the name associated with each cell for all samples. The order is the same as the order of entries in matrix.mtx
+  - genes.tsv contains the name associated with each measured gene. The order is the same as the order of entries in matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN08975394
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX3989978
+Supplementary files:
+  - NONE
+
+============================================================
+[3/6] GSM3109255
+============================================================
+Title: scRNAseq of cells from the preoptic region of a pool of three female mice: Replicate 3
+Source name: Preoptic region of the hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: Preoptic region of the hypothalamus
+  - Sex: female
+Description: Processed data are contained with the matrix.mtx file and correspond to all cell names that end with -3
+Extract protocol:
+  - The preoptic region of the hypothalamus was dissected from freshly prepared brains, dissociated into individual cells via protease treatement, FACS sorted to enrich live cells, and then prepared using the 10X Chromium protocols.
+  - Libraries were constructed following the instructions of the 10xGenomics Chromium platform
+Data processing:
+  - Construction of fastq files using cellranger (v2.0.0) mkfastq command
+  - Alignment of files to reference genome using cellranger (v2.0.0) count
+  - Aggregation of multiple samples using cellranger (v2.0.0) aggr
+  - Genome_build: mm10-1.2.0
+  - Supplementary_files_format_and_content: matrix.mtx contains the aggreggated counts from all samples
+  - barcodes.tsv contains the name associated with each cell for all samples. The order is the same as the order of entries in matrix.mtx
+  - genes.tsv contains the name associated with each measured gene. The order is the same as the order of entries in matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN08975393
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX3989979
+Supplementary files:
+  - NONE
+
+============================================================
+[4/6] GSM3109256
+============================================================
+Title: scRNAseq of cells from the preoptic region of a pool of three male mice: Replicate 1
+Source name: Preoptic region of the hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: Preoptic region of the hypothalamus
+  - Sex: male
+Description: Processed data are contained with the matrix.mtx file and correspond to all cell names that end with -4
+Extract protocol:
+  - The preoptic region of the hypothalamus was dissected from freshly prepared brains, dissociated into individual cells via protease treatement, FACS sorted to enrich live cells, and then prepared using the 10X Chromium protocols.
+  - Libraries were constructed following the instructions of the 10xGenomics Chromium platform
+Data processing:
+  - Construction of fastq files using cellranger (v2.0.0) mkfastq command
+  - Alignment of files to reference genome using cellranger (v2.0.0) count
+  - Aggregation of multiple samples using cellranger (v2.0.0) aggr
+  - Genome_build: mm10-1.2.0
+  - Supplementary_files_format_and_content: matrix.mtx contains the aggreggated counts from all samples
+  - barcodes.tsv contains the name associated with each cell for all samples. The order is the same as the order of entries in matrix.mtx
+  - genes.tsv contains the name associated with each measured gene. The order is the same as the order of entries in matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN08975392
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX3989980
+Supplementary files:
+  - NONE
+
+============================================================
+[5/6] GSM3109257
+============================================================
+Title: scRNAseq of cells from the preoptic region of a pool of three male mice: Replicate 2
+Source name: Preoptic region of the hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: Preoptic region of the hypothalamus
+  - Sex: male
+Description: Processed data are contained with the matrix.mtx file and correspond to all cell names that end with -5
+Extract protocol:
+  - The preoptic region of the hypothalamus was dissected from freshly prepared brains, dissociated into individual cells via protease treatement, FACS sorted to enrich live cells, and then prepared using the 10X Chromium protocols.
+  - Libraries were constructed following the instructions of the 10xGenomics Chromium platform
+Data processing:
+  - Construction of fastq files using cellranger (v2.0.0) mkfastq command
+  - Alignment of files to reference genome using cellranger (v2.0.0) count
+  - Aggregation of multiple samples using cellranger (v2.0.0) aggr
+  - Genome_build: mm10-1.2.0
+  - Supplementary_files_format_and_content: matrix.mtx contains the aggreggated counts from all samples
+  - barcodes.tsv contains the name associated with each cell for all samples. The order is the same as the order of entries in matrix.mtx
+  - genes.tsv contains the name associated with each measured gene. The order is the same as the order of entries in matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN08975391
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX3989981
+Supplementary files:
+  - NONE
+
+============================================================
+[6/6] GSM3109258
+============================================================
+Title: scRNAseq of cells from the preoptic region of a pool of three male mice: Replicate 3
+Source name: Preoptic region of the hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - tissue: brain
+  - brain region: Preoptic region of the hypothalamus
+  - Sex: male
+Description: Processed data are contained with the matrix.mtx file and correspond to all cell names that end with -6
+Extract protocol:
+  - The preoptic region of the hypothalamus was dissected from freshly prepared brains, dissociated into individual cells via protease treatement, FACS sorted to enrich live cells, and then prepared using the 10X Chromium protocols.
+  - Libraries were constructed following the instructions of the 10xGenomics Chromium platform
+Data processing:
+  - Construction of fastq files using cellranger (v2.0.0) mkfastq command
+  - Alignment of files to reference genome using cellranger (v2.0.0) count
+  - Aggregation of multiple samples using cellranger (v2.0.0) aggr
+  - Genome_build: mm10-1.2.0
+  - Supplementary_files_format_and_content: matrix.mtx contains the aggreggated counts from all samples
+  - barcodes.tsv contains the name associated with each cell for all samples. The order is the same as the order of entries in matrix.mtx
+  - genes.tsv contains the name associated with each measured gene. The order is the same as the order of entries in matrix.mtx
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN08975390
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX3989982
+Supplementary files:
+  - NONE
+

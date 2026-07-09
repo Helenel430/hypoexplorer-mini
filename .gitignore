@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Large raw GEO downloads — re-downloadable from GEO; keep local only, do not commit
+GSE172461_barcodes.tsv.gz
+GSE172461_features.tsv.gz
+GSE172461_matrix.mtx.gz
+GSE172461_metadata.csv.gz
+GSE93374_Merged_all_020816_DGE.txt.gz
+GSE93374_cell_metadata.txt.gz
+GSE207736_RAW/
+
+# Generated importer output — regenerate with:  python -m importer <dataset_id>
+processed/

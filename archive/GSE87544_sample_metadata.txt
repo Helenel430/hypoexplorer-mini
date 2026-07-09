@@ -1,0 +1,534 @@
+GSE87544 — Per-Sample Metadata (all 17 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87544&targ=gsm&form=text&view=quick
+Total samples: 17
+Fields shown verbatim from GEO.
+
+============================================================
+[1/17] GSM2333577
+============================================================
+Title: B0-normal1-#1-200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 0
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 0, mouse 1, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858629
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207329
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333577/suppl/GSM2333577_B0-normal1-_1-200cells.dge.txt.gz
+
+============================================================
+[2/17] GSM2333578
+============================================================
+Title: B0-normal2-#1-200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 0
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 0, mouse 2, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858628
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207330
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333578/suppl/GSM2333578_B0-normal2-_1-200cells.dge.txt.gz
+
+============================================================
+[3/17] GSM2333579
+============================================================
+Title: B1-FD-#1-300cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 1, mouse 1, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858627
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207331
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333579/suppl/GSM2333579_B1-FD-_1-300cells.dge.txt.gz
+
+============================================================
+[4/17] GSM2333580
+============================================================
+Title: B1-FD-#2-1600cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 1, mouse 1, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858643
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207332
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333580/suppl/GSM2333580_B1-FD-_2-1600cells.dge.txt.gz
+
+============================================================
+[5/17] GSM2333581
+============================================================
+Title: B1-FD-#3-1200cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 1, mouse 1, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858642
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207333
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333581/suppl/GSM2333581_B1-FD-_3-1200cells.dge.txt.gz
+
+============================================================
+[6/17] GSM2333582
+============================================================
+Title: B1-FD-#4-1200cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 1, mouse 1, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858641
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207334
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333582/suppl/GSM2333582_B1-FD-_4-1200cells.dge.txt.gz
+
+============================================================
+[7/17] GSM2333583
+============================================================
+Title: B1-normal-#1-1200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 1, mouse 2, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858640
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207335
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333583/suppl/GSM2333583_B1-normal-_1-1200cells.dge.txt.gz
+
+============================================================
+[8/17] GSM2333584
+============================================================
+Title: B1-normal-#2-1000cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 1, mouse 2, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858639
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207336
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333584/suppl/GSM2333584_B1-normal-_2-1000cells.dge.txt.gz
+
+============================================================
+[9/17] GSM2333585
+============================================================
+Title: B1-normal-#3-800cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 1
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 1, mouse 2, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858638
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207337
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333585/suppl/GSM2333585_B1-normal-_3-800cells.dge.txt.gz
+
+============================================================
+[10/17] GSM2333586
+============================================================
+Title: B2-normal-#1-1200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 2
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 2, mouse 1, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858637
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207338
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333586/suppl/GSM2333586_B2-normal-_1-1200cells.dge.txt.gz
+
+============================================================
+[11/17] GSM2333587
+============================================================
+Title: B2-normal-#2-1200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 2
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 2, mouse 1, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858636
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207339
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333587/suppl/GSM2333587_B2-normal-_2-1200cells.dge.txt.gz
+
+============================================================
+[12/17] GSM2333588
+============================================================
+Title: B2-FD-#1-1100cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 2
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 2, mouse 2, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858635
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207340
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333588/suppl/GSM2333588_B2-FD-_1-1100cells.dge.txt.gz
+
+============================================================
+[13/17] GSM2333589
+============================================================
+Title: B2-FD-#2-400cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 2
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 2, mouse 2, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858634
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207341
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333589/suppl/GSM2333589_B2-FD-_2-400cells.dge.txt.gz
+
+============================================================
+[14/17] GSM2333590
+============================================================
+Title: B2-FD-#3-2200cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 2
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 2
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 2, mouse 2, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858633
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207342
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333590/suppl/GSM2333590_B2-FD-_3-2200cells.dge.txt.gz
+
+============================================================
+[15/17] GSM2333591
+============================================================
+Title: B3-Normal-#1-1200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 3
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 3, mouse 1, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858632
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207343
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333591/suppl/GSM2333591_B3-Normal-_1-1200cells.dge.txt.gz
+
+============================================================
+[16/17] GSM2333592
+============================================================
+Title: B3-Normal-#2-1200cells
+Source name: normal_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 3
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: normal
+  - tissue: hypothalamus
+Description: Batch 3, mouse 1, normal
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858631
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207344
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333592/suppl/GSM2333592_B3-Normal-_2-1200cells.dge.txt.gz
+
+============================================================
+[17/17] GSM2333593
+============================================================
+Title: B4-FD-#1-2200cells
+Source name: food deprived_hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - batch no.: Batch 4
+  - strain background: B6D2F1 (C57BL6 female X DBA2 male)
+  - mouse id: mouse 1
+  - mouse status: food deprived
+  - tissue: hypothalamus
+Description: Batch 4, mouse 1, food deprived
+Extract protocol:
+  - Hypothalamus was dissected and dissociated into single-cell suspension, followed by drop-seq library preparation.
+  - Libraries were prepared following the protocol of drop-seq.
+Data processing:
+  - Reads were trimmed and aligned using the drop-seq data analysis package.
+  - Raw count for each gene was converted to TPM (transcript per million).
+  - Genome_build: mm9
+  - Supplementary_files_format_and_content: The processed txt files are tab-delimited count data for each gene of each single cell.
+  - 1443737Cells.SVM.cluster.identity.renamed.csv: Comma-separated text file documents cluster identity for each single cell.
+  - 1443737Cells.Expresssion.Matrix.log_tpm+1_.renamed.RData: Single-cell gene expression matrix in Rdata format.
+  - Merged_17samples_14437cells_count.txt: Drop-seq count for 14437 cells from 17 samples
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN05858630
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX2207345
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM2333nnn/GSM2333593/suppl/GSM2333593_B4-FD-_1-2200cells.dge.txt.gz
+

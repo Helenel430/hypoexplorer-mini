@@ -1,0 +1,3 @@
+GSM,HM_HypoMap_label,HM_Species,HM_Technology,HM_Cells_or_nuclei,HM_Region,HM_Sex,HM_Age,HM_Condition,Title,Source_name,Description,Sex,age,animal numbers,brain region,strain,tissue,SRA,BioSample
+GSM3562050,Mickelsen10x,Mus musculus,10x v2,cells,Lateral hypothalamus,male,P30,normal chow,LHA male,lateral hypothalamic area,"freshly disscted mouse tissue, all 5 animals in study were littermates",male,P30,3,lateral hypothalamic area,C57BL/6,brain,SRX5248794,SAMN10741814
+GSM3562051,Mickelsen10x,Mus musculus,10x v2,cells,Lateral hypothalamus,female,P30,normal chow,LHA female,lateral hypothalamic area,"freshly disscted mouse tissue, all 5 animals in study were littermates",female,P30,2,lateral hypothalamic area,C57BL/6,brain,SRX5248795,SAMN10741813

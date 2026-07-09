@@ -1,0 +1,40 @@
+SRP135960 — Per-Run / Per-Sample Metadata (SRA study)
+============================================================
+Study title: Single cell sequencing of the whole adult mouse brain
+Study abstract: The study aims to determine the set of transcriptional cell types that make up the mouse brain
+BioProject: PRJNA438862 | PubMed: 30089906, 30096314 (Zeisel et al. 2018, Cell)
+Source: ENA (study XML + run report + BioSample attributes)
+URLs:
+  https://www.ebi.ac.uk/ena/browser/api/xml/SRP135960
+  https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRP135960&result=read_run
+Total runs: 132 | Unique BioSamples: 132
+Embryonic? NO — all ages postnatal (p12–p60); study explicitly 'adult mouse brain'.
+Note: SRA/BioSample metadata is sparser than GEO. Region annotation is in the
+'tissue' attribute (13 Hypothalamus samples; rest are other brain regions).
+
+Tissue distribution (BioSamples):
+  - Hypothalamus: 13
+  - Medulla: 13
+  - Pons: 12
+  - Amygdala: 11
+  - Thalamus: 9
+  - MidbrainDorsal: 8
+  - MidbrainVentral: 7
+  - SC: 7
+  - OB: 5
+  - CA1: 5
+  - HC: 4
+  - Ctx1: 4
+  - StriatumDorsal: 4
+  - Ctx2: 4
+  - Ctx3: 4
+  - CB: 4
+  - StriatumVentral: 4
+  - ENS: 4
+  - SScortex: 2
+  - DentGyr: 2
+  - DRG: 2
+  - Ctx1.5: 1
+  - mES: 1
+  - Sympath: 1
+  - ventral midbrain: 1

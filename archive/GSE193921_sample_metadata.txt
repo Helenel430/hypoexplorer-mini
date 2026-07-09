@@ -1,0 +1,535 @@
+GSE193921 — Per-Sample Metadata (all 16 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE193921&targ=gsm&form=text&view=quick
+Total samples: 16
+Fields shown verbatim from GEO.
+
+============================================================
+[1/16] GSM5823664
+============================================================
+Title: VMH_F_Lac_Control_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: control
+  - tissue: brain
+Description: VMH_F_Lac_20190820
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071604
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824088
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823664/suppl/GSM5823664_VMH_F_Lac_20190820_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823664/suppl/GSM5823664_VMH_F_Lac_20190820_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823664/suppl/GSM5823664_VMH_F_Lac_20190820_matrix.mtx.gz
+
+============================================================
+[2/16] GSM5823665
+============================================================
+Title: VMH_F_Lac_Agg_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: aggressive
+  - tissue: brain
+Description: VMH_F_Lac_20190924
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071605
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824089
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823665/suppl/GSM5823665_VMH_F_Lac_20190924_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823665/suppl/GSM5823665_VMH_F_Lac_20190924_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823665/suppl/GSM5823665_VMH_F_Lac_20190924_matrix.mtx.gz
+
+============================================================
+[3/16] GSM5823666
+============================================================
+Title: VMH_F_Lac_NonAgg_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: non aggressive
+  - tissue: brain
+Description: VMH_F_Lac_20190925
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071606
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824090
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823666/suppl/GSM5823666_VMH_F_Lac_20190925_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823666/suppl/GSM5823666_VMH_F_Lac_20190925_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823666/suppl/GSM5823666_VMH_F_Lac_20190925_matrix.mtx.gz
+
+============================================================
+[4/16] GSM5823667
+============================================================
+Title: VMH_F_Lac_Control_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: control
+  - tissue: brain
+Description: VMH_F_Lac_20191126
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071607
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824091
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823667/suppl/GSM5823667_VMH_F_Lac_20191126_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823667/suppl/GSM5823667_VMH_F_Lac_20191126_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823667/suppl/GSM5823667_VMH_F_Lac_20191126_matrix.mtx.gz
+
+============================================================
+[5/16] GSM5823668
+============================================================
+Title: VMH_F_Lac_Agg_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: aggressive
+  - tissue: brain
+Description: VMH_F_Lac_20200117
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071608
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824092
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823668/suppl/GSM5823668_VMH_F_Lac_20200117_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823668/suppl/GSM5823668_VMH_F_Lac_20200117_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823668/suppl/GSM5823668_VMH_F_Lac_20200117_matrix.mtx.gz
+
+============================================================
+[6/16] GSM5823669
+============================================================
+Title: VMH_F_Lac_Agg_Rep3
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: aggressive
+  - tissue: brain
+Description: VMH_F_Lac_20200326
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071609
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824093
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823669/suppl/GSM5823669_VMH_F_Lac_20200326_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823669/suppl/GSM5823669_VMH_F_Lac_20200326_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823669/suppl/GSM5823669_VMH_F_Lac_20200326_matrix.mtx.gz
+
+============================================================
+[7/16] GSM5823670
+============================================================
+Title: VMH_F_Lac_NonAgg_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: lactating
+  - social behavior: non aggressive
+  - tissue: brain
+Description: VMH_F_Lac_20200405
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071610
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824094
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823670/suppl/GSM5823670_VMH_F_Lac_20200405_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823670/suppl/GSM5823670_VMH_F_Lac_20200405_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823670/suppl/GSM5823670_VMH_F_Lac_20200405_matrix.mtx.gz
+
+============================================================
+[8/16] GSM5823671
+============================================================
+Title: VMH_F_Virgin_Control_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: control
+  - tissue: brain
+Description: VMH_F_Virgin_20190822
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071611
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824095
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823671/suppl/GSM5823671_VMH_F_Virgin_20190822_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823671/suppl/GSM5823671_VMH_F_Virgin_20190822_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823671/suppl/GSM5823671_VMH_F_Virgin_20190822_matrix.mtx.gz
+
+============================================================
+[9/16] GSM5823672
+============================================================
+Title: VMH_F_Virgin_NonAgg_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: non aggressive
+  - tissue: brain
+Description: VMH_F_Virgin_20190923
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071612
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824096
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823672/suppl/GSM5823672_VMH_F_Virgin_20190923_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823672/suppl/GSM5823672_VMH_F_Virgin_20190923_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823672/suppl/GSM5823672_VMH_F_Virgin_20190923_matrix.mtx.gz
+
+============================================================
+[10/16] GSM5823673
+============================================================
+Title: VMH_F_Virgin_Control_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: control
+  - tissue: brain
+Description: VMH_F_Virgin_20191125
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071613
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824097
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823673/suppl/GSM5823673_VMH_F_Virgin_20191125_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823673/suppl/GSM5823673_VMH_F_Virgin_20191125_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823673/suppl/GSM5823673_VMH_F_Virgin_20191125_matrix.mtx.gz
+
+============================================================
+[11/16] GSM5823674
+============================================================
+Title: VMH_F_Virgin_NonAgg_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: non aggressive
+  - tissue: brain
+Description: VMH_F_Virgin_20200118
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071614
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824098
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823674/suppl/GSM5823674_VMH_F_Virgin_20200118_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823674/suppl/GSM5823674_VMH_F_Virgin_20200118_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823674/suppl/GSM5823674_VMH_F_Virgin_20200118_matrix.mtx.gz
+
+============================================================
+[12/16] GSM5823675
+============================================================
+Title: VMH_F_Virgin_Mate_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: mating
+  - tissue: brain
+Description: VMH_F_Virgin_20200324
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071615
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824099
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823675/suppl/GSM5823675_VMH_F_Virgin_20200324_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823675/suppl/GSM5823675_VMH_F_Virgin_20200324_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823675/suppl/GSM5823675_VMH_F_Virgin_20200324_matrix.mtx.gz
+
+============================================================
+[13/16] GSM5823676
+============================================================
+Title: VMH_F_Virgin_NonAgg_Rep3
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: non aggressive
+  - tissue: brain
+Description: VMH_F_Virgin_20200325
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071616
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824100
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823676/suppl/GSM5823676_VMH_F_Virgin_20200325_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823676/suppl/GSM5823676_VMH_F_Virgin_20200325_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823676/suppl/GSM5823676_VMH_F_Virgin_20200325_matrix.mtx.gz
+
+============================================================
+[14/16] GSM5823677
+============================================================
+Title: VMH_F_Virgin_Mate_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: virgin
+  - social behavior: mating
+  - tissue: brain
+Description: VMH_F_Virgin_20200404
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071617
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824101
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823677/suppl/GSM5823677_VMH_F_Virgin_20200404_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823677/suppl/GSM5823677_VMH_F_Virgin_20200404_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823677/suppl/GSM5823677_VMH_F_Virgin_20200404_matrix.mtx.gz
+
+============================================================
+[15/16] GSM5823678
+============================================================
+Title: VMH_F_Post_Control_Rep1
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: post-lactating
+  - social behavior: control
+  - tissue: brain
+Description: VMH_F_Post_20200209
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071618
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824102
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823678/suppl/GSM5823678_VMH_F_Post_20200209_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823678/suppl/GSM5823678_VMH_F_Post_20200209_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823678/suppl/GSM5823678_VMH_F_Post_20200209_matrix.mtx.gz
+
+============================================================
+[16/16] GSM5823679
+============================================================
+Title: VMH_F_Post_Control_Rep2
+Source name: female ventral VMH
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6N
+  - developmental stage: adult
+  - Sex: female
+  - reproductive state: post-lactating
+  - social behavior: control
+  - tissue: brain
+Description: VMH_F_Post_20200304
+Extract protocol:
+  - Method section in publication: 10.1016/j.neuron.2021.12.002
+  - 10x Chromium 3' v3 sequencing
+Data processing:
+  - alignment using CellRanger v3.0
+  - filtering out cells using CellRanger v3.0 "cell-calling algorithm"
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: Features table with every gene (.tsv)
+  - Supplementary_files_format_and_content: Barcodes table with unique barcode for each cell (.tsv)
+  - Supplementary_files_format_and_content: Matrix table with raw gene counts for every gene and every cell (.mtx)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN25071619
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX13824103
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823679/suppl/GSM5823679_VMH_F_Post_20200304_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823679/suppl/GSM5823679_VMH_F_Post_20200304_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5823nnn/GSM5823679/suppl/GSM5823679_VMH_F_Post_20200304_matrix.mtx.gz
+

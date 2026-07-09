@@ -1,0 +1,19 @@
+Dataset,HypoMap_cells,Original_reported,Fraction_kept,Mechanism,Original_source
+Anderson10x,60756,not stated,~ (most retained),condition note: 'virgin only'; largest dataset so mostly retained,hypoMap curation note
+Kim10x,40599,not separately reported,~full,QC/doublet removal only,-
+Dowsett10xnuc,35945,not separately reported,~full,QC/doublet removal only,-
+Rupp10x,33502,not separately reported,~full,QC/doublet removal only,-
+Morris10x,30950,not stated (per-cond 8-17k),>100% vs reported,re-aligned from raw reads (count can increase),GEO GSE167927 summary
+Moffit10x,28035,"~31,000",~90%,QC/doublet removal only (full data used),GEO GSE113576 summary
+Affinati10x,23473,not separately reported,~full,QC/doublet removal only,-
+Mousebrainorg10x,21421,"~160,796 (whole CNS)",~13%,region subset: only hypothalamus libraries of a whole-brain atlas,Zeisel 2018 Cell
+CampbellDropseq,20889,not separately reported,~full,QC/doublet removal only,-
+Wen10x,17483,not separately reported,~full,QC/doublet removal only,-
+wenDropseq,16181,not separately reported,~full,QC/doublet removal only,-
+Flynn10x,13353,"~16,000",~83%,QC/doublet removal only (full data used),GEO GSE146692 summary
+ChenDropseq,13329,not separately reported,~full,QC/doublet removal only,-
+RossiDropseq,9292,not separately reported,~full,QC/doublet removal only,-
+Mickelsen10x,8441,not separately reported,~full,QC/doublet removal only,-
+KimDev10x,6912,"129,151",~5%,timepoint subset: only P45 kept (drops E10-P14 + mutants),Kim 2020 Nat Commun
+LeeDropseq,2212,not separately reported (KO+WT),n/a,genotype subset: only WT kept (IDOL-KO samples dropped),hypoMap curation note
+RomanovDev10x,2152,"51,199",~4%,timepoint subset: only P23 kept (drops E15.5/E17.5/P0/P2/P10),GEO GSE132730 summary

@@ -1,0 +1,776 @@
+GSE132355 — Per-Sample Metadata (all 27 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132355&targ=gsm&form=text&view=quick
+Total samples: 27
+Fields shown verbatim from GEO.
+
+============================================================
+[1/27] GSM3860733
+============================================================
+Title: Hypothalamus, embryonic E10 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 10 days
+  - genotype: wild type
+Description: E10
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975095
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984832
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860733/suppl/GSM3860733_E10_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860733/suppl/GSM3860733_E10_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860733/suppl/GSM3860733_E10_matrix.mtx.gz
+
+============================================================
+[2/27] GSM3860734
+============================================================
+Title: Hypothalamus, embryonic E11 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 11 days
+  - genotype: wild type
+Description: E11
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975094
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984833
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860734/suppl/GSM3860734_E11_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860734/suppl/GSM3860734_E11_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860734/suppl/GSM3860734_E11_matrix.mtx.gz
+
+============================================================
+[3/27] GSM3860735
+============================================================
+Title: Hypothalamus, embryonic E12 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: wild type
+Description: E12
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975093
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984834
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860735/suppl/GSM3860735_E12-Foxd1-Ex3-Control-1-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860735/suppl/GSM3860735_E12_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860735/suppl/GSM3860735_E12_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860735/suppl/GSM3860735_E12_matrix.mtx.gz
+
+============================================================
+[4/27] GSM3860736
+============================================================
+Title: Hypothalamus, embryonic E13 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 13 days
+  - genotype: wild type
+Description: E13
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975092
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984835
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860736/suppl/GSM3860736_E13_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860736/suppl/GSM3860736_E13_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860736/suppl/GSM3860736_E13_matrix.mtx.gz
+
+============================================================
+[5/27] GSM3860737
+============================================================
+Title: Hypothalamus, embryonic E14 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 14 days
+  - genotype: wild type
+Description: E14
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975091
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984836
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860737/suppl/GSM3860737_E14_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860737/suppl/GSM3860737_E14_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860737/suppl/GSM3860737_E14_matrix.mtx.gz
+
+============================================================
+[6/27] GSM3860738
+============================================================
+Title: Hypothalamus, embryonic E15 time point (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 15 days
+  - genotype: wild type
+Description: E15-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975090
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984837
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860738/suppl/GSM3860738_E15-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860738/suppl/GSM3860738_E15-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860738/suppl/GSM3860738_E15-1_matrix.mtx.gz
+
+============================================================
+[7/27] GSM3860739
+============================================================
+Title: Hypothalamus, embryonic E15 time point (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 15 days
+  - genotype: wild type
+Description: E15-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975089
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984838
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860739/suppl/GSM3860739_E15-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860739/suppl/GSM3860739_E15-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860739/suppl/GSM3860739_E15-2_matrix.mtx.gz
+
+============================================================
+[8/27] GSM3860740
+============================================================
+Title: Hypothalamus, embryonic E16 time point (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 16 days
+  - genotype: wild type
+Description: E16-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975088
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984839
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860740/suppl/GSM3860740_E16-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860740/suppl/GSM3860740_E16-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860740/suppl/GSM3860740_E16-1_matrix.mtx.gz
+
+============================================================
+[9/27] GSM3860741
+============================================================
+Title: Hypothalamus, embryonic E16 time point (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 16 days
+  - genotype: wild type
+Description: E16-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975087
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984840
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860741/suppl/GSM3860741_E16-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860741/suppl/GSM3860741_E16-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860741/suppl/GSM3860741_E16-2_matrix.mtx.gz
+
+============================================================
+[10/27] GSM3860742
+============================================================
+Title: Hypothalamus, embryonic E18 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: embryonic 18 days
+  - genotype: wild type
+Description: E18
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975086
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984841
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860742/suppl/GSM3860742_E18_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860742/suppl/GSM3860742_E18_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860742/suppl/GSM3860742_E18_matrix.mtx.gz
+
+============================================================
+[11/27] GSM3860743
+============================================================
+Title: Hypothalamus, postnatal P4 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: postnatal 4 days
+  - genotype: wild type
+Description: P4
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975085
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984842
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860743/suppl/GSM3860743_P4_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860743/suppl/GSM3860743_P4_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860743/suppl/GSM3860743_P4_matrix.mtx.gz
+
+============================================================
+[12/27] GSM3860744
+============================================================
+Title: Hypothalamus, postnatal P8 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: postnatal 8 days
+  - genotype: wild type
+Description: P8
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975084
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984843
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860744/suppl/GSM3860744_P8_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860744/suppl/GSM3860744_P8_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860744/suppl/GSM3860744_P8_matrix.mtx.gz
+
+============================================================
+[13/27] GSM3860745
+============================================================
+Title: Hypothalamus, postnatal P14 time point
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1
+  - tissue: Hypothalamus
+  - age: postnatal 14 days
+  - genotype: wild type
+Description: P14
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975083
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984844
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860745/suppl/GSM3860745_P14_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860745/suppl/GSM3860745_P14_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860745/suppl/GSM3860745_P14_matrix.mtx.gz
+
+============================================================
+[14/27] GSM3860746
+============================================================
+Title: Hypothalamus, postnatal P45 time point (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - tissue: Hypothalamus
+  - age: postnatal 45 days
+  - genotype: wild type
+Description: P45-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975082
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984845
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860746/suppl/GSM3860746_P45-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860746/suppl/GSM3860746_P45-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860746/suppl/GSM3860746_P45-1_matrix.mtx.gz
+
+============================================================
+[15/27] GSM3860747
+============================================================
+Title: Hypothalamus, postnatal P45 time point (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - tissue: Hypothalamus
+  - age: postnatal 45 days
+  - genotype: wild type
+Description: P45-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975081
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984846
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860747/suppl/GSM3860747_P45-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860747/suppl/GSM3860747_P45-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860747/suppl/GSM3860747_P45-2_matrix.mtx.gz
+
+============================================================
+[16/27] GSM3860748
+============================================================
+Title: Hypothalamus, E12 Nkx2.1 CreERT2/+
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: wild type
+Description: E12-Nkx2-1-Control
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975080
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984847
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860748/suppl/GSM3860748_E12-Foxd1-Nkx2-1-Control-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860748/suppl/GSM3860748_E12-Nkx2-1-Control_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860748/suppl/GSM3860748_E12-Nkx2-1-Control_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860748/suppl/GSM3860748_E12-Nkx2-1-Control_matrix.mtx.gz
+
+============================================================
+[17/27] GSM3860749
+============================================================
+Title: Hypothalamus, E12 Nkx2.1 CreERT2/CreERT2 (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Nkx2-1-Mutant-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975079
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984848
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860749/suppl/GSM3860749_E12-Foxd1-Nkx2-1-Mutant-1-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860749/suppl/GSM3860749_E12-Nkx2-1-Mutant-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860749/suppl/GSM3860749_E12-Nkx2-1-Mutant-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860749/suppl/GSM3860749_E12-Nkx2-1-Mutant-1_matrix.mtx.gz
+
+============================================================
+[18/27] GSM3860750
+============================================================
+Title: Hypothalamus, E12 Nkx2.1 CreERT2/CreERT2 (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Nkx2-1-Mutant-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975078
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984849
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860750/suppl/GSM3860750_E12-Foxd1-Nkx2-1-Mutant-2-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860750/suppl/GSM3860750_E12-Nkx2-1-Mutant-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860750/suppl/GSM3860750_E12-Nkx2-1-Mutant-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860750/suppl/GSM3860750_E12-Nkx2-1-Mutant-2_matrix.mtx.gz
+
+============================================================
+[19/27] GSM3860751
+============================================================
+Title: Hypothalamus, E12 Nkx2.2 Cre/+
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: wild type
+Description: E12-Nkx2-2-Control
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975077
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984850
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860751/suppl/GSM3860751_E12-Foxd1-Nkx2-2-Control-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860751/suppl/GSM3860751_E12-Nkx2-2-Control_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860751/suppl/GSM3860751_E12-Nkx2-2-Control_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860751/suppl/GSM3860751_E12-Nkx2-2-Control_matrix.mtx.gz
+
+============================================================
+[20/27] GSM3860752
+============================================================
+Title: Hypothalamus, E12 Nkx2.2 Cre/Cre (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Nkx2-2-Mutant-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975076
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984851
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860752/suppl/GSM3860752_E12-Foxd1-Nkx2-2-Mutant-1-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860752/suppl/GSM3860752_E12-Nkx2-2-Mutant-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860752/suppl/GSM3860752_E12-Nkx2-2-Mutant-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860752/suppl/GSM3860752_E12-Nkx2-2-Mutant-1_matrix.mtx.gz
+
+============================================================
+[21/27] GSM3860753
+============================================================
+Title: Hypothalamus, E12 Nkx2.2 Cre/Cre (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Nkx2-2-Mutant-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975075
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984852
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860753/suppl/GSM3860753_E12-Foxd1-Nkx2-2-Mutant-2-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860753/suppl/GSM3860753_E12-Nkx2-2-Mutant-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860753/suppl/GSM3860753_E12-Nkx2-2-Mutant-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860753/suppl/GSM3860753_E12-Nkx2-2-Mutant-2_matrix.mtx.gz
+
+============================================================
+[22/27] GSM3860754
+============================================================
+Title: Hypothalamus, E12 Foxd1 CreGFP/-; Dlx1/2 lox/+
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: wild type
+Description: E12-Foxd1-Dlx-Control
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975074
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984853
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860754/suppl/GSM3860754_E12-Foxd1-Dlx-Control-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860754/suppl/GSM3860754_E12-Foxd1-Dlx-Control_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860754/suppl/GSM3860754_E12-Foxd1-Dlx-Control_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860754/suppl/GSM3860754_E12-Foxd1-Dlx-Control_matrix.mtx.gz
+
+============================================================
+[23/27] GSM3860755
+============================================================
+Title: Hypothalamus, E12 Foxd1 CreGFP/-; Dlx1/2 lox/lox (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Foxd1-Dlx-Mutant-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975073
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984854
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860755/suppl/GSM3860755_E12-Foxd1-Dlx-Mutant-1-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860755/suppl/GSM3860755_E12-Foxd1-Dlx-Mutant-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860755/suppl/GSM3860755_E12-Foxd1-Dlx-Mutant-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860755/suppl/GSM3860755_E12-Foxd1-Dlx-Mutant-1_matrix.mtx.gz
+
+============================================================
+[24/27] GSM3860756
+============================================================
+Title: Hypothalamus, E12 Foxd1 CreGFP/-; Dlx1/2 lox/lox (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Foxd1-Dlx-Mutant-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975072
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984855
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860756/suppl/GSM3860756_E12-Foxd1-Dlx-Mutant-2-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860756/suppl/GSM3860756_E12-Foxd1-Dlx-Mutant-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860756/suppl/GSM3860756_E12-Foxd1-Dlx-Mutant-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860756/suppl/GSM3860756_E12-Foxd1-Dlx-Mutant-2_matrix.mtx.gz
+
+============================================================
+[25/27] GSM3860757
+============================================================
+Title: Hypothalamus, E12 Foxd1 Cre/+
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: wild type
+Description: E12-Foxd1-Ex3-Control-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975071
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984856
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860757/suppl/GSM3860757_E12-Foxd1-Ex3-Control-2-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860757/suppl/GSM3860757_E12-Foxd1-Ex3-Control-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860757/suppl/GSM3860757_E12-Foxd1-Ex3-Control-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860757/suppl/GSM3860757_E12-Foxd1-Ex3-Control-2_matrix.mtx.gz
+
+============================================================
+[26/27] GSM3860758
+============================================================
+Title: Hypothalamus, E12 Foxd1 CreGFP/+; Ctnnb1 Ex3/+ (1)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Foxd1-Ex3-Mutant-1
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975097
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984857
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860758/suppl/GSM3860758_E12-Foxd1-Ex3-Mutant-1-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860758/suppl/GSM3860758_E12-Foxd1-Ex3-Mutant-1_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860758/suppl/GSM3860758_E12-Foxd1-Ex3-Mutant-1_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860758/suppl/GSM3860758_E12-Foxd1-Ex3-Mutant-1_matrix.mtx.gz
+
+============================================================
+[27/27] GSM3860759
+============================================================
+Title: Hypothalamus, E12 Foxd1 CreGFP/+; Ctnnb1 Ex3/+ (2)
+Source name: Hypothalamus
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - strain: CD1 & C57BL/6J
+  - tissue: Hypothalamus
+  - age: embryonic 12 days
+  - genotype: mutant
+Description: E12-Foxd1-Ex3-Mutant-2
+Extract protocol:
+  - scRNA-Seq - following the manufacturer's (10x Genomics)
+  - scRNA-Seq (Illumina NextSeq500)
+Data processing:
+  - scRNA-Seq: Sequencing results were processed through the Cell Ranger pipeline (10x Genomics) with default parameters. Seurat and Scanpy were used to perform downstream analysis following the standard pipeline using cells with more than 500 genes and 1000 UMI counts. Clusters were annotated based on previous literature, and differential gene expression test was performed in each cluster, between treatment groups.
+  - Genome_build: mm10
+  - Supplementary_files_format_and_content: matrix.mtx (scRNA-Seq count matrix), barcodes.tsv (scRNA-Seq barcodes list) , genes.tsv (scRNA-Seq genes list), log2cpm*.rds (log2cpm matrix of aggregated dataset), tSNE.rds (tSNE data of aggregated dataset), umap.rds (UMAP data of aggregated dataset)
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11975096
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5984858
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860759/suppl/GSM3860759_E12-Foxd1-Ex3-Mutant-2-tSNE.rds.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860759/suppl/GSM3860759_E12-Foxd1-Ex3-Mutant-2_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860759/suppl/GSM3860759_E12-Foxd1-Ex3-Mutant-2_genes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3860nnn/GSM3860759/suppl/GSM3860759_E12-Foxd1-Ex3-Mutant-2_matrix.mtx.gz
+

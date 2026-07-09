@@ -1,0 +1,5 @@
+GSM,HM_HypoMap_label,HM_Species,HM_Technology,HM_Cells_or_nuclei,HM_Region,HM_Sex,HM_Age,HM_Condition,Title,Source_name,Description,treatment,SRA,BioSample
+GSM5257458,Rupp10x,Mus musculus,10x v3,nuclei,Mediobasal Hypothalamus,M & F,adult (6+ wk),Saline,Saline 1,Mediobasal hypothalamus,,Saline,SRX10646975,SAMN18813526
+GSM5257459,Rupp10x,Mus musculus,10x v3,nuclei,Mediobasal Hypothalamus,M & F,adult (6+ wk),Insulin,Insulin 1,Mediobasal hypothalamus,,Insulin,SRX10646976,SAMN18813525
+GSM5257460,Rupp10x,Mus musculus,10x v3,nuclei,Mediobasal Hypothalamus,M & F,adult (6+ wk),Saline,Saline 2,Mediobasal hypothalamus,,Saline,SRX10646977,SAMN18813524
+GSM5257461,Rupp10x,Mus musculus,10x v3,nuclei,Mediobasal Hypothalamus,M & F,adult (6+ wk),Insulin,Insulin 2,Mediobasal hypothalamus,,Insulin,SRX10646978,SAMN18813523

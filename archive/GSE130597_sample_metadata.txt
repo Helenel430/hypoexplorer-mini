@@ -1,0 +1,455 @@
+GSE130597 — Per-Sample Metadata (all 14 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE130597&targ=gsm&form=text&view=quick
+Total samples: 14
+Fields shown verbatim from GEO.
+
+============================================================
+[1/14] GSM3744476
+============================================================
+Title: Mouse 1
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: AJ | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554058
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779277
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744476/suppl/GSM3744476_MLB003_AJP1-N701_merged_GE_clean.bam.dge_1920.txt.gz
+
+============================================================
+[2/14] GSM3744477
+============================================================
+Title: Mouse 2
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: AK | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554057
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779278
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744477/suppl/GSM3744477_MLB003_AKP1-N702_merged_GE_clean.bam.dge_2280.txt.gz
+
+============================================================
+[3/14] GSM3744478
+============================================================
+Title: Mouse 3
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: AL | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554056
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779279
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744478/suppl/GSM3744478_MLB003_ALP1-N703_merged_GE_clean.bam.dge_2640.txt.gz
+
+============================================================
+[4/14] GSM3744479
+============================================================
+Title: Mouse 4
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: AN | sequencing pool: 2 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554055
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779280
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744479/suppl/GSM3744479_MLB004_ANP1-N701_merged_GE_clean.bam.dge_3750.txt.gz
+
+============================================================
+[5/14] GSM3744480
+============================================================
+Title: Mouse 5
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: AO | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554054
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779281
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744480/suppl/GSM3744480_MLB003_AOP1-N704_merged_GE_clean.bam.dge_2160.txt.gz
+
+============================================================
+[6/14] GSM3744481
+============================================================
+Title: Mouse 6
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: AP | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554053
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779282
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744481/suppl/GSM3744481_MLB003_APP1-N705_merged_GE_clean.bam.dge_2580.txt.gz
+
+============================================================
+[7/14] GSM3744482
+============================================================
+Title: Mouse 7
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: AQ | sequencing pool: 2 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554052
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779283
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744482/suppl/GSM3744482_MLB004_AQP1-N702_merged_GE_clean.bam.dge_3360.txt.gz
+
+============================================================
+[8/14] GSM3744483
+============================================================
+Title: Mouse 8
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: AS | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554065
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779284
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744483/suppl/GSM3744483_MLB003_ASP1-N706_merged_GE_clean.bam.dge_1770.txt.gz
+
+============================================================
+[9/14] GSM3744484
+============================================================
+Title: Mouse 9
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: AZ | sequencing pool: 2 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554064
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779285
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744484/suppl/GSM3744484_MLB004_AZP1-N703_merged_GE_clean.bam.dge_3360.txt.gz
+
+============================================================
+[10/14] GSM3744485
+============================================================
+Title: Mouse 10
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: BA | sequencing pool: 2 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554063
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779286
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744485/suppl/GSM3744485_MLB004_BAP1-N704_merged_GE_clean.bam.dge_2310.txt.gz
+
+============================================================
+[11/14] GSM3744486
+============================================================
+Title: Mouse 11
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: BB | sequencing pool: 2 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554062
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779287
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744486/suppl/GSM3744486_MLB004_BBP1-N705_merged_GE_clean.bam.dge_0300.txt.gz
+
+============================================================
+[12/14] GSM3744487
+============================================================
+Title: Mouse 12
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: BC | sequencing pool: 2 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554061
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779288
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744487/suppl/GSM3744487_MLB004_BCP1-N706_merged_GE_clean.bam.dge_1020.txt.gz
+
+============================================================
+[13/14] GSM3744488
+============================================================
+Title: Mouse 13
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: control
+Description: internal sample name: BD | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554060
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779289
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744488/suppl/GSM3744488_MLB003_BDP1-N707_merged_GE_clean.bam.dge_0690.txt.gz
+
+============================================================
+[14/14] GSM3744489
+============================================================
+Title: Mouse 14
+Source name: lateral hypothalamus tissue punch
+Organism: Mus musculus
+Molecule: total RNA
+Characteristics:
+  - tissue: lateral hypothalamus
+  - strain: C57BL/6J
+  - genotype: wildtype
+  - Sex: male
+  - group: high fat diet
+Description: internal sample name: BE | sequencing pool: 1 | Drop-seq
+Extract protocol:
+  - Single cell suspensions were prepared from lateral hypothalamic area tissue punches and processed through the standard dropseq protocol to generate single-cell cDNA libraries attached to barcoded beads. Beads were counted, PCR amplified and indexed at the 3' end for sequencing using a modified Nextera XT protocol. Two sequencing pools were made and sequenced on separate lanes of an Illumina HiSeq 2500 in rapid-run mode using paired-end sequencing with 20x8x50 cycles.
+  - Drop-seq
+Data processing:
+  - Demultiplexing was performed with 1 mismatch allowed using Illumina bcl2fastq v2.18.0.12.
+  - R1 contains cell barcode (bases 1-12) and UMI (bases 13-20).
+  - Read 2 was aligned to mm10 using STAR v2.4.2a with 72 GB of RAM and 16 threads.
+  - Aligned reads were tagged with mate-pair UMI and cell barcodes using Drop-seq_tools v1.12 and Picard Tools v2.2.4.
+  - Aligned exonic reads were tagged with a mapped gene name.
+  - A count expression matrix was made by counting UMIs for each gene for each cell barcode.
+  - Genome_build: mm10 (GRCm38)
+  - Supplementary_files_format_and_content: paired-end fastq files and processed  gene count expression matrices are provided for each sample.
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN11554059
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX5779290
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3744nnn/GSM3744489/suppl/GSM3744489_MLB003_BEP1-N708_merged_GE_clean.bam.dge_0270.txt.gz
+

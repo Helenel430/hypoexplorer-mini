@@ -1,0 +1,95 @@
+GSE172461 — Per-Sample Metadata (all 4 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE172461&targ=gsm&form=text&view=quick
+Total samples: 4
+Fields shown verbatim from GEO.
+
+============================================================
+[1/4] GSM5257458
+============================================================
+Title: Saline 1
+Source name: Mediobasal hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - treatment: Saline
+Extract protocol:
+  - Mice were euthanized, the hypothalamus was dissected, nuclei were isolated and cleaned using FACS, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18813526
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10646975
+Supplementary files:
+  - NONE
+
+============================================================
+[2/4] GSM5257459
+============================================================
+Title: Insulin 1
+Source name: Mediobasal hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - treatment: Insulin
+Extract protocol:
+  - Mice were euthanized, the hypothalamus was dissected, nuclei were isolated and cleaned using FACS, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18813525
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10646976
+Supplementary files:
+  - NONE
+
+============================================================
+[3/4] GSM5257460
+============================================================
+Title: Saline 2
+Source name: Mediobasal hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - treatment: Saline
+Extract protocol:
+  - Mice were euthanized, the hypothalamus was dissected, nuclei were isolated and cleaned using FACS, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18813524
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10646977
+Supplementary files:
+  - NONE
+
+============================================================
+[4/4] GSM5257461
+============================================================
+Title: Insulin 2
+Source name: Mediobasal hypothalamus
+Organism: Mus musculus
+Molecule: polyA RNA
+Characteristics:
+  - treatment: Insulin
+Extract protocol:
+  - Mice were euthanized, the hypothalamus was dissected, nuclei were isolated and cleaned using FACS, and submitted to 10x library preparating and sequencing
+  - 10x 3’ Gene Expression
+Data processing:
+  - alignment, mapping, and demultiplexing with cellranger
+  - Genome_build: GRCm38
+  - Supplementary_files_format_and_content: sparse matrix of counts with associated barcodes and features
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN18813523
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX10646978
+Supplementary files:
+  - NONE
+

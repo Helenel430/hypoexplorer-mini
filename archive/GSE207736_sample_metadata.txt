@@ -1,0 +1,181 @@
+GSE207736 — Per-Sample Metadata (all 6 sample IDs)
+============================================================
+Source: raw GEO SOFT record (targ=gsm, view=quick)
+URL: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE207736&targ=gsm&form=text&view=quick
+Total samples: 6
+Fields shown verbatim from GEO.
+
+============================================================
+[1/6] GSM6311217
+============================================================
+Title: Mouse Hypo Adlib 3
+Source name: hypothalamus
+Organism: Mus musculus
+Molecule: nuclear RNA
+Characteristics:
+  - tissue: hypothalamus
+  - age: 6-8 weeks
+  - genotype: C57Bl/6 WT
+  - Sex: Male
+  - treatment: ad libitum fed
+Description: Mouse Hypo Adlib 3
+Extract protocol:
+  - The brains were harvested, and the hypothalami dissected before being frozen on dry ice and stored at -80°C until use. Brain tissues were thawed on the day of library preparation and samples from the sample nutritional condition were pooled together to yield 2 ad libitum fed samples (prepared on separate days) and 1 fasted sample. Samples were homogenized using a dounce homogenizer in ice cold homogenate buffer. Homogenates were centrifuged at 900xg for 10 minutes and pellets were resuspended in homogenate buffer with 25% Optiprep solution. Suspensions were layered on top of 29% Optiprep solution and centrifuged for 20 minutes at 13,500xg. Pellets were removed and resuspended in 1 ml of wash buffer containing DRAQ5. Samples were passed through a 40um cell strainer prior to FACS sorting. Samples were FACS sorted with gating set according to size and granularity using the FSC and SSC to capture singlets and remove debris. Each sample was sorted into two tubes and sequencing libraries were generated from these samples.
+  - Library construction was perfomed using 10X Genomics Chromium Single Cell 3’ Reagent kits (Version 3) according to the standardised protocol.
+Data processing:
+  - The demultiplexing, barcoded processing, gene counting and aggregation were made using the Cell Ranger software v5.0.1 (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  - Assembly: mm10
+  - Supplementary files format and content: Tab-separated values files and matrix files
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN29598492
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX16085831
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311217/suppl/GSM6311217_AA3_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311217/suppl/GSM6311217_AA3_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311217/suppl/GSM6311217_AA3_matrix.mtx.gz
+
+============================================================
+[2/6] GSM6311218
+============================================================
+Title: Mouse Hypo Adlib 4
+Source name: hypothalamus
+Organism: Mus musculus
+Molecule: nuclear RNA
+Characteristics:
+  - tissue: hypothalamus
+  - age: 6-8 weeks
+  - genotype: C57Bl/6 WT
+  - Sex: Male
+  - treatment: ad libitum fed
+Description: Mouse Hypo Adlib 4
+Extract protocol:
+  - The brains were harvested, and the hypothalami dissected before being frozen on dry ice and stored at -80°C until use. Brain tissues were thawed on the day of library preparation and samples from the sample nutritional condition were pooled together to yield 2 ad libitum fed samples (prepared on separate days) and 1 fasted sample. Samples were homogenized using a dounce homogenizer in ice cold homogenate buffer. Homogenates were centrifuged at 900xg for 10 minutes and pellets were resuspended in homogenate buffer with 25% Optiprep solution. Suspensions were layered on top of 29% Optiprep solution and centrifuged for 20 minutes at 13,500xg. Pellets were removed and resuspended in 1 ml of wash buffer containing DRAQ5. Samples were passed through a 40um cell strainer prior to FACS sorting. Samples were FACS sorted with gating set according to size and granularity using the FSC and SSC to capture singlets and remove debris. Each sample was sorted into two tubes and sequencing libraries were generated from these samples.
+  - Library construction was perfomed using 10X Genomics Chromium Single Cell 3’ Reagent kits (Version 3) according to the standardised protocol.
+Data processing:
+  - The demultiplexing, barcoded processing, gene counting and aggregation were made using the Cell Ranger software v5.0.1 (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  - Assembly: mm10
+  - Supplementary files format and content: Tab-separated values files and matrix files
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN29598491
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX16085832
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311218/suppl/GSM6311218_AB3_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311218/suppl/GSM6311218_AB3_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311218/suppl/GSM6311218_AB3_matrix.mtx.gz
+
+============================================================
+[3/6] GSM6311219
+============================================================
+Title: Mouse Hypo Fasted 1
+Source name: hypothalamus
+Organism: Mus musculus
+Molecule: nuclear RNA
+Characteristics:
+  - tissue: hypothalamus
+  - age: 6-8 weeks
+  - genotype: C57Bl/6 WT
+  - Sex: Male
+  - treatment: 16 hour overnight fast
+Description: Mouse Hypo Fasted 1
+Extract protocol:
+  - The brains were harvested, and the hypothalami dissected before being frozen on dry ice and stored at -80°C until use. Brain tissues were thawed on the day of library preparation and samples from the sample nutritional condition were pooled together to yield 2 ad libitum fed samples (prepared on separate days) and 1 fasted sample. Samples were homogenized using a dounce homogenizer in ice cold homogenate buffer. Homogenates were centrifuged at 900xg for 10 minutes and pellets were resuspended in homogenate buffer with 25% Optiprep solution. Suspensions were layered on top of 29% Optiprep solution and centrifuged for 20 minutes at 13,500xg. Pellets were removed and resuspended in 1 ml of wash buffer containing DRAQ5. Samples were passed through a 40um cell strainer prior to FACS sorting. Samples were FACS sorted with gating set according to size and granularity using the FSC and SSC to capture singlets and remove debris. Each sample was sorted into two tubes and sequencing libraries were generated from these samples.
+  - Library construction was perfomed using 10X Genomics Chromium Single Cell 3’ Reagent kits (Version 3) according to the standardised protocol.
+Data processing:
+  - The demultiplexing, barcoded processing, gene counting and aggregation were made using the Cell Ranger software v5.0.1 (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  - Assembly: mm10
+  - Supplementary files format and content: Tab-separated values files and matrix files
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN29598490
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX16085833
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311219/suppl/GSM6311219_AC3_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311219/suppl/GSM6311219_AC3_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311219/suppl/GSM6311219_AC3_matrix.mtx.gz
+
+============================================================
+[4/6] GSM6311220
+============================================================
+Title: Mouse Hypo Fasted 2
+Source name: hypothalamus
+Organism: Mus musculus
+Molecule: nuclear RNA
+Characteristics:
+  - tissue: hypothalamus
+  - age: 6-8 weeks
+  - genotype: C57Bl/6 WT
+  - Sex: Male
+  - treatment: 16 hour overnight fast
+Description: Mouse Hypo Fasted 2
+Extract protocol:
+  - The brains were harvested, and the hypothalami dissected before being frozen on dry ice and stored at -80°C until use. Brain tissues were thawed on the day of library preparation and samples from the sample nutritional condition were pooled together to yield 2 ad libitum fed samples (prepared on separate days) and 1 fasted sample. Samples were homogenized using a dounce homogenizer in ice cold homogenate buffer. Homogenates were centrifuged at 900xg for 10 minutes and pellets were resuspended in homogenate buffer with 25% Optiprep solution. Suspensions were layered on top of 29% Optiprep solution and centrifuged for 20 minutes at 13,500xg. Pellets were removed and resuspended in 1 ml of wash buffer containing DRAQ5. Samples were passed through a 40um cell strainer prior to FACS sorting. Samples were FACS sorted with gating set according to size and granularity using the FSC and SSC to capture singlets and remove debris. Each sample was sorted into two tubes and sequencing libraries were generated from these samples.
+  - Library construction was perfomed using 10X Genomics Chromium Single Cell 3’ Reagent kits (Version 3) according to the standardised protocol.
+Data processing:
+  - The demultiplexing, barcoded processing, gene counting and aggregation were made using the Cell Ranger software v5.0.1 (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  - Assembly: mm10
+  - Supplementary files format and content: Tab-separated values files and matrix files
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN29598489
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX16085834
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311220/suppl/GSM6311220_AD3_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311220/suppl/GSM6311220_AD3_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311220/suppl/GSM6311220_AD3_matrix.mtx.gz
+
+============================================================
+[5/6] GSM6311221
+============================================================
+Title: Mouse Hypo Adlib 1
+Source name: hypothalamus
+Organism: Mus musculus
+Molecule: nuclear RNA
+Characteristics:
+  - tissue: hypothalamus
+  - age: 6-8 weeks
+  - genotype: C57Bl/6 WT
+  - Sex: Male
+  - treatment: ad libitum fed
+Description: Mouse Hypo Adlib 1
+Extract protocol:
+  - The brains were harvested, and the hypothalami dissected before being frozen on dry ice and stored at -80°C until use. Brain tissues were thawed on the day of library preparation and samples from the sample nutritional condition were pooled together to yield 2 ad libitum fed samples (prepared on separate days) and 1 fasted sample. Samples were homogenized using a dounce homogenizer in ice cold homogenate buffer. Homogenates were centrifuged at 900xg for 10 minutes and pellets were resuspended in homogenate buffer with 25% Optiprep solution. Suspensions were layered on top of 29% Optiprep solution and centrifuged for 20 minutes at 13,500xg. Pellets were removed and resuspended in 1 ml of wash buffer containing DRAQ5. Samples were passed through a 40um cell strainer prior to FACS sorting. Samples were FACS sorted with gating set according to size and granularity using the FSC and SSC to capture singlets and remove debris. Each sample was sorted into two tubes and sequencing libraries were generated from these samples.
+  - Library construction was perfomed using 10X Genomics Chromium Single Cell 3’ Reagent kits (Version 3) according to the standardised protocol.
+Data processing:
+  - The demultiplexing, barcoded processing, gene counting and aggregation were made using the Cell Ranger software v5.0.1 (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  - Assembly: mm10
+  - Supplementary files format and content: Tab-separated values files and matrix files
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN29598488
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX16085835
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311221/suppl/GSM6311221_AG8_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311221/suppl/GSM6311221_AG8_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311221/suppl/GSM6311221_AG8_matrix.mtx.gz
+
+============================================================
+[6/6] GSM6311222
+============================================================
+Title: Mouse Hypo Adlib 2
+Source name: hypothalamus
+Organism: Mus musculus
+Molecule: nuclear RNA
+Characteristics:
+  - tissue: hypothalamus
+  - age: 6-8 weeks
+  - genotype: C57Bl/6 WT
+  - Sex: Male
+  - treatment: ad libitum fed
+Description: Mouse Hypo Adlib 2
+Extract protocol:
+  - The brains were harvested, and the hypothalami dissected before being frozen on dry ice and stored at -80°C until use. Brain tissues were thawed on the day of library preparation and samples from the sample nutritional condition were pooled together to yield 2 ad libitum fed samples (prepared on separate days) and 1 fasted sample. Samples were homogenized using a dounce homogenizer in ice cold homogenate buffer. Homogenates were centrifuged at 900xg for 10 minutes and pellets were resuspended in homogenate buffer with 25% Optiprep solution. Suspensions were layered on top of 29% Optiprep solution and centrifuged for 20 minutes at 13,500xg. Pellets were removed and resuspended in 1 ml of wash buffer containing DRAQ5. Samples were passed through a 40um cell strainer prior to FACS sorting. Samples were FACS sorted with gating set according to size and granularity using the FSC and SSC to capture singlets and remove debris. Each sample was sorted into two tubes and sequencing libraries were generated from these samples.
+  - Library construction was perfomed using 10X Genomics Chromium Single Cell 3’ Reagent kits (Version 3) according to the standardised protocol.
+Data processing:
+  - The demultiplexing, barcoded processing, gene counting and aggregation were made using the Cell Ranger software v5.0.1 (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  - Assembly: mm10
+  - Supplementary files format and content: Tab-separated values files and matrix files
+Relations:
+  - BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN29598487
+  - SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX16085836
+Supplementary files:
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311222/suppl/GSM6311222_AH8_barcodes.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311222/suppl/GSM6311222_AH8_features.tsv.gz
+  - ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM6311nnn/GSM6311222/suppl/GSM6311222_AH8_matrix.mtx.gz
+

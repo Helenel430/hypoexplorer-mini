@@ -1,0 +1,5 @@
+GSM,HM_HypoMap_label,HM_Species,HM_Technology,HM_Cells_or_nuclei,HM_Region,HM_Sex,HM_Age,HM_Condition,Title,Source_name,Description,10x chemistry,Sex,age,harvest,strain,tissue,SRA,BioSample
+GSM4404135,Flynn10x,Mus musculus,10x v2,cells,Ventroposterior hypothalamus,male,P30-35,1,Male 1,Ventroposterior hypothalamus,,v2,male,P30-35,1,C57BL/6,Ventroposterior hypothalamus,SRX7884272,SAMN14341538
+GSM4404136,Flynn10x,Mus musculus,10x v2,cells,Ventroposterior hypothalamus,female,P30-35,1,Female 1,Ventroposterior hypothalamus,,v2,female,P30-35,1,C57BL/6,Ventroposterior hypothalamus,SRX7884273,SAMN14341537
+GSM4404137,Flynn10x,Mus musculus,10x v2,cells,Ventroposterior hypothalamus,female,P30-35,2,Female 2,Ventroposterior hypothalamus,,v3,female,P30-35,2,C57BL/6,Ventroposterior hypothalamus,SRX7884274,SAMN14341536
+GSM4404138,Flynn10x,Mus musculus,10x v2,cells,Ventroposterior hypothalamus,male,P30-35,2,Male 2,Ventroposterior hypothalamus,,v3,male,P30-35,2,C57BL/6,Ventroposterior hypothalamus,SRX7884275,SAMN14341535
