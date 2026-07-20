@@ -1,0 +1,44 @@
+{
+  "source": "MGI MRK_List1 + MGI_Gene_Model_Coord",
+  "source_version_or_date": "downloaded_2026-07-20",
+  "mgi_marker_report": "gene_harmonization/mgi_source/MRK_List1.rpt.gz",
+  "mgi_marker_report_sha256": "1e6396e2bc37b7e77fc1509045e5d3f4be785179a1e292383275385a71a4971b",
+  "mgi_gene_model_report": "gene_harmonization/mgi_source/MGI_Gene_Model_Coord.rpt",
+  "mgi_gene_model_report_sha256": "6bc389504460598ff788b4057b9f338e53bd72893517469644c65f84c44e689a",
+  "processed_dir": "processed",
+  "datasets": [
+    "GSE207736",
+    "GSE172461",
+    "GSE93374"
+  ],
+  "rows": 93809,
+  "unique_canonical_genes": 39583,
+  "resolution_stats": {
+    "GSE207736": {
+      "total": 55399,
+      "resolved": 39462,
+      "unresolved": 15937,
+      "ambiguous": 0
+    },
+    "GSE172461": {
+      "total": 31053,
+      "resolved": 29816,
+      "unresolved": 1227,
+      "ambiguous": 10
+    },
+    "GSE93374": {
+      "total": 26774,
+      "resolved": 24531,
+      "unresolved": 2231,
+      "ambiguous": 12
+    }
+  },
+  "rules": [
+    "preserve dataset genes.csv unchanged",
+    "prefer dataset Ensembl gene_id when present",
+    "else resolve dataset gene_symbol by exact current MGI symbol first",
+    "else resolve by MGI synonym or withdrawn symbol",
+    "skip ambiguous dataset symbols; query resolver reports ambiguity for user terms",
+    "missing dataset mappings are gene_not_found, not zero expression"
+  ]
+}

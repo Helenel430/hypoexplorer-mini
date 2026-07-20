@@ -1,0 +1,111 @@
+{
+  "dataset_id": "GSE93374",
+  "hypomap_label": "CampbellDropseq",
+  "atlas_object": "hypomap.h5ad (integrated HypoMap atlas, Steuernagel et al. 2022)",
+  "cellxgene_collection": "d86517f0-fa7e-4266-b82e-a521350d6d36",
+  "atlas_h5ad": "/Volumes/SanDisk/hypomap_download/hypomap.h5ad",
+  "reads": "atlas obs (cell metadata) only; no expression values read",
+  "field_map": {
+    "Region_summarized": "hypomap_region",
+    "Author_CellType": "hypomap_author_cell_type",
+    "C7_named": "hypomap_C7",
+    "C25_named": "hypomap_C25",
+    "C66_named": "hypomap_C66",
+    "C185_named": "hypomap_C185",
+    "C286_named": "hypomap_C286",
+    "C465_named": "hypomap_C465"
+  },
+  "crosswalk": {
+    "SRR5164436": "arc1",
+    "SRR5164437": "arc2",
+    "SRR5164438": "arc3",
+    "SRR5164439": "Chow",
+    "SRR5164440": "HFD",
+    "SRR5164441": "Fasted",
+    "SRR5164442": "Refed",
+    "SRR5164443": "MaleFed",
+    "SRR5164444": "MaleFasted",
+    "SRR5164445": "FemaleFed",
+    "SRR5164446": "FemaleFasted"
+  },
+  "atlas_cells": 20889,
+  "built": "2026-07-17",
+  "builder": "tools/build_hypomap_sidecar.py",
+  "validation": {
+    "processed_cells_csv": "processed/GSE93374/cells.csv",
+    "atlas_cells": 20889,
+    "imported_cells": 21086,
+    "atlas_cells_matched_to_import": 14286,
+    "imported_cells_matched_to_atlas": 14286,
+    "atlas_cells_unmatched_to_import": 6603,
+    "imported_cells_unmatched_to_atlas": 6800,
+    "per_token": [
+      {
+        "atlas_token": "SRR5164436",
+        "sum": 2118,
+        "count": 2988,
+        "unmatched": 870
+      },
+      {
+        "atlas_token": "SRR5164437",
+        "sum": 2113,
+        "count": 3041,
+        "unmatched": 928
+      },
+      {
+        "atlas_token": "SRR5164438",
+        "sum": 1954,
+        "count": 2773,
+        "unmatched": 819
+      },
+      {
+        "atlas_token": "SRR5164439",
+        "sum": 2641,
+        "count": 3228,
+        "unmatched": 587
+      },
+      {
+        "atlas_token": "SRR5164440",
+        "sum": 2939,
+        "count": 3611,
+        "unmatched": 672
+      },
+      {
+        "atlas_token": "SRR5164441",
+        "sum": 917,
+        "count": 1598,
+        "unmatched": 681
+      },
+      {
+        "atlas_token": "SRR5164442",
+        "sum": 1053,
+        "count": 1763,
+        "unmatched": 710
+      },
+      {
+        "atlas_token": "SRR5164443",
+        "sum": 97,
+        "count": 277,
+        "unmatched": 180
+      },
+      {
+        "atlas_token": "SRR5164444",
+        "sum": 165,
+        "count": 457,
+        "unmatched": 292
+      },
+      {
+        "atlas_token": "SRR5164445",
+        "sum": 198,
+        "count": 691,
+        "unmatched": 493
+      },
+      {
+        "atlas_token": "SRR5164446",
+        "sum": 91,
+        "count": 462,
+        "unmatched": 371
+      }
+    ]
+  }
+}

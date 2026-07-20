@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARC Gene Explorer — standalone recreation</title>
+<!--
+  ARC Gene Explorer · standalone, self-contained recreation of the frozen FVP.
+
+  WHY THIS FILE EXISTS
+    The product source lives as a Design Component ("ARC Gene Explorer - FVP.dc.html")
+    that needs a proprietary runtime to render. This file is a portable, dependency-free
+    twin: plain HTML + one vanilla-JS module, no build step, no external requests. Open it
+    in any browser to see the exact page, or read it top-to-bottom to recreate the product.
+
+  HOW IT IS ORGANISED (search for these banners)
+    [DATA]    every number the page shows, as plain JS literals. Swap these for real
+              pipeline output to make the page data-driven (see RECREATE.md).
+    [LOGIC]   pure functions: coverage aggregation, context math, metric derivation.
+              1:1 with the DC's renderVals(); nothing here touches the DOM.
+    [VIEW]    render functions, one per tab, that turn LOGIC output into markup.
+    [SHELL]   state, event wiring, and the single render() entry point.
+
+  DATA HONESTY (mirrors the product)
+    - counts, coverage, cluster abundance, dataset membership: structural values.
+    - % expressing / positive cells / mean expression / histogram: MODELED here
+      (flagged "modeled" in the UI) until wired to the metric export. The real
+      definitions live in docs/METRIC_SPEC.md; real values in
+      fvp_export/gene_metrics_vertical_slice.json.
+-->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #e9e7e2;
+    color: #211f1b;
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: #b23b32; text-decoration: none; }
+  a:hover { color: #8f2c25; text-decoration: underline; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  button { font-family: inherit; }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: #d6d1c8; border-radius: 6px; }
+  .wrap { min-height: 100vh; padding: 28px; display: flex; justify-content: center; }
+  .card { width: 1280px; background: #fff; border: 1px solid #e2ddd4; border-radius: 14px; box-shadow: 0 1px 3px rgba(30,25,15,.05); }
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card" id="app"></div></div>
+
+<script>
+"use strict";
+/* ===================================================================== */
+/* ============================== [DATA] =============================== */
+/* Every literal the page renders. Replace with pipeline output to make   */
+/* the page data-driven. Keys are the annotation source's own labels.     */
+/* ===================================================================== */
+
+// Deposits (datasets). native / hypomap / hypoRegion = cells annotated at each level.
+const DS = [
+  { id:'GSE207736', label:'Dowsett10xnuc', sub:'GSE207736 · 10x snRNA-seq',   cells:39953, native:0,     hypomap:35945, hypoRegion:26536, color:'#b23b32' },
+  { id:'GSE172461', label:'GSE172461',     sub:'GSE172461 · 10x, per-cell meta', cells:41157, native:36523, hypomap:null,  hypoRegion:null,  color:'#d9694e' },
+  { id:'GSE93374',  label:'Campbell 2017', sub:'GSE93374 · Drop-seq',          cells:21087, native:21087, hypomap:null,  hypoRegion:null,  color:'#e0a24e' },
+];
+
+// Nucleus cell counts (HypoMap hypomap_region), GSE207736 vertical slice.
+const REGIONS = [
+  ['Arcuate hypothalamic nucleus',6318],
+  ['(Pre)Mammillary region',5851],
+  ['Ventromedial hypothalamic nucleus',5514],
+  ['Lateral hypothalamic area',3034],
+  ['Periventricular hyp. n. (posterior)',1315],
+  ['Paraventricular hypothalamic nucleus',1147],
+  ['Dorsomedial n. of the hypothalamus',947],
+  ['Medial preoptic area',570],
+  ['Anterior hypothalamic nucleus',561],
+  ['Zona incerta',543],
+  ['Suprachiasmatic nucleus',503],
+  ['(Anterior/Preoptic)Periventricular',111],
+  ['Tuberal nucleus',93],
+  ['Lateral preoptic area',28],
+  ['Periventricular hyp. n. (intermediate)',1],
+  ['Not assigned',9409],
+];
+const ABBR = {
+  'Paraventricular hypothalamic nucleus':'PVN','Zona incerta':'ZI',
+  'Lateral hypothalamic area':'LHA','Dorsomedial n. of the hypothalamus':'DMH',
+  'Ventromedial hypothalamic nucleus':'VMH','Periventricular hyp. n. (posterior)':'PVp',
+  'Arcuate hypothalamic nucleus':'ARC','(Pre)Mammillary region':'MM',
+  'Medial preoptic area':'MPO','Suprachiasmatic nucleus':'SCN',
+  '(Anterior/Preoptic)Periventricular':'PeVa','Tuberal nucleus':'TU',
+  'Lateral preoptic area':'LPO','Periventricular hyp. n. (intermediate)':'PVi',
+  'Anterior hypothalamic nucleus':'AHN','Not assigned':'NA',
+};
+// MODELED Pomc positive fraction per region (placeholder until expression pass).
+const FRAC = {
+  'Arcuate hypothalamic nucleus':0.168,'Paraventricular hypothalamic nucleus':0.031,
+  'Ventromedial hypothalamic nucleus':0.022,'Dorsomedial n. of the hypothalamus':0.019,
+  'Lateral hypothalamic area':0.013,'Periventricular hyp. n. (posterior)':0.024,
+  'Zona incerta':0.009,'(Pre)Mammillary region':0.011,'Medial preoptic area':0.014,
+  'Anterior hypothalamic nucleus':0.012,'Suprachiasmatic nucleus':0.016,
+  '(Anterior/Preoptic)Periventricular':0.02,'Tuberal nucleus':0.03,
+  'Lateral preoptic area':0.008,'Periventricular hyp. n. (intermediate)':0.01,'Not assigned':0.017,
+};
+// HypoMap cluster hierarchy resolutions.
+const RES = [ ['C7',7],['C25',24],['C66',63],['C185',165],['C286',254],['C465',390] ];
+const C7 = [
+  ['C7-1: GLU',17279],['C7-2: GABA',13826],['C7-4: Oligo+Precursor',2194],
+  ['C7-3: Astro-Ependymal',2102],['C7-5: Immune',298],['C7-7: Vascular',170],['C7-6: ParsTuber',76],
+];
+const C25 = [
+  ['C25-11: GABA-1',7377],['C25-3: GLU-3',6906],['C25-2: GLU-2',4934],['C25-10: GABA-2',3059],
+  ['C25-8: GLU-8',2284],['C25-5: GLU-5',1558],['C25-19: Oligodendrocytes',1466],['C25-18: Astrocytes',1455],
+  ['C25-13: GABA-4',1452],['C25-4: GLU-4',1103],['C25-12: GABA-3',783],['C25-20: OPC',728],
+  ['C25-14: GABA-5',711],['C25-17: Ependymal-like',647],['C25-15: GABA-6',443],['C25-6: GLU-6',325],
+  ['C25-21: Immune',298],['C25-25: Fibroblasts',135],['C25-1: GLU-1',124],['C25-23: ParsTuber',76],
+  ['C25-7: GLU-7',41],['C25-24: Mural+Endothelial',35],['C25-9: GLU-9',4],['C25-16: GABA-7',1],
+];
+// Lineage tree (C7 → C25 → C66). mark = carries the queried gene as a marker.
+const TREE = [
+  { id:'C7-1: GLU', n:17279, kids:[
+    { id:'C25-3: GLU-3', n:6906, kids:[ {id:'C66-12: Gpr149.GLU-3',n:3248},{id:'C66-10: Fezf1.GLU-3',n:1421},{id:'C66-11: Cd40.GLU-3',n:924} ]},
+    { id:'C25-2: GLU-2', n:4934, kids:[ {id:'C66-2: Irx5.GLU-2',n:1459},{id:'C66-4: Trh.GLU-2',n:1140},{id:'C66-7: Foxb1.GLU-2',n:939} ]},
+    { id:'C25-8: GLU-8', n:2284, kids:[ {id:'C66-25: Foxb1.GLU-8',n:2124},{id:'C66-26: Prkch.GLU-8',n:160} ]},
+    { id:'C25-5: GLU-5', n:1558, mark:true, kids:[ {id:'C66-19: Pomc.GLU-5',n:717,mark:true},{id:'C66-21: Bace2.GLU-5',n:474},{id:'C66-20: Tac2.GLU-5',n:367} ]},
+  ]},
+  { id:'C7-2: GABA', n:13826, kids:[
+    { id:'C25-11: GABA-1', n:7377, kids:[ {id:'C66-35: Lef1.GABA-1',n:1664},{id:'C66-34: Il1rapl2.GABA-1',n:1375},{id:'C66-41: Tbx3.GABA-1',n:904} ]},
+    { id:'C25-10: GABA-2', n:3059, kids:[ {id:'C66-28: Mixed.GABA-2',n:1207},{id:'C66-30: Onecut2.GABA-2',n:964},{id:'C66-29: Vipr2.GABA-2',n:511} ]},
+    { id:'C25-13: GABA-4', n:1452, kids:[ {id:'C66-47: Sst.GABA-4',n:739},{id:'C66-46: Agrp.GABA-4',n:713} ]},
+    { id:'C25-12: GABA-3', n:783, kids:[ {id:'C66-44: Nkx2-4.GABA-3',n:469},{id:'C66-45: Ghrh.GABA-3',n:314} ]},
+  ]},
+  { id:'C7-4: Oligo+Precursor', n:2194, kids:[] },
+  { id:'C7-3: Astro-Ependymal', n:2102, kids:[] },
+  { id:'C7-5: Immune', n:298, kids:[] },
+  { id:'C7-7: Vascular', n:170, kids:[] },
+  { id:'C7-6: ParsTuber', n:76, kids:[] },
+];
+// Per-dataset consistency multiplier (modeled placeholder for reproducibility bars).
+const DSMULT = { GSE207736:1.0, GSE172461:0.93, GSE93374:1.09 };
+
+const GENE = { symbol:'Pomc', name:'Proopiomelanocortin' };
+const GENE_BLURB = 'Proopiomelanocortin encodes a polypeptide precursor cleaved into melanocortins (α-MSH) and β-endorphin. In the hypothalamus its expression is concentrated in the arcuate nucleus, where POMC neurons drive satiety signaling — a canonical marker for anorexigenic energy-balance circuits.';
+
+// Nucleus placement on the coronal schematic (one hemisphere; mirrored at render).
+const NUCLEI = [
+  {abbr:'PVN', key:'Paraventricular hypothalamic nucleus', cx:436, cy:188, rx:50, ry:25, rot:-14},
+  {abbr:'ZI',  key:'Zona incerta',                         cx:524, cy:174, rx:38, ry:21, rot:-18},
+  {abbr:'LHA', key:'Lateral hypothalamic area',            cx:550, cy:278, rx:54, ry:68, rot:6},
+  {abbr:'DMH', key:'Dorsomedial n. of the hypothalamus',   cx:450, cy:252, rx:32, ry:48, rot:0},
+  {abbr:'VMH', key:'Ventromedial hypothalamic nucleus',    cx:448, cy:346, rx:41, ry:39, rot:0},
+  {abbr:'PVp', key:'Periventricular hyp. n. (posterior)',  cx:406, cy:302, rx:10, ry:92, rot:0, narrow:true},
+];
+const OFFMAP = ['(Pre)Mammillary region','Medial preoptic area','Suprachiasmatic nucleus','Anterior hypothalamic nucleus','(Anterior/Preoptic)Periventricular','Tuberal nucleus','Lateral preoptic area','Periventricular hyp. n. (intermediate)'];
+const TABS = [ ['overview','Overview'],['identity','Cell Identity'],['expression','Expression'],['repro','Reproducibility'],['context','Context'] ];
+
+/* ===================================================================== */
+/* ============================== [STATE] ============================== */
+/* ===================================================================== */
+const state = {
+  tab: 'overview',
+  source: 'hypomap',                 // 'hypomap' | 'native'
+  datasets: { GSE207736:true, GSE172461:false, GSE93374:false },
+  region: null,                      // null = whole hypothalamus
+  resolution: 'C25',
+  expanded: { 'C7-1: GLU': true },
+  hoverRegion: null,
+  provOpen: false,
+  showModeled: true,                 // tweak: label + show modeled estimates
+  mapCounts: true,                   // tweak: show counts on map nuclei
+};
+
+/* ===================================================================== */
+/* ============================== [LOGIC] ============================== */
+/* Pure helpers + one derive() that returns everything the views need.    */
+/* 1:1 port of the DC renderVals(); no DOM access in this section.        */
+/* ===================================================================== */
+const RC = Object.fromEntries(REGIONS);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt  = n => n == null ? '—' : Math.round(n).toLocaleString('en-US');
+const pct  = (n,d) => d ? (n/d*100) : 0;
+const fmt0 = p => (p||0).toFixed(0)+'%';
+const fracFor = name => FRAC[name] != null ? FRAC[name] : 0.012;
+const selectedDS = () => DS.filter(d => state.datasets[d.id]);
+function wholeFrac(){
+  let pos=0, tot=0;
+  for(const [n,c] of REGIONS){ if(n==='Not assigned') continue; pos += c*fracFor(n); tot += c; }
+  return tot ? pos/tot : 0;
+}
+
+function derive(){
+  const S = state;
+  const hypo = S.source === 'hypomap';
+  const sel = selectedDS();
+  const anyHypoAvail = sel.some(d => d.hypomap != null);
+  const regionEnabled = hypo && anyHypoAvail;
+  const region = regionEnabled ? S.region : null;
+
+  // coverage aggregation across selected deposits
+  let total=0, regionAssigned=0, annotNoRegion=0, notCovered=0, nativeAnnot=0;
+  for(const d of sel){
+    total += d.cells;
+    if(hypo){
+      if(d.hypomap != null){ regionAssigned += (d.hypoRegion||0); annotNoRegion += (d.hypomap-(d.hypoRegion||0)); notCovered += (d.cells-d.hypomap); }
+      else notCovered += d.cells;
+    } else {
+      if(d.native > 0){ nativeAnnot += d.native; notCovered += (d.cells-d.native); }
+      else notCovered += d.cells;
+    }
+  }
+  const covFor = src => { let t=0,a=0; for(const d of sel){ t+=d.cells; a += src==='hypomap' ? (d.hypomap||0) : (d.native||0); } return t ? a/t*100 : 0; };
+
+  // context (single-select nucleus, else whole)
+  const contextIsNucleus = !!region;
+  let contextTotal, positive, fracContext;
+  if(contextIsNucleus){
+    contextTotal = RC[region]||0; fracContext = fracFor(region); positive = contextTotal*fracContext;
+  } else if(regionEnabled){
+    contextTotal = regionAssigned; let p=0;
+    for(const [n,c] of REGIONS){ if(n==='Not assigned') continue; p += c*fracFor(n); }
+    positive = p; fracContext = contextTotal ? positive/contextTotal : 0;
+  } else {
+    contextTotal = nativeAnnot || total;
+    fracContext = wholeFrac(); positive = contextTotal*fracContext;
+  }
+  const pctExpr = fracContext*100;
+  const meanExpr = 0.2 + fracContext*15;
+  const contextName = contextIsNucleus ? region : 'Whole hypothalamus';
+  const contextPctLabel = contextIsNucleus && regionAssigned ? ` · ${(contextTotal/regionAssigned*100).toFixed(1)}% of tissue` : '';
+  const annotatedTotal = hypo ? (regionAssigned+annotNoRegion) : nativeAnnot;
+
+  return {
+    hypo, sel, regionEnabled, region, contextIsNucleus, contextName, contextTotal,
+    contextPctLabel, positive, fracContext, pctExpr, meanExpr,
+    total, regionAssigned, notCovered, annotatedTotal,
+    annCov: hypo ? covFor('hypomap') : covFor('native'),
+    covNative: covFor('native'), covHypomap: covFor('hypomap'),
+  };
+}
+
+/* ===================================================================== */
+/* ============================== [VIEW] =============================== */
+/* Each returns an HTML string. data-act attributes drive the event map.  */
+/* ===================================================================== */
+const modeledBadge = big =>
+  `<span style="font-size:${big?8.5:8.5}px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#c19a4e;border:1px solid #e8d4a8;background:#faf3e2;padding:${big?'2px 6px':'1px 5px'};border-radius:4px;">modeled</span>`;
+
+function rampAlpha(c){ return 0.13 + 0.64*Math.sqrt((c||0)/6318); }
+
+function header(D){
+  const opts = ['native','hypomap'].map(k=>{
+    const active = (k==='hypomap')===D.hypo;
+    const cov = fmt0(k==='hypomap'?D.covHypomap:D.covNative);
+    return `<button data-act="source" data-v="${k}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 10px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;${active?'background:#b23b32;color:#fff;':'background:#f6f4ef;color:#7b756a;'}">
+      <span>${k==='hypomap'?'HypoMap':'Native'}</span>
+      <span class="mono" style="font-size:9.5px;font-weight:600;${active?'color:#f0cfca;':'color:#b8b2a7;'}">${cov}</span></button>`;
+  }).join('');
+  const showAutoNote = D.hypo && D.sel.length>0 && D.covNative===0;
+  const autoNote = `HypoMap integrated annotations are shown because ${D.sel.map(d=>d.label).join(', ')} carries no native cell labels. Native stays default wherever a deposit provides its own.`;
+  const provText = D.hypo
+    ? 'HypoMap atlas · CZ CELLxGENE d86517f0 · Steuernagel et al. 2022. 35,945 / 39,953 cells matched; 26,536 carry a nucleus assignment.'
+    : 'Native study annotations, as deposited in GEO. Region recorded only at study level.';
+  const dropdown = state.provOpen ? `
+    <div style="position:absolute;top:calc(100% + 8px);right:0;width:344px;background:#fff;border:1px solid #e2ddd3;border-radius:12px;box-shadow:0 12px 34px rgba(30,25,15,.16);padding:16px;z-index:40;">
+      <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#8a847a;margin-bottom:8px;">Annotation source</div>
+      <div style="display:flex;border:1px solid #ddd7cc;border-radius:9px;overflow:hidden;margin-bottom:12px;">${opts}</div>
+      ${showAutoNote?`<div style="font-size:11.5px;color:#8a6d47;line-height:1.5;background:#f5ece2;border:1px solid #ecdcc8;border-radius:8px;padding:9px 11px;margin-bottom:12px;">${esc(autoNote)}</div>`:''}
+      <div style="font-size:11px;color:#a7a197;line-height:1.55;">${provText}</div>
+    </div>` : '';
+  return `
+  <header style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:15px 26px;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #e8e4dc;border-radius:14px 14px 0 0;">
+    <div style="display:flex;align-items:center;gap:20px;min-width:0;">
+      <span style="font-size:13.5px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;">ARC Gene Explorer</span>
+      <div style="display:flex;align-items:center;background:#f2efe9;border:1px solid #e2ddd3;border-radius:9px;padding:3px 3px 3px 12px;">
+        <span style="font-size:12px;color:#a7a197;margin-right:8px;">Gene</span>
+        <input value="${GENE.symbol}" style="width:120px;padding:6px 8px;border:1px solid #ddd7cc;border-radius:6px;font-size:13px;font-weight:600;background:#fff;color:#211f1b;">
+        <button style="margin-left:5px;padding:7px 13px;border:none;border-radius:6px;background:#b23b32;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Look up</button>
+      </div>
+    </div>
+    <div style="position:relative;flex:none;">
+      <button data-act="prov" style="display:flex;align-items:center;gap:9px;padding:7px 12px;border:1px solid #e2ddd3;border-radius:9px;background:#faf9f6;cursor:pointer;">
+        <span style="width:8px;height:8px;border-radius:50%;background:${D.hypo?'#b23b32':'#8a847a'};flex:none;"></span>
+        <span style="font-size:12px;font-weight:600;color:#3a352d;">${D.hypo?'HypoMap':'Native'}</span>
+        <span style="font-size:11px;color:#a7a197;">${fmt0(D.annCov)} coverage</span>
+        <span style="font-size:9px;color:#bdb7ac;">▾</span>
+      </button>${dropdown}
+    </div>
+  </header>`;
+}
+
+function nav(D){
+  const tabs = TABS.map(([k,label])=>{
+    const active = state.tab===k;
+    return `<button data-act="tab" data-v="${k}" style="padding:13px 15px;border:none;background:none;cursor:pointer;font-size:13px;letter-spacing:-.005em;white-space:nowrap;font-weight:${active?'700':'500'};color:${active?'#211f1b':'#a7a197'};border-bottom:2px solid ${active?'#b23b32':'transparent'};margin-bottom:-1px;">${label}</button>`;
+  }).join('');
+  const whole = D.contextIsNucleus ? `<button data-act="whole" style="flex:none;padding:4px 9px;border:1px solid #ddd7cc;border-radius:6px;background:#fff;font-size:11px;font-weight:600;color:#7b756a;cursor:pointer;white-space:nowrap;">↩ Whole</button>` : '';
+  return `
+  <nav style="position:sticky;top:59px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 26px;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #e8e4dc;">
+    <div style="display:flex;align-items:stretch;gap:2px;">${tabs}</div>
+    <div style="display:flex;align-items:center;gap:11px;min-width:0;">
+      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#bdb7ac;white-space:nowrap;">Viewing</span>
+      <span style="font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;">${esc(D.contextName)}</span>
+      <span style="font-size:11px;color:#a7a197;white-space:nowrap;"><span class="mono" style="color:#b23b32;font-weight:600;">${fmt(D.contextTotal)}</span> cells</span>
+      ${whole}
+    </div>
+  </nav>`;
+}
+
+function anatomyMap(D){
+  const hasContext = D.contextIsNucleus;
+  const styleFor = key => {
+    const count = RC[key]||0, on = D.region===key, hov = state.hoverRegion===key, a = rampAlpha(count);
+    return { count,
+      fill: on ? '#b23b32' : `rgba(178,59,50,${a.toFixed(3)})`,
+      stroke: on ? '#8f2c25' : (hov ? '#b23b32' : 'rgba(122,40,34,.32)'),
+      sw: (on||hov) ? 2.4 : 1.1,
+      opacity: (hasContext && !on) ? 0.38 : 1,
+      labelColor: on ? '#fff' : (a>0.5 ? '#fff' : '#5a2b26'),
+      countColor: on ? 'rgba(255,255,255,.82)' : (a>0.5 ? 'rgba(255,255,255,.82)' : '#8a5c53') };
+  };
+  const txt = (x,y,fs,fill,fam,w,t)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="${fs}" font-weight="${w}" fill="${fill}" style="pointer-events:none;font-family:${fam};">${t}</text>`;
+  const SANS='-apple-system,Helvetica Neue,Arial,sans-serif', MONO='ui-monospace,Menlo,monospace';
+  let shapes = '';
+  for(const n of NUCLEI){
+    const st = styleFor(n.key), labFont = n.narrow?11:15, showCount = state.mapCounts && !n.narrow;
+    const one = (cx,tf) => `<g data-act="region" data-v="${esc(n.key)}" data-hover="${esc(n.key)}" opacity="${st.opacity}" style="cursor:pointer;transition:opacity .15s;">
+      <ellipse cx="${cx}" cy="${n.cy}" rx="${n.rx}" ry="${n.ry}" transform="${tf}" fill="${st.fill}" stroke="${st.stroke}" stroke-width="${st.sw}"></ellipse>
+      ${txt(cx, n.narrow?n.cy+3:n.cy-2, labFont, st.labelColor, SANS, 700, n.abbr)}
+      ${showCount?txt(cx,n.cy+14,11,st.countColor,MONO,400,fmt(st.count)):''}</g>`;
+    const lx = 760-n.cx;
+    shapes += one(n.cx, `rotate(${n.rot} ${n.cx} ${n.cy})`);
+    shapes += one(lx, `rotate(${-n.rot} ${lx} ${n.cy})`);
+  }
+  const arc = styleFor('Arcuate hypothalamic nucleus');
+  const arcG = `<g data-act="region" data-v="Arcuate hypothalamic nucleus" data-hover="Arcuate hypothalamic nucleus" opacity="${arc.opacity}" style="cursor:pointer;transition:opacity .15s;">
+    <path d="M380,430 C414,441 420,496 380,510 C340,496 346,441 380,430 Z" fill="${arc.fill}" stroke="${arc.stroke}" stroke-width="${arc.sw}"></path>
+    ${txt(380,466,14,arc.labelColor,SANS,700,'ARC')}
+    ${state.mapCounts?txt(380,482,11,arc.countColor,MONO,400,fmt(arc.count)):''}</g>`;
+  const hov = state.hoverRegion;
+  const readout = hov
+    ? `<div style="text-align:right;min-width:0;"><div style="font-size:11.5px;font-weight:700;color:#211f1b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(hov)}</div><div style="font-size:10.5px;color:#a7a197;"><span class="mono" style="color:#b23b32;">${fmt(RC[hov]||0)}</span> · ${((RC[hov]||0)/26536*100).toFixed(1)}%</div></div>`
+    : `<span style="font-size:10.5px;color:#bdb7ac;">click a nucleus</span>`;
+  return `
+  <div style="border:1px solid #e8e4dc;border-radius:12px;overflow:hidden;background:#fbfaf7;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;border-bottom:1px solid #efece5;min-height:44px;">
+      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#8a847a;white-space:nowrap;">Coronal · tuberal</span>${readout}
+    </div>
+    <div style="padding:4px 10px 0;">
+      <svg viewBox="0 0 760 600" style="width:100%;height:auto;display:block;">
+        <path d="M380,96 C305,92 230,98 180,124 C130,150 112,208 120,262 C127,326 156,382 205,416 C224,430 244,433 258,428 C250,440 256,452 270,452 C286,452 296,438 312,444 C334,453 352,464 380,466 C408,464 426,453 448,444 C464,438 474,452 490,452 C504,452 510,440 502,428 C516,433 536,430 555,416 C604,382 633,326 640,262 C648,208 630,150 580,124 C530,98 455,92 380,96 Z" fill="#f3ede7" stroke="#d8cdc3" stroke-width="2"></path>
+        <path d="M380,116 L389,132 L380,148 L371,132 Z" fill="#c9c0b4"></path>
+        <path d="M380,146 L380,452" stroke="#c9c0b4" stroke-width="3" stroke-linecap="round"></path>
+        <circle cx="380" cy="452" r="5" fill="#4a453d"></circle>
+        <ellipse cx="380" cy="522" rx="30" ry="14" fill="#efe7df" stroke="#cbbfb4" stroke-width="1.2"></ellipse>
+        <text x="380" y="527" text-anchor="middle" font-size="12" font-weight="600" fill="#a7a197" style="pointer-events:none;">ME</text>
+        ${shapes}${arcG}
+      </svg>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 14px 12px;">
+      <span style="font-size:10.5px;color:#a7a197;">fewer</span>
+      <div style="flex:1;height:7px;border-radius:4px;background:linear-gradient(90deg,rgba(178,59,50,.13),rgba(178,59,50,.77));"></div>
+      <span style="font-size:10.5px;color:#a7a197;">more cells</span>
+    </div>
+  </div>`;
+}
+
+function viewOverview(D){
+  const disabled = !D.regionEnabled;
+  const cards = [
+    { label:'% expressing', value:D.pctExpr.toFixed(1), unit:'%', sub:'positive fraction', modeled:state.showModeled, color:'#b23b32' },
+    { label:'Positive cells', value:fmt(D.positive), unit:'cells', sub:`of ${fmt(D.contextTotal)} in context`, modeled:state.showModeled, color:'#211f1b' },
+    { label:'Mean expression', value:D.meanExpr.toFixed(2), unit:'log-norm', sub:'across positive cells', modeled:state.showModeled, color:'#211f1b' },
+    { label:'Detected in', value:`${D.sel.length}/${D.sel.length}`, unit:'datasets', sub:'present in every selected deposit', modeled:false, color:'#211f1b' },
+  ].map(m=>`<div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 16px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:9px;min-height:16px;">
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#8a847a;">${m.label}</span>${m.modeled?modeledBadge():''}</div>
+      <div style="display:flex;align-items:baseline;gap:4px;"><span class="mono" style="font-size:25px;font-weight:700;color:${m.color};letter-spacing:-.01em;">${m.value}</span><span style="font-size:12px;color:#a7a197;">${m.unit}</span></div>
+      <div style="font-size:11px;color:#a7a197;margin-top:4px;line-height:1.35;">${m.sub}</div></div>`).join('');
+
+  const left = disabled
+    ? `<div style="border:1px dashed #ddd7cc;border-radius:12px;background:#faf9f6;padding:22px 20px;text-align:center;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Spatial view needs HypoMap</div>
+        <div style="font-size:11.5px;color:#8a6d47;line-height:1.55;margin-bottom:14px;">Nucleus placement comes from the HypoMap <span class="mono">hypomap_region</span> field. Native deposits carry only a study-level region.</div>
+        <button data-act="source" data-v="hypomap" style="padding:8px 15px;border:none;border-radius:8px;background:#b23b32;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Switch to HypoMap</button></div>`
+    : anatomyMap(D);
+
+  const offRows = D.regionEnabled ? OFFMAP.concat(['Not assigned']).map(name=>{
+    const count = RC[name]||0, on = D.region===name, na = name==='Not assigned';
+    const dot = na
+      ? `width:11px;height:11px;border-radius:3px;flex:none;background-image:repeating-linear-gradient(45deg,#cbc6bd,#cbc6bd 3px,#bdb7ac 3px,#bdb7ac 6px);`
+      : `width:11px;height:11px;border-radius:3px;flex:none;background:rgba(178,59,50,${rampAlpha(count).toFixed(3)});border:1px solid rgba(122,40,34,.3);`;
+    return `<div data-act="region" data-v="${esc(name)}" style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:7px;cursor:pointer;background:${on?'#f5e6e3':'transparent'};">
+      <span style="${dot}"></span>
+      <span style="flex:1;font-size:11.5px;line-height:1.25;${on?'font-weight:700;color:#b23b32;':(na?'color:#7b756a;':'')}">${esc(name)}</span>
+      <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(count)}</span></div>`;
+  }).join('') : '';
+  const offBlock = D.regionEnabled ? `
+    <div style="width:452px;margin-top:16px;">
+      <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#8a847a;margin-bottom:3px;">Off this plane</div>
+      <div style="font-size:10.5px;color:#bdb7ac;line-height:1.45;margin-bottom:8px;">Nuclei at other rostro-caudal levels — selectable all the same.</div>
+      <div style="display:flex;flex-direction:column;gap:1px;">${offRows}</div>
+    </div>` : '';
+
+  return `
+    <div style="display:flex;align-items:baseline;gap:11px;margin-bottom:4px;">
+      <span style="font-size:32px;font-weight:700;letter-spacing:-.02em;">${GENE.symbol}</span>
+      <span style="font-size:14px;color:#7b756a;">${GENE.name}</span>
+    </div>
+    <div style="margin-top:22px;border:1px solid #e8e4dc;border-radius:11px;padding:16px 18px;background:#fbfaf7;width:922px;">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;">About this gene</div>
+      <div style="font-size:12.5px;color:#7b756a;line-height:1.6;">${GENE_BLURB}</div>
+    </div>
+    <div style="width:452px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#8a847a;margin-top:20px;margin-bottom:9px;">Anatomy · click a nucleus to set context</div>
+    <div style="display:flex;gap:30px;align-items:center;">
+      <div style="width:452px;flex:none;">${left}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12.5px;color:#a7a197;margin-bottom:22px;line-height:1.5;">Hypothalamus · Mus musculus · expression across <b style="color:#7b756a;">${esc(D.contextName)}</b>${D.contextPctLabel}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">${cards}</div>
+      </div>
+    </div>${offBlock}`;
+}
+
+function viewIdentity(D){
+  if(!D.regionEnabled){
+    return `<div style="font-size:18px;font-weight:700;margin-bottom:4px;">Which cell types</div>
+      <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">HypoMap lineage within <b style="color:#211f1b;">${esc(D.contextName)}</b>.</div>
+      <div style="border:1px dashed #ddd7cc;background:#faf9f6;border-radius:11px;padding:22px;text-align:center;">
+        <div style="font-size:12.5px;color:#8a6d47;line-height:1.55;max-width:440px;margin:0 auto 14px;">The C7 → C465 tree is a HypoMap integrated annotation, unavailable for native-only labels.</div>
+        <button data-act="source" data-v="hypomap" style="padding:8px 15px;border:none;border-radius:8px;background:#b23b32;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Switch to HypoMap</button></div>`;
+  }
+  const resBtns = RES.map(([k,n])=>{
+    const active = k===state.resolution;
+    return `<button data-act="res" data-v="${k}" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border:none;border-right:1px solid #ddd7cc;cursor:pointer;font-size:12px;font-weight:600;${active?'background:#b23b32;color:#fff;':'background:#fff;color:#7b756a;'}">${k}<span class="mono" style="font-size:9.5px;font-weight:400;${active?'color:#f0cfca;':'color:#b8b2a7;'}">${n}</span></button>`;
+  }).join('');
+
+  // tree
+  let treeRows = '';
+  const walk = (nodes, depth) => {
+    for(const node of nodes){
+      const open = !!state.expanded[node.id], hasKids = node.kids && node.kids.length>0;
+      const caretStyle = `width:14px;flex:none;text-align:center;font-size:${hasKids?11:13}px;color:${hasKids?'#b23b32':'#cbc6bd'};`;
+      const labelWeight = depth===0?'font-weight:600;':(depth===1?'font-weight:500;color:#3a352d;':'color:#7b756a;');
+      const markSpan = node.mark?`<span style="font-size:8.5px;font-weight:700;color:#b23b32;background:#f5e6e3;padding:1px 5px;border-radius:4px;margin-left:6px;">${GENE.symbol}⁺</span>`:'';
+      treeRows += `<div ${hasKids?`data-act="node" data-v="${esc(node.id)}"`:''} style="display:flex;align-items:center;gap:7px;padding:6px 8px;padding-left:${8+depth*18}px;border-radius:6px;cursor:${hasKids?'pointer':'default'};background:${node.mark?'#faf1ef':'transparent'};">
+        <span style="${caretStyle}">${hasKids?(open?'▾':'▸'):'·'}</span>
+        <span style="flex:1;font-size:11.5px;${labelWeight}">${esc(node.id)}${markSpan}</span>
+        <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(node.n)}</span></div>`;
+      if(open && hasKids) walk(node.kids, depth+1);
+    }
+  };
+  walk(TREE, 0);
+
+  // abundance table
+  const listable = state.resolution==='C7' || state.resolution==='C25';
+  const src = state.resolution==='C7' ? C7 : C25;
+  const resMeta = RES.find(r=>r[0]===state.resolution) || ['C25',24];
+  let table;
+  if(listable){
+    const max = src[0][1];
+    const rows = src.map(([label,count])=>{
+      const mark = /GLU-5$/.test(label);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f4f1ea;">
+        <div style="flex:1;min-width:0;"><div style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(label)}${mark?`<span style="font-size:8.5px;font-weight:700;color:#b23b32;margin-left:5px;">${GENE.symbol}⁺</span>`:''}</div>
+        <div style="height:5px;border-radius:3px;background:#efece5;overflow:hidden;margin-top:4px;"><div style="height:100%;width:${(count/max*100).toFixed(1)}%;background:#b23b32;"></div></div></div>
+        <span class="mono" style="font-size:10.5px;width:48px;text-align:right;">${fmt(count)}</span>
+        <span class="mono" style="font-size:10px;color:#a7a197;width:40px;text-align:right;">${(count/D.annotatedTotal*100).toFixed(1)}%</span></div>`;
+    }).join('');
+    table = `<div style="max-height:412px;overflow-y:auto;">${rows}</div>`;
+  } else {
+    table = `<div style="padding:20px 8px;text-align:center;"><div class="mono" style="font-size:22px;font-weight:700;color:#b23b32;">${resMeta[1]}</div>
+      <div style="font-size:11.5px;color:#7b756a;margin-top:6px;line-height:1.5;">clusters at ${state.resolution} — too many to rank flat. Drill a lineage instead.</div></div>`;
+  }
+
+  return `
+    <div style="font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;">Which cell types</div>
+    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">HypoMap lineage within <b style="color:#211f1b;">${esc(D.contextName)}</b>. Expand a class to drill C7 → C465.</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#8a847a;">Resolution</span>
+      <div style="display:inline-flex;border:1px solid #ddd7cc;border-radius:8px;overflow:hidden;">${resBtns}</div>
+      <span style="font-size:11px;color:#a7a197;">coarse → fine</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;">
+      <div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 6px 15px 15px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;padding-right:10px;">Lineage explorer</div>
+        <div style="font-size:10.5px;color:#a7a197;margin-bottom:11px;padding-right:10px;line-height:1.45;">Collapsed by default — the 390 leaf clusters never all show at once.</div>
+        <div style="max-height:420px;overflow-y:auto;padding-right:8px;">${treeRows}</div>
+      </div>
+      <div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 17px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:11px;">
+          <span style="font-size:12px;font-weight:700;">Cluster abundance · ${state.resolution}</span>
+          <span style="font-size:10px;color:#a7a197;">${listable?`${resMeta[1]} clusters · % of annotated`:`${resMeta[1]} distinct`}</span></div>
+        ${table}
+        <div style="margin-top:11px;display:flex;align-items:center;gap:9px;padding:8px 10px;background:#f8f6f2;border-radius:8px;">
+          <span style="width:10px;height:10px;border-radius:2px;background:#cbc6bd;flex:none;"></span>
+          <span style="font-size:10.5px;color:#7b756a;line-height:1.4;"><b style="color:#211f1b;">${fmt(D.notCovered)}</b> cells (${D.total?(D.notCovered/D.total*100).toFixed(1):'—'}%) present but unannotated — kept visible.</span></div>
+      </div>
+    </div>`;
+}
+
+function viewExpression(D){
+  const stats = [
+    { label:'% expressing', value:D.pctExpr.toFixed(1), unit:'%', color:'#b23b32' },
+    { label:'Positive cells', value:fmt(D.positive), unit:`of ${fmt(D.contextTotal)}`, color:'#211f1b' },
+    { label:'Mean (positive)', value:D.meanExpr.toFixed(2), unit:'log-norm', color:'#211f1b' },
+  ].map(m=>`<div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 16px;">
+      <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#8a847a;margin-bottom:9px;">${m.label}</div>
+      <div style="display:flex;align-items:baseline;gap:4px;"><span class="mono" style="font-size:25px;font-weight:700;color:${m.color};letter-spacing:-.01em;">${m.value}</span><span style="font-size:12px;color:#a7a197;">${m.unit}</span></div></div>`).join('');
+
+  const shape = [1,0.86,0.6,0.42,0.29,0.19,0.12,0.07,0.035];
+  const scale = 0.6 + Math.min(1.4, D.fracContext*8);
+  const bars = shape.map((h,i)=>`<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;">
+      <div style="width:100%;border-radius:3px 3px 0 0;height:${Math.max(3,h*100*Math.min(1,scale)).toFixed(0)}%;background:${i<2?'#b23b32':'rgba(178,59,50,'+(0.72-i*0.06).toFixed(2)+')'};"></div></div>`).join('');
+  const ticks = shape.map((_,i)=>`<span style="flex:1;text-align:center;font-size:9.5px;color:#bdb7ac;" class="mono">${(i*0.75).toFixed(1)}</span>`).join('');
+
+  return `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+      <span style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Expression detail</span>${modeledBadge(true)}</div>
+    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">Quantitative <span class="mono">${GENE.symbol}</span> expression among positive cells in <b style="color:#211f1b;">${esc(D.contextName)}</b>. Computes from the raw matrix — unchanged by enrichment.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">${stats}</div>
+    <div style="border:1px solid #e8e4dc;border-radius:11px;padding:18px 20px 14px;">
+      <div style="font-size:12px;font-weight:700;margin-bottom:14px;">Distribution among positive cells</div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:150px;">${bars}</div>
+      <div style="display:flex;gap:6px;margin-top:8px;">${ticks}</div>
+      <div style="text-align:center;font-size:10.5px;color:#a7a197;margin-top:4px;">log-normalized expression →</div>
+    </div>`;
+}
+
+function viewRepro(D){
+  const chips = DS.map(d=>{
+    const on = !!state.datasets[d.id], cov = D.hypo?d.hypomap:d.native;
+    const covLabel = cov==null?'no HM':pct(cov,d.cells).toFixed(0)+'%';
+    return `<button data-act="dataset" data-v="${d.id}" style="display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;border:1px solid ${on?'#e2ddd3':'#ece8e0'};background:${on?'#fff':'#f6f4ef'};color:${on?'#211f1b':'#a7a197'};">
+      <span style="width:10px;height:10px;border-radius:3px;flex:none;background:${on?d.color:'transparent'};border:1.5px solid ${d.color};"></span>
+      <span>${d.label}</span><span class="mono" style="font-size:10px;opacity:.7;">${covLabel}</span></button>`;
+  }).join('');
+
+  const consRaw = D.sel.map(d=>{
+    const mult = DSMULT[d.id]||1, noRegion = D.contextIsNucleus && d.hypoRegion==null;
+    const baseFrac = noRegion ? wholeFrac() : D.fracContext;
+    return { label:d.label, color:d.color, pct: baseFrac*mult*100, noRegion };
+  });
+  const maxPct = Math.max(0.001, ...consRaw.map(r=>r.pct));
+  const rows = consRaw.map(r=>`<div style="display:flex;align-items:center;gap:11px;">
+      <span style="width:11px;height:11px;border-radius:3px;flex:none;background:${r.color};"></span>
+      <span style="width:118px;flex:none;font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.label}</span>
+      <div style="flex:1;height:8px;border-radius:4px;background:#efece5;overflow:hidden;"><div style="height:100%;width:${(r.pct/maxPct*100).toFixed(1)}%;background:${r.color};"></div></div>
+      <span class="mono" style="width:46px;flex:none;text-align:right;font-size:11.5px;font-weight:600;">${r.pct.toFixed(1)}%</span>
+      <span style="${r.noRegion?'flex:none;font-size:9px;font-weight:600;color:#a7a197;background:#f0ede6;padding:2px 7px;border-radius:4px;white-space:nowrap;':'flex:none;font-size:9px;font-weight:600;color:#1f8a5b;background:#e7f3ec;padding:2px 7px;border-radius:4px;white-space:nowrap;'}">${r.noRegion?'tissue-level':'consistent'}</span></div>`).join('');
+
+  return `
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;">
+      <span style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Reproducible?</span>
+      <span style="font-size:11.5px;color:#a7a197;">${D.sel.length} of ${D.sel.length} datasets</span></div>
+    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">Detection and per-dataset agreement for <span class="mono">${GENE.symbol}</span> in <b style="color:#211f1b;">${esc(D.contextName)}</b>. Toggle a deposit to include it.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">${chips}</div>
+    <div style="border:1px solid #e8e4dc;border-radius:11px;padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:22px;">
+        <div style="flex:none;"><div class="mono" style="font-size:30px;font-weight:700;color:#b23b32;line-height:1;">${D.pctExpr.toFixed(1)}%</div>
+        <div style="font-size:11px;color:#a7a197;margin-top:5px;">pooled % expressing</div></div>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:11px;">${rows}</div>
+      </div>
+    </div>`;
+}
+
+function viewContext(D){
+  return `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+      <span style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Baseline coexpression</span>
+      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#c19a4e;padding:3px 7px;border-radius:5px;">Next</span></div>
+    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">Gene context for <span class="mono">${GENE.symbol}</span>. More context analyses (differential coexpression, pathways, gene programs) will land here later.</div>
+    <div style="border:1px dashed #ddd7cc;border-radius:11px;padding:20px 22px;background:#faf9f6;">
+      <div style="font-size:12.5px;color:#7b756a;line-height:1.6;max-width:640px;">The gene-pair workflow inherits everything set elsewhere — the active <b style="color:#211f1b;">annotation source</b>, the <b style="color:#211f1b;">${esc(D.contextName)}</b> context, and the cluster <b style="color:#211f1b;">resolution</b>. Because context is shared, coexpression adds no navigation of its own: only a second gene to pair with <span class="mono">${GENE.symbol}</span>.</div>
+    </div>`;
+}
+
+/* ===================================================================== */
+/* ============================== [SHELL] ============================== */
+/* ===================================================================== */
+function render(){
+  const D = derive();
+  const body = {
+    overview: viewOverview, identity: viewIdentity, expression: viewExpression,
+    repro: viewRepro, context: viewContext,
+  }[state.tab](D);
+  const footer = `
+    <footer style="padding:13px 30px;border-top:1px solid #e8e4dc;background:#f9f8f4;border-radius:0 0 14px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <span style="font-size:11px;color:#a7a197;">${D.hypo?'HypoMap atlas · CZ CELLxGENE d86517f0 · Steuernagel et al. 2022 · 35,945 / 39,953 cells matched':'Native study annotations · as deposited in GEO'}</span>
+      <span class="mono" style="font-size:10px;color:#bdb7ac;">expression matrix unchanged by enrichment · 39,953 × 55,399</span>
+    </footer>`;
+  document.getElementById('app').innerHTML =
+    header(D) + nav(D) + `<main style="padding:26px 30px 34px;">${body}</main>` + footer;
+}
+
+// event delegation
+const app = document.getElementById('app');
+app.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if(!el) { if(state.provOpen){ state.provOpen=false; render(); } return; }
+  const act = el.getAttribute('data-act'), v = el.getAttribute('data-v');
+  switch(act){
+    case 'tab': state.tab = v; break;
+    case 'source': state.source = v; state.provOpen = false; break;
+    case 'prov': state.provOpen = !state.provOpen; break;
+    case 'dataset': state.datasets = {...state.datasets, [v]: !state.datasets[v]}; break;
+    case 'region': state.region = state.region===v ? null : v; break;
+    case 'whole': state.region = null; break;
+    case 'res': state.resolution = v; break;
+    case 'node': { const ex={...state.expanded}; ex[v]?delete ex[v]:ex[v]=true; state.expanded=ex; break; }
+    default: return;
+  }
+  e.stopPropagation();
+  render();
+});
+app.addEventListener('mouseover', e => {
+  const el = e.target.closest('[data-hover]');
+  const key = el ? el.getAttribute('data-hover') : null;
+  if(key !== state.hoverRegion){ state.hoverRegion = key; render(); }
+});
+app.addEventListener('mouseleave', () => { if(state.hoverRegion){ state.hoverRegion=null; render(); } }, true);
+
+render();
+</script>
+</body>
+</html>

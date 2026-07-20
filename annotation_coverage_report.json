@@ -1,0 +1,53 @@
+{
+  "generated_on": "2026-07-20",
+  "processed_dir": "processed",
+  "datasets": [
+    {
+      "dataset_id": "GSE207736",
+      "total_cells": 39953,
+      "nonblank_hypomap_region": 26536,
+      "blank_hypomap_region": 13417,
+      "nonblank_hypomap_C25": 35945,
+      "blank_hypomap_C25": 4008,
+      "nonblank_sample_id": 39953,
+      "blank_sample_id": 0,
+      "whole_dataset_denominator_cells": 39953,
+      "selected_nucleus_denominator_rule": "hypomap_region == selected_nucleus",
+      "blank_hypomap_region_metric_handling": "retained in whole-dataset denominators; excluded from named selected-nucleus denominators; report as unannotated/out of scope",
+      "blank_sample_id_metric_handling": "retained in whole-dataset metrics when sample identity is not required; excluded from sample-, replicate-, condition-, and true pseudobulk-scoped metrics"
+    },
+    {
+      "dataset_id": "GSE172461",
+      "total_cells": 41156,
+      "nonblank_hypomap_region": 19554,
+      "blank_hypomap_region": 21602,
+      "nonblank_hypomap_C25": 33306,
+      "blank_hypomap_C25": 7850,
+      "nonblank_sample_id": 41156,
+      "blank_sample_id": 0,
+      "whole_dataset_denominator_cells": 41156,
+      "selected_nucleus_denominator_rule": "hypomap_region == selected_nucleus",
+      "blank_hypomap_region_metric_handling": "retained in whole-dataset denominators; excluded from named selected-nucleus denominators; report as unannotated/out of scope",
+      "blank_sample_id_metric_handling": "retained in whole-dataset metrics when sample identity is not required; excluded from sample-, replicate-, condition-, and true pseudobulk-scoped metrics"
+    },
+    {
+      "dataset_id": "GSE93374",
+      "total_cells": 21086,
+      "nonblank_hypomap_region": 8148,
+      "blank_hypomap_region": 12938,
+      "nonblank_hypomap_C25": 14286,
+      "blank_hypomap_C25": 6800,
+      "nonblank_sample_id": 21086,
+      "blank_sample_id": 0,
+      "whole_dataset_denominator_cells": 21086,
+      "selected_nucleus_denominator_rule": "hypomap_region == selected_nucleus",
+      "blank_hypomap_region_metric_handling": "retained in whole-dataset denominators; excluded from named selected-nucleus denominators; report as unannotated/out of scope",
+      "blank_sample_id_metric_handling": "retained in whole-dataset metrics when sample identity is not required; excluded from sample-, replicate-, condition-, and true pseudobulk-scoped metrics"
+    }
+  ],
+  "global_rules": [
+    "No cells are silently dropped from whole-dataset denominators because annotations are blank.",
+    "Blank hypomap_region cells are retained and reported; they are not eligible for named selected-nucleus metrics.",
+    "Blank sample_id cells are retained and reported; they are excluded only from scopes requiring sample identity."
+  ]
+}
