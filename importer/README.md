@@ -40,7 +40,7 @@ python -m importer GSE93374       # dense Drop-seq DGE + per-cell metadata
 processed/<dataset_id>/
   dataset.json             # study-level: dataset_id,title,species,tissue,technology,publication,source
   samples.csv              # sample_id,dataset_id,condition,age,sex,technology
-  cells.csv                # cell_id,dataset_id,sample_id,condition,major_cell_type,cell_type,cluster_id,region
+  cells.csv                # native columns + canonical hypomap_* external-annotation columns
   genes.csv                # gene_id,gene_symbol,species
   expression_matrix.npz    # scipy CSR sparse, cells x genes
   expression_metadata.json # orientation, value_type (raw_counts/normalized/log_normalized), shape, nnz
@@ -48,6 +48,33 @@ processed/<dataset_id>/
 
 The matrix row order matches `cells.csv`; the column order matches `genes.csv`
 (also recorded in `expression_metadata.json`).
+
+See [`../docs/SHARED_SCHEMA.md`](../docs/SHARED_SCHEMA.md) for the exact canonical
+columns and missing-annotation rules.
+
+The importer writes raw-count matrices. Log-normalized matrices are generated as
+separate derived artifacts after import:
+
+```bash
+python3 ../tools/build_lognormalized_layer.py GSE207736 GSE172461 GSE93374
+```
+
+That tool writes `expression_matrix_lognormalized.npz` and
+`expression_metadata_lognormalized.json`, then independently regenerates the
+Seurat LogNormalize matrix from raw counts and verifies numeric agreement before
+marking the layer usable.
+
+Cross-dataset gene alias harmonization is also a separate post-import derived
+artifact. It preserves each dataset's `genes.csv` unchanged:
+
+```bash
+python3 ../tools/build_gene_harmonization.py
+python3 ../tools/resolve_gene_query.py Ccn1
+```
+
+The resolver reports explicit states: `resolved`, `disambiguation_required`,
+`gene_not_found`, or `duplicate_dataset_mapping`. Do not treat unresolved genes
+as zero expression.
 
 Reload the matrix with:
 
@@ -64,6 +91,8 @@ Every run checks, and fails on:
 3. metadata cell ids join the matrix cells (when per-cell metadata is provided;
    partial coverage warns, or fails under `--strict`)
 4. gene symbols are unique (duplicates made unique R-style: `Foo`, `Foo.1`, ...)
+5. stable nonempty/unique cell and gene identifiers
+6. nonnegative, integer-like values for raw-count matrices
 
 ## Architecture
 

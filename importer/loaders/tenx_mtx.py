@@ -110,7 +110,12 @@ class TenXMtxLoader(BaseLoader):
         self.species = species
 
     def _discover_matrices(self) -> list[Path]:
-        matrices = sorted(self.input_dir.glob("*matrix.mtx.gz"))
+        # Skip macOS AppleDouble sidecar files (``._*``); they share the real
+        # file's name and glob but are non-gzip filesystem metadata.
+        matrices = sorted(
+            p for p in self.input_dir.glob("*matrix.mtx.gz")
+            if not p.name.startswith("._")
+        )
         if not matrices:
             raise FileNotFoundError(
                 f"No *matrix.mtx.gz files found under {self.input_dir}"

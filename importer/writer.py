@@ -29,7 +29,9 @@ def write_dataset(
     with open(out_dir / "dataset.json", "w") as fh:
         json.dump(dataset_meta, fh, indent=2)
 
-    # samples.csv / cells.csv / genes.csv (conform to required columns)
+    # samples.csv / cells.csv / genes.csv (conform to canonical columns).
+    # External annotation columns are always written. Blank values make missing
+    # or unavailable annotation explicit instead of changing the file shape.
     samples = schema.conform(result.samples, schema.SAMPLE_COLUMNS)
     cells = schema.conform(result.cells, schema.CELL_COLUMNS)
     genes = schema.conform(result.genes, schema.GENE_COLUMNS)

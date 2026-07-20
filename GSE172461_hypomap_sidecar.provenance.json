@@ -1,0 +1,62 @@
+{
+  "dataset_id": "GSE172461",
+  "hypomap_label": "Rupp10x",
+  "atlas_object": "hypomap.h5ad (integrated HypoMap atlas, Steuernagel et al. 2022)",
+  "cellxgene_collection": "d86517f0-fa7e-4266-b82e-a521350d6d36",
+  "atlas_h5ad": "/Volumes/SanDisk/hypomap_download/hypomap.h5ad",
+  "reads": "atlas obs (cell metadata) only; no expression values read",
+  "field_map": {
+    "Region_summarized": "hypomap_region",
+    "Author_CellType": "hypomap_author_cell_type",
+    "C7_named": "hypomap_C7",
+    "C25_named": "hypomap_C25",
+    "C66_named": "hypomap_C66",
+    "C185_named": "hypomap_C185",
+    "C286_named": "hypomap_C286",
+    "C465_named": "hypomap_C465"
+  },
+  "crosswalk": {
+    "SRR14289035": "",
+    "SRR14289036": "-2",
+    "SRR14289037": "-3",
+    "SRR14289038": "-4"
+  },
+  "atlas_cells": 33502,
+  "built": "2026-07-17",
+  "builder": "tools/build_hypomap_sidecar.py",
+  "validation": {
+    "processed_cells_csv": "processed/GSE172461/cells.csv",
+    "atlas_cells": 33502,
+    "imported_cells": 41156,
+    "atlas_cells_matched_to_import": 33306,
+    "imported_cells_matched_to_atlas": 33306,
+    "atlas_cells_unmatched_to_import": 196,
+    "imported_cells_unmatched_to_atlas": 7850,
+    "per_token": [
+      {
+        "atlas_token": "SRR14289035",
+        "sum": 8275,
+        "count": 8471,
+        "unmatched": 196
+      },
+      {
+        "atlas_token": "SRR14289036",
+        "sum": 7875,
+        "count": 7875,
+        "unmatched": 0
+      },
+      {
+        "atlas_token": "SRR14289037",
+        "sum": 8125,
+        "count": 8125,
+        "unmatched": 0
+      },
+      {
+        "atlas_token": "SRR14289038",
+        "sum": 9031,
+        "count": 9031,
+        "unmatched": 0
+      }
+    ]
+  }
+}

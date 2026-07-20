@@ -29,6 +29,7 @@ interactive gene-expression explorer for the Romanov_10x dataset, with a design 
 | [CURRENT_STATE.md](CURRENT_STATE.md) | **Live status** — what's done, what's next, known issues. Split into Design-owned and Code-owned sections. Start here for "what should I do next." |
 | [README.md](README.md) | Repository map + importer quickstart. |
 | [importer/README.md](importer/README.md) | Importer usage, output schema, architecture, how to add a dataset. |
+| [EXTERNAL_ANNOTATION_STRATEGY.md](EXTERNAL_ANNOTATION_STRATEGY.md) | Design decision + workflow for raw-only GEO deposits (counts but no per-cell annotation): map fine labels from an external curated source via an optional, validated sidecar. Read before enriching a raw-only dataset. |
 | [archive/README.md](archive/README.md) | Index of archived raw provenance and superseded working files. |
 | [hypomap-viz/README.md](hypomap-viz/README.md) | Visualizer setup and its three app stacks. |
 
