@@ -57,15 +57,19 @@ aggregation logic ready for `GSE172461` and `GSE93374`.
 
 Implemented:
 
-- gene lookup with alias resolution from the static export (`Cyr61` resolves to
-  canonical `Ccn1`)
+- dynamic gene search with a filtered type-ahead dropdown, keyboard navigation,
+  and alias resolution from the static export (`Cyr61` resolves to canonical
+  `Ccn1`)
 - selectable dataset rows, defaulting to Dowsett10xnuc only
 - dataset-average and cell-pooled aggregation modes, revealed only when more
   than one dataset is selected
 - Whole / ARC / PVN / VMH / DMH context selector
-- five-tab handoff structure: Overview, Cell Identity, Expression,
-  Reproducibility, and Context
-- Overview and Expression metric cards backed by raw-count and verified Seurat
+- five-tab structure: Overview, Cell Identity, Aggregate, By dataset, and Context
+- count-led Aggregate view with a live expressing-cell donut, across-dataset
+  percentage, positive-cell mean expression, metric explainers, and detection count
+- By dataset view with selectable dataset chips, a fixed 0–100% bar chart, and
+  per-dataset expression detail cards
+- Overview and Aggregate metric cards backed by raw-count and verified Seurat
   LogNormalize metrics defined in `docs/METRIC_SPEC.md`
 - region-scoped `hypomap_C25` grouping for the Cell Identity tab
 - explicit provenance and annotation-coverage reporting, including unsupported

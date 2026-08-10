@@ -3,7 +3,7 @@
 Live working status. Update as work proceeds. *(Not intended for Claude Project knowledge —
 it changes often; the stable docs are PROJECT_OVERVIEW / DATASET_SUMMARIES / DESIGN_SPEC.)*
 
-_Last updated: 2026-07-20_
+_Last updated: 2026-08-10_
 
 This file merges the two working tracks. **Claude Design** owns UX/spec sections; **Claude
 Code** owns data, importer, and app-implementation sections. Keep edits within your track's
@@ -228,12 +228,23 @@ without a follow-up design pass.
   and `Ccn1`/`Cyr61`, defaulting to Dowsett10xnuc / `GSE207736` only. Additional target datasets
   (`GSE172461`, `GSE93374`) remain selectable for multi-dataset analysis, and dataset-average vs
   cell-pooled aggregation controls are revealed only when more than one dataset is selected.
-  Whole/ARC/PVN/VMH/DMH context switching, Overview, Cell Identity, Expression, Reproducibility,
-  and Context views now follow the handoff layout. Extended `tools/export_fvp_metrics.py` to
+  Whole/ARC/PVN/VMH/DMH context switching and the five-view shell were implemented from the
+  handoff. Extended `tools/export_fvp_metrics.py` to
   include `hypomap_C25` groups within each `hypomap_region`, so the Cell Identity tab uses
   region-scoped values when ARC/PVN/VMH/DMH is selected. Context/coexpression is intentionally a
   metric-definition-needed state; no quadrant values are computed or substituted until the
   canonical coexpression denominator/formulas are specified.
+- ✅ **Dynamic gene autocomplete added to `gene-explorer-js` (2026-08-10).** The header search
+  now filters the genes present in the loaded metric export as the user types, exposes canonical
+  names and dataset aliases in a dropdown, supports mouse and arrow-key/Enter selection, and
+  retains alias resolution (for example, `Cyr61` selects canonical `Ccn1`).
+- ✅ **Aggregate and By dataset views added to `gene-explorer-js` (2026-08-10).** Replaced the
+  Expression and Reproducibility tabs at the user's direction. Aggregate now presents the
+  count-led expressing-cell donut, across-dataset average, positive-cell mean with scale, formula
+  popovers, and detection chip. By dataset now presents the specified 0–100% bar chart with
+  25-point gridlines, dataset color ramp, 52° labels, live dataset toggles, and per-dataset
+  expression detail cards. All values react to the active gene, context, annotation source, and
+  selected datasets.
 
 **hypomap-viz app — in progress.** Interactive explorer for the **Romanov_10x** dataset (GEO
 GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hypomap-viz/`
@@ -249,8 +260,8 @@ GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hy
   Plain HTML/CSS/JS, no framework; reads
   `public/data/gene_metrics_vertical_slice.json`. Current scope: `Pomc`, `Agrp`, and
   `Ccn1`/`Cyr61`, defaulting to Dowsett10xnuc while allowing the three target datasets to be
-  selected. The five-tab `ARC_Gene_Explorer.html` handoff is wired to real metric exports where
-  supported: Overview, Expression, Reproducibility, and `hypomap_C25` Cell Identity values.
+  selected. The five-tab app is wired to real metric exports where supported: Overview,
+  Aggregate, By dataset, and `hypomap_C25` Cell Identity values.
   Context/coexpression and non-C25 cell-identity hierarchy levels remain blocked on metric/export
   definitions rather than filled with modeled values.
 
@@ -290,6 +301,9 @@ excluded):
 - **FVP static app data (generated, tracked if app deployment needs it)** —
   `hypomap-viz/gene-explorer-js/public/data/gene_metrics_vertical_slice.json`, copied from
   `fvp_export/gene_metrics_vertical_slice.json` after regeneration.
+- **FVP static app UI** — `hypomap-viz/gene-explorer-js/src/main.js` and `src/style.css`, including
+  dynamic gene autocomplete sourced from the loaded metric export, canonical/alias labels, and
+  keyboard selection behavior.
 - **ARC Gene Explorer handoff (Design source copied into app workspace)** —
   `hypomap-viz/gene-explorer-js/handoff/ARC_Gene_Explorer.html` and
   `hypomap-viz/gene-explorer-js/handoff/RECREATE.md`, extracted from
