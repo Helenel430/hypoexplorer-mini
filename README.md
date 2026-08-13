@@ -124,11 +124,12 @@ This writes `annotation_coverage_report.json`, including retained blank
 Generate the lightweight FVP metric vertical slice with:
 
 ```bash
-python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1
+python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1 Fam237b
 ```
 
 This writes `fvp_export/gene_metrics_vertical_slice.json` with whole-dataset,
-`hypomap_region`, and `hypomap_C25` metrics for the three-gene slice.
+`hypomap_region`, and `hypomap_C25` metrics for the four-gene slice, including
+MGI-backed alias resolution for `Ccn1`/`Cyr61` and `Fam237b`/`Gm8773`.
 
 ## What lives where
 

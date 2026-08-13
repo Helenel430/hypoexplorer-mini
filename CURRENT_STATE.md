@@ -245,6 +245,15 @@ without a follow-up design pass.
   25-point gridlines, dataset color ramp, 52° labels, live dataset toggles, and per-dataset
   expression detail cards. All values react to the active gene, context, annotation source, and
   selected datasets.
+- ✅ **Aggregate calculation switch added (2026-08-12).** The Aggregate page now exposes
+  dataset-average (each dataset weighted equally) versus cell-pooled (each cell weighted equally)
+  calculation modes. Both the percentage and positive-cell mean update with the selected mode;
+  the donut remains an explicitly labeled pooled absolute cell count.
+- ✅ **Fam237b vertical slice added (2026-08-13).** Expanded the static metric export and
+  `gene-explorer-js` lookup from three to four canonical genes. `Fam237b` resolves through
+  MGI:3646213 to the native `Gm8773` feature in GSE207736, GSE172461, and GSE93374; both symbols
+  are searchable and lead to the same record. Whole-dataset detection is 3/3 datasets (1,224 /
+  102,195 pooled expressing cells, 1.198%).
 
 **hypomap-viz app — in progress.** Interactive explorer for the **Romanov_10x** dataset (GEO
 GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hypomap-viz/`
@@ -258,10 +267,10 @@ GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hy
   and per cell type), mean log-normalized expression, bar charts.
 - **`gene-explorer-js/`** — JS/Vite static Gene Explorer for the current FVP vertical slice.
   Plain HTML/CSS/JS, no framework; reads
-  `public/data/gene_metrics_vertical_slice.json`. Current scope: `Pomc`, `Agrp`, and
-  `Ccn1`/`Cyr61`, defaulting to Dowsett10xnuc while allowing the three target datasets to be
-  selected. The five-tab app is wired to real metric exports where supported: Overview,
-  Aggregate, By dataset, and `hypomap_C25` Cell Identity values.
+  `public/data/gene_metrics_vertical_slice.json`. Current scope: `Pomc`, `Agrp`,
+  `Ccn1`/`Cyr61`, and `Fam237b`/`Gm8773`, defaulting to Dowsett10xnuc while allowing the three
+  target datasets to be selected. The five-tab app is wired to real metric exports where
+  supported: Overview, Aggregate, By dataset, and `hypomap_C25` Cell Identity values.
   Context/coexpression and non-C25 cell-identity hierarchy levels remain blocked on metric/export
   definitions rather than filled with modeled values.
 
@@ -296,7 +305,7 @@ excluded):
   rules for metric/UI code.
 - **FVP static metric export tool (tracked source tool)** — `tools/export_fvp_metrics.py`.
   Generates `fvp_export/gene_metrics_vertical_slice.json` for the lightweight
-  `Pomc`/`Agrp`/`Ccn1` vertical slice using raw counts, verified LogNormalize matrices, MGI
+  `Pomc`/`Agrp`/`Ccn1`/`Fam237b` vertical slice using raw counts, verified LogNormalize matrices, MGI
   resolver mappings, annotation coverage buckets, and region-scoped `hypomap_C25` groups.
 - **FVP static app data (generated, tracked if app deployment needs it)** —
   `hypomap-viz/gene-explorer-js/public/data/gene_metrics_vertical_slice.json`, copied from

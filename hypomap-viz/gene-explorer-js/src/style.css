@@ -191,6 +191,88 @@ button {
   line-height: 1.5;
 }
 
+.aggregate-heading-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9a948b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.aggregate-calculation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -7px 0 22px;
+  padding: 10px 12px;
+  border: 1px solid #e5e0d8;
+  border-radius: 10px;
+  background: #faf9f6;
+}
+
+.aggregate-calculation-label {
+  color: #817b72;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.aggregate-calculation-options {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid #d9d3ca;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.aggregate-calculation-option {
+  min-width: 154px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 7px 11px;
+  border: none;
+  border-right: 1px solid #e1dcd4;
+  background: #fff;
+  color: #777168;
+  cursor: pointer;
+}
+
+.aggregate-calculation-option:last-child {
+  border-right: none;
+}
+
+.aggregate-calculation-option strong {
+  font-size: 11px;
+}
+
+.aggregate-calculation-option span {
+  color: #aaa398;
+  font-size: 9px;
+}
+
+.aggregate-calculation-option:hover {
+  background: #f7f2f0;
+}
+
+.aggregate-calculation-option.is-active {
+  background: #b23b32;
+  color: #fff;
+}
+
+.aggregate-calculation-option.is-active span {
+  color: #f2d5d1;
+}
+
+.aggregate-calculation small {
+  color: #aaa398;
+  font-size: 9.5px;
+}
+
 .aggregate-layout {
   display: grid;
   grid-template-columns: 370px 1fr;
@@ -283,6 +365,15 @@ button {
   margin-top: 5px;
   color: #817c74;
   font-size: 13px;
+}
+
+.aggregate-donut-note {
+  max-width: 280px;
+  margin: 13px 0 0;
+  color: #aaa398;
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
 }
 
 .aggregate-summary {

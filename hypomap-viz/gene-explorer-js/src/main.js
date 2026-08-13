@@ -86,6 +86,11 @@ const GENE_BLURBS = {
     blurb: "Cellular communication network factor 1, historically known as Cyr61, is an extracellular matrix-associated signaling gene. In this slice the query resolves across datasets through the MGI alias layer rather than being treated as absent.",
     marks: ["Ccn1", "Cyr61"],
   },
+  Fam237b: {
+    name: "Family with sequence similarity 237, member B",
+    blurb: "Fam237b, historically annotated as Gm8773, encodes a small secreted protein associated with orexigenic signaling. Its hypothalamic expression is enriched in arcuate NPY/AgRP neurons; in this slice the current symbol resolves to the native Gm8773 feature in all three datasets.",
+    marks: ["Fam237b", "Gm8773", "GABA-4"],
+  },
 };
 
 const NUCLEI = [
@@ -220,7 +225,7 @@ function derive() {
     : gene.metrics.whole_dataset.dataset_metrics;
   const dsMetrics = selectedMetrics(sourceMetrics);
   const agg = aggregate(dsMetrics);
-  const mode = selectedIds.length > 1 ? state.aggregation : "mode_b_cell_pooled";
+  const mode = state.aggregation;
   const regionCountsDisplay = {};
   for (const [label, group] of Object.entries(gene.metrics.by_hypomap_region || {})) {
     const metrics = selectedMetrics(group.dataset_metrics);
@@ -579,27 +584,58 @@ function datasetToggles(D) {
 
 function metricInfo(kind, D) {
   if (state.metricHelp !== kind) return "";
-  if (kind === "percent") return `<div class="metric-popover">
+  const datasetAverage = D.mode === "mode_a_dataset_average";
+  if (kind === "percent" && datasetAverage) return `<div class="metric-popover">
     <button data-act="metric-help" data-v="percent" class="metric-popover-close" aria-label="Close formula">×</button>
-    <div class="metric-popover-title">Across-dataset % expressing</div>
+    <div class="metric-popover-title">Dataset-average % expressing</div>
     <div class="metric-formula"><span>1</span><span class="formula-rule"></span><span>${fmt(D.agg.dataset_detection_total) || "D"}</span></div>
     <span class="metric-formula-times">× Σ</span>
     <div class="metric-fraction"><span># expressing cells</span><span></span><span># eligible cells</span></div>
     <span class="metric-formula-times">× 100</span>
     <p>Each selected dataset contributes its own percentage equally; the headline is their average.</p>
   </div>`;
+  if (kind === "percent") return `<div class="metric-popover">
+    <button data-act="metric-help" data-v="percent" class="metric-popover-close" aria-label="Close formula">×</button>
+    <div class="metric-popover-title">Cell-pooled % expressing</div>
+    <div class="metric-fraction metric-fraction-wide"><span>Σ expressing cells across selected datasets</span><span></span><span>Σ eligible cells across selected datasets</span></div>
+    <span class="metric-formula-times">× 100</span>
+    <p>Every eligible cell has equal weight, so larger datasets contribute more to the headline value.</p>
+  </div>`;
+  const meanFormula = datasetAverage
+    ? `<div class="metric-formula"><span>1</span><span class="formula-rule"></span><span>${fmt(D.agg.dataset_detection_total) || "D"}</span></div><span class="metric-formula-times">× Σ</span><div class="metric-fraction"><span>dataset mean among positive cells</span><span></span><span>1</span></div>`
+    : `<div class="metric-fraction metric-fraction-wide"><span>Σ log-normalized expression in all positive cells</span><span></span><span>Σ positive cells across selected datasets</span></div>`;
   return `<div class="metric-popover">
     <button data-act="metric-help" data-v="mean" class="metric-popover-close" aria-label="Close formula">×</button>
-    <div class="metric-popover-title">Mean expression when on</div>
-    <div class="metric-fraction metric-fraction-wide"><span>Σ log-normalized expression in positive cells</span><span></span><span># positive cells</span></div>
-    <p>Expression uses the verified Seurat LogNormalize layer. The bar is scaled to the largest positive-cell value in the selected data.</p>
+    <div class="metric-popover-title">${datasetAverage ? "Dataset-average" : "Cell-pooled"} mean expression when on</div>
+    ${meanFormula}
+    <p>Expression uses the verified Seurat LogNormalize layer. ${datasetAverage ? "Each dataset mean has equal weight." : "Each positive cell has equal weight."} The bar is scaled to the largest positive-cell value in the selected data.</p>
+  </div>`;
+}
+
+function aggregateCalculationControl(D) {
+  const options = [
+    ["mode_a_dataset_average", "Dataset average", "Each dataset counts equally"],
+    ["mode_b_cell_pooled", "Cell pooled", "Each cell counts equally"],
+  ];
+  return `<div class="aggregate-calculation">
+    <span class="aggregate-calculation-label">Calculation</span>
+    <div class="aggregate-calculation-options" role="group" aria-label="Aggregate calculation method">
+      ${options.map(([mode, label, description]) => {
+        const active = D.mode === mode;
+        return `<button data-act="agg" data-v="${mode}" class="aggregate-calculation-option${active ? " is-active" : ""}" aria-pressed="${active}">
+          <strong>${label}</strong><span>${description}</span>
+        </button>`;
+      }).join("")}
+    </div>
+    ${D.sel.length === 1 ? `<small>Both methods are identical with one selected dataset.</small>` : ""}
   </div>`;
 }
 
 function viewAggregate(D) {
   const pooledPct = D.contextTotal ? D.positive / D.contextTotal * 100 : 0;
-  const datasetAveragePct = D.agg.percent_expressing.mode_a_dataset_average;
-  const aggregateMean = D.agg.mean_expression_positive.mode_b_cell_pooled;
+  const aggregatePct = D.agg.percent_expressing[D.mode];
+  const aggregateMean = D.agg.mean_expression_positive[D.mode];
+  const calculationLabel = D.mode === "mode_a_dataset_average" ? "dataset average" : "cell pooled";
   const selectedMetrics = Object.values(D.dsMetrics).filter((metric) => metric.eligible_cells > 0);
   const meanScale = Math.max(1, ...selectedMetrics.map((metric) =>
     Number(metric.expression_distribution?.quantiles?.max || metric.mean_expression_positive || 0)));
@@ -610,8 +646,9 @@ function viewAggregate(D) {
   return `
     <div class="aggregate-heading">
       <div><h2>Aggregate expression</h2><p><i>${esc(D.info.symbol)}</i> across <b>${esc(D.contextName)}</b> and ${D.sel.length} selected dataset${D.sel.length === 1 ? "" : "s"}.</p></div>
-      ${computedBadge()}
+      <div class="aggregate-heading-meta">${computedBadge()}<span>${calculationLabel}</span></div>
     </div>
+    ${aggregateCalculationControl(D)}
     ${empty ? `<div class="aggregate-empty">Select a dataset with eligible cells to view aggregate expression.</div>` : `<div class="aggregate-layout">
       <section class="aggregate-donut-panel" aria-label="${pooledPct.toFixed(1)} percent of cells express ${esc(D.info.symbol)}">
         <h3>Cells expressing — ${selectionLabel}</h3>
@@ -622,13 +659,14 @@ function viewAggregate(D) {
         <div class="aggregate-donut" style="background:conic-gradient(#b93429 0 ${pooledPct.toFixed(3)}%,#efddd9 ${pooledPct.toFixed(3)}% 100%);">
           <div><strong>${fmt(D.positive)}</strong><span>of ${fmt(D.contextTotal)} cells</span></div>
         </div>
+        <p class="aggregate-donut-note">Absolute counts are always pooled across selected datasets.</p>
       </section>
       <section class="aggregate-summary">
         <div class="aggregate-cards">
           <article class="aggregate-card">
-            <div class="aggregate-card-label">% <i>${esc(D.info.symbol)}</i>+ across datasets</div>
-            <button data-act="metric-help" data-v="percent" class="metric-help" aria-expanded="${state.metricHelp === "percent"}" aria-label="Explain across-dataset percentage">?</button>
-            <div class="aggregate-percent">${datasetAveragePct == null ? "—" : `${Number(datasetAveragePct).toFixed(1)}%`}</div>
+            <div class="aggregate-card-label">% <i>${esc(D.info.symbol)}</i>+ · ${calculationLabel}</div>
+            <button data-act="metric-help" data-v="percent" class="metric-help" aria-expanded="${state.metricHelp === "percent"}" aria-label="Explain aggregate percentage">?</button>
+            <div class="aggregate-percent">${aggregatePct == null ? "—" : `${Number(aggregatePct).toFixed(1)}%`}</div>
             ${metricInfo("percent", D)}
           </article>
           <article class="aggregate-card">

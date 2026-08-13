@@ -17,7 +17,7 @@ public/data/gene_metrics_vertical_slice.json
 Regenerate it from the repository root:
 
 ```bash
-python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1
+python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1 Fam237b
 cp fvp_export/gene_metrics_vertical_slice.json hypomap-viz/gene-explorer-js/public/data/gene_metrics_vertical_slice.json
 ```
 
@@ -51,7 +51,7 @@ On Vercel: create a project pointed at this repo, set **Root Directory** to
 ## Status
 
 Currently wires the frozen `ARC_Gene_Explorer.html` handoff to real computed
-values for `Pomc`, `Agrp`, and `Ccn1` / `Cyr61`. The app defaults to
+values for `Pomc`, `Agrp`, `Ccn1` / `Cyr61`, and `Fam237b` / `Gm8773`. The app defaults to
 `GSE207736` / Dowsett10xnuc only, while keeping the dataset selector and
 aggregation logic ready for `GSE172461` and `GSE93374`.
 
@@ -59,14 +59,15 @@ Implemented:
 
 - dynamic gene search with a filtered type-ahead dropdown, keyboard navigation,
   and alias resolution from the static export (`Cyr61` resolves to canonical
-  `Ccn1`)
+  `Ccn1`; `Gm8773` resolves to canonical `Fam237b`)
 - selectable dataset rows, defaulting to Dowsett10xnuc only
 - dataset-average and cell-pooled aggregation modes, revealed only when more
   than one dataset is selected
 - Whole / ARC / PVN / VMH / DMH context selector
 - five-tab structure: Overview, Cell Identity, Aggregate, By dataset, and Context
 - count-led Aggregate view with a live expressing-cell donut, across-dataset
-  percentage, positive-cell mean expression, metric explainers, and detection count
+  percentage, positive-cell mean expression, metric explainers, detection count,
+  and a dataset-average versus cell-pooled calculation switch
 - By dataset view with selectable dataset chips, a fixed 0–100% bar chart, and
   per-dataset expression detail cards
 - Overview and Aggregate metric cards backed by raw-count and verified Seurat

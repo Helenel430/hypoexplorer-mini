@@ -20,7 +20,7 @@ from scipy.sparse import load_npz
 from gene_harmonization_lib import DATASETS, resolve_query
 
 
-DEFAULT_GENES = ["Pomc", "Agrp", "Ccn1"]
+DEFAULT_GENES = ["Pomc", "Agrp", "Ccn1", "Fam237b"]
 NO_REGION_LABEL = "No HypoMap region"
 NO_C25_LABEL = "Unannotated C25"
 MISSING_SAMPLE_LABEL = "Missing sample identity"
@@ -452,8 +452,8 @@ def main() -> None:
             annotation_coverage = json.load(fh)
 
     export = {
-        "generated_on": "2026-07-20",
-        "description": "Lightweight FVP vertical-slice metrics for Pomc, Agrp, and Ccn1/Cyr61.",
+        "generated_on": "2026-08-13",
+        "description": "Lightweight FVP vertical-slice gene metrics with MGI-backed alias resolution.",
         "metric_contract": {
             "positivity": "raw_count >= 1",
             "percent_expressing": "positive_cells / eligible_cells * 100",
