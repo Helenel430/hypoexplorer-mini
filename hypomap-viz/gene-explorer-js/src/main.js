@@ -1,9 +1,9 @@
 const DATA_URL = "/data/gene_metrics_vertical_slice.json";
 
 const DATASET_META = [
-  { id: "GSE207736", label: "Dowsett10xnuc", sub: "GSE207736 · 10x snRNA-seq", native: 0, color: "#b23b32" },
-  { id: "GSE172461", label: "GSE172461", sub: "GSE172461 · 10x, per-cell meta", native: 36523, color: "#d9694e" },
-  { id: "GSE93374", label: "Campbell 2017", sub: "GSE93374 · Drop-seq", native: 21086, color: "#e0a24e" },
+  { id: "GSE207736", label: "Dowsett10xnuc", sub: "GSE207736 · 10x snRNA-seq", native: 0, color: "#e3a092" },
+  { id: "GSE172461", label: "Rupp10x", sub: "GSE172461 · 10x, per-cell metadata", native: 36523, color: "#ce6d5b" },
+  { id: "GSE93374", label: "CampbellDropseq", sub: "GSE93374 · Drop-seq", native: 21086, color: "#a92d21" },
 ];
 
 const REGION_LABELS = {
@@ -86,6 +86,11 @@ const GENE_BLURBS = {
     blurb: "Cellular communication network factor 1, historically known as Cyr61, is an extracellular matrix-associated signaling gene. In this slice the query resolves across datasets through the MGI alias layer rather than being treated as absent.",
     marks: ["Ccn1", "Cyr61"],
   },
+  Fam237b: {
+    name: "Family with sequence similarity 237, member B",
+    blurb: "Fam237b, historically annotated as Gm8773, encodes a small secreted protein associated with orexigenic signaling. Its hypothalamic expression is enriched in arcuate NPY/AgRP neurons; in this slice the current symbol resolves to the native Gm8773 feature in all three datasets.",
+    marks: ["Fam237b", "Gm8773", "GABA-4"],
+  },
 };
 
 const NUCLEI = [
@@ -97,7 +102,7 @@ const NUCLEI = [
   { abbr: "PVp", key: "Periventricular hyp. n. (posterior)", cx: 406, cy: 302, rx: 10, ry: 92, rot: 0, narrow: true },
 ];
 const OFFMAP = ["(Pre)Mammillary region", "Medial preoptic area", "Suprachiasmatic nucleus", "Anterior hypothalamic nucleus", "(Anterior/Preoptic)Periventricular", "Tuberal nucleus", "Lateral preoptic area", "Periventricular hyp. n. (intermediate)", "Not assigned"];
-const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["expression", "Expression"], ["repro", "Reproducibility"], ["context", "Context"]];
+const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["aggregate", "Aggregate"], ["dataset", "By dataset"], ["context", "Context"]];
 
 const state = {
   tab: "overview",
@@ -107,14 +112,19 @@ const state = {
   resolution: "C25",
   aggregation: "mode_b_cell_pooled",
   gene: "Pomc",
+  geneQuery: "Pomc",
+  geneMenuOpen: false,
+  geneActiveIndex: 0,
   expanded: { "C7-1: GLU": true },
   hoverRegion: null,
   provOpen: false,
+  metricHelp: null,
   mapCounts: true,
   message: "",
 };
 
 let model = null;
+let suppressGeneFocusOpen = false;
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (n) => n == null || !Number.isFinite(Number(n)) ? "—" : Math.round(Number(n)).toLocaleString("en-US");
@@ -177,6 +187,21 @@ function geneInfo(gene) {
   };
 }
 
+function geneSuggestions(query = state.geneQuery) {
+  const needle = query.trim().toLowerCase();
+  return model.searchOptions
+    .filter((option) => !needle || option.searchText.includes(needle))
+    .sort((a, b) => {
+      const rank = (option) => {
+        if (!needle) return 2;
+        if (option.symbol.toLowerCase().startsWith(needle)) return 0;
+        if (option.aliases.some((alias) => alias.toLowerCase().startsWith(needle))) return 1;
+        return 2;
+      };
+      return rank(a) - rank(b) || a.symbol.localeCompare(b.symbol);
+    });
+}
+
 function markTree(nodes, marks) {
   return nodes.map((node) => {
     const kids = markTree(node.kids || [], marks);
@@ -200,7 +225,7 @@ function derive() {
     : gene.metrics.whole_dataset.dataset_metrics;
   const dsMetrics = selectedMetrics(sourceMetrics);
   const agg = aggregate(dsMetrics);
-  const mode = selectedIds.length > 1 ? state.aggregation : "mode_b_cell_pooled";
+  const mode = state.aggregation;
   const regionCountsDisplay = {};
   for (const [label, group] of Object.entries(gene.metrics.by_hypomap_region || {})) {
     const metrics = selectedMetrics(group.dataset_metrics);
@@ -294,14 +319,27 @@ function header(D) {
       <div style="font-size:11px;color:#a7a197;line-height:1.55;">${provText}</div>
       <div style="font-size:11px;color:#7b756a;line-height:1.55;margin-top:10px;">${metricHelp()}</div>
     </div>` : "";
+  const suggestions = geneSuggestions();
+  const geneDropdown = state.geneMenuOpen ? `
+    <div class="gene-menu" id="gene-suggestions" role="listbox" aria-label="Available genes">
+      ${suggestions.length ? suggestions.map((option, index) => {
+        const aliasMatches = option.aliases.filter((alias) => alias.toLowerCase() !== option.symbol.toLowerCase());
+        return `<button type="button" id="gene-option-${index}" class="gene-option${index === state.geneActiveIndex ? " is-active" : ""}" role="option" aria-selected="${index === state.geneActiveIndex}" data-act="gene-select" data-v="${esc(option.gene)}" data-index="${index}">
+          <span class="gene-option-copy"><span class="gene-option-symbol mono">${esc(option.symbol)}</span><span class="gene-option-name">${esc(option.name)}</span></span>
+          ${aliasMatches.length ? `<span class="gene-option-alias mono">alias ${esc(aliasMatches.join(", "))}</span>` : ""}
+        </button>`;
+      }).join("") : `<div class="gene-menu-empty">No available gene matches “${esc(state.geneQuery)}”</div>`}
+      <div class="gene-menu-meta">${suggestions.length} of ${model.searchOptions.length} genes available in this data slice</div>
+    </div>` : "";
   return `
   <header style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:15px 26px;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #e8e4dc;border-radius:14px 14px 0 0;">
     <div style="display:flex;align-items:center;gap:20px;min-width:0;">
       <span style="font-size:13.5px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;">ARC Gene Explorer</span>
-      <form data-act="gene-form" style="display:flex;align-items:center;background:#f2efe9;border:1px solid #e2ddd3;border-radius:9px;padding:3px 3px 3px 12px;">
-        <span style="font-size:12px;color:#a7a197;margin-right:8px;">Gene</span>
-        <input data-role="gene-input" value="${esc(D.info.symbol)}" style="width:120px;padding:6px 8px;border:1px solid #ddd7cc;border-radius:6px;font-size:13px;font-weight:600;background:#fff;color:#211f1b;">
-        <button style="margin-left:5px;padding:7px 13px;border:none;border-radius:6px;background:#b23b32;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Look up</button>
+      <form data-act="gene-form" data-gene-picker class="gene-search">
+        <label for="gene-input" style="font-size:12px;color:#a7a197;margin-right:8px;">Gene</label>
+        <input id="gene-input" data-role="gene-input" value="${esc(state.geneQuery)}" placeholder="Type a gene" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="gene-suggestions" aria-expanded="${state.geneMenuOpen}" ${state.geneMenuOpen && suggestions.length ? `aria-activedescendant="gene-option-${state.geneActiveIndex}"` : ""}>
+        <button type="submit" class="gene-submit">Look up</button>
+        ${geneDropdown}
       </form>
       ${state.message ? `<span style="font-size:11px;color:#8a6d47;">${esc(state.message)}</span>` : ""}
     </div>
@@ -326,7 +364,7 @@ function nav(D) {
   <nav style="position:sticky;top:59px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 26px;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #e8e4dc;">
     <div style="display:flex;align-items:stretch;gap:2px;">${tabs}</div>
     <div style="display:flex;align-items:center;gap:11px;min-width:0;">
-      ${aggregationControl(D)}
+      ${state.tab === "aggregate" || state.tab === "dataset" ? "" : aggregationControl(D)}
       <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#bdb7ac;white-space:nowrap;">Viewing</span>
       <span style="font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;">${esc(D.contextName)}</span>
       <span style="font-size:11px;color:#a7a197;white-space:nowrap;"><span class="mono" style="color:#b23b32;font-weight:600;">${fmt(D.contextTotal)}</span> cells</span>
@@ -534,85 +572,158 @@ function viewIdentity(D) {
     </div>`;
 }
 
-function mergeDistribution(D) {
-  const selected = Object.values(D.dsMetrics).filter((m) => m.expression_distribution?.counts?.length);
-  if (selected.length === 1) return selected[0].expression_distribution;
-  return null;
-}
-
-function viewExpression(D) {
-  const stats = [
-    { label: "% expressing", value: D.pctExpr == null ? "—" : Number(D.pctExpr).toFixed(1), unit: "%", color: "#b23b32" },
-    { label: "Positive cells", value: fmt(D.positive), unit: `of ${fmt(D.contextTotal)}`, color: "#211f1b" },
-    { label: "Mean (positive)", value: D.meanExpr == null ? "—" : Number(D.meanExpr).toFixed(2), unit: "log-norm", color: "#211f1b" },
-  ].map((m) => `<div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 16px;">
-      <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#8a847a;margin-bottom:9px;">${m.label}</div>
-      <div style="display:flex;align-items:baseline;gap:4px;"><span class="mono" style="font-size:25px;font-weight:700;color:${m.color};letter-spacing:-.01em;">${m.value}</span><span style="font-size:12px;color:#a7a197;">${m.unit}</span></div></div>`).join("");
-
-  const dist = mergeDistribution(D);
-  const counts = dist?.counts || [];
-  const maxCount = Math.max(1, ...counts);
-  const bars = counts.length ? counts.map((c, i) => `<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;">
-      <div style="width:100%;border-radius:3px 3px 0 0;height:${Math.max(3, c / maxCount * 100).toFixed(0)}%;background:${i < 2 ? "#b23b32" : `rgba(178,59,50,${Math.max(0.2, 0.72 - i * 0.025).toFixed(2)})`};"></div></div>`).join("")
-    : `<div style="font-size:12px;color:#a7a197;align-self:center;">No positive cells in this selected context.</div>`;
-  const edges = dist?.bin_edges || [];
-  const tickIdx = edges.length ? [0, Math.floor(edges.length / 2), edges.length - 1] : [];
-  const ticks = counts.length
-    ? counts.map((_, i) => `<span style="flex:1;text-align:center;font-size:9.5px;color:#bdb7ac;" class="mono">${tickIdx.includes(i) ? Number(edges[i]).toFixed(1) : ""}</span>`).join("")
-    : "";
-  const distNote = D.sel.length > 1
-    ? "Histogram shown when a single selected dataset provides one native binning. Aggregated distribution bin harmonization is not inferred."
-    : "Histogram uses verified Seurat LogNormalize values among raw-count-positive cells.";
-
-  return `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-      <span style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Expression detail</span>${computedBadge()}</div>
-    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">Quantitative <span class="mono">${esc(D.info.symbol)}</span> expression among positive cells in <b style="color:#211f1b;">${esc(D.contextName)}</b>. Positivity computes from raw counts; magnitude uses the verified Seurat LogNormalize layer.</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">${stats}</div>
-    <div style="border:1px solid #e8e4dc;border-radius:11px;padding:18px 20px 14px;">
-      <div style="font-size:12px;font-weight:700;margin-bottom:14px;">Distribution among positive cells</div>
-      <div style="display:flex;align-items:flex-end;gap:6px;height:150px;">${bars}</div>
-      <div style="display:flex;gap:6px;margin-top:8px;">${ticks}</div>
-      <div style="text-align:center;font-size:10.5px;color:#a7a197;margin-top:4px;">log-normalized expression →</div>
-      <div style="font-size:10.5px;color:#a7a197;margin-top:8px;line-height:1.45;">${distNote}</div>
-    </div>`;
-}
-
-function viewRepro(D) {
-  const chips = model.datasets.map((d) => {
+function datasetToggles(D) {
+  return model.datasets.map((d) => {
     const on = !!state.datasets[d.id], cov = D.hypo ? d.hypomap : d.native;
     const covLabel = cov == null ? "no HM" : `${pct(cov, d.cells).toFixed(0)}%`;
-    return `<button data-act="dataset" data-v="${d.id}" style="display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;border:1px solid ${on ? "#e2ddd3" : "#ece8e0"};background:${on ? "#fff" : "#f6f4ef"};color:${on ? "#211f1b" : "#a7a197"};">
-      <span style="width:10px;height:10px;border-radius:3px;flex:none;background:${on ? d.color : "transparent"};border:1.5px solid ${d.color};"></span>
-      <span>${d.label}</span><span class="mono" style="font-size:10px;opacity:.7;">${covLabel}</span></button>`;
+    return `<button data-act="dataset" data-v="${d.id}" aria-pressed="${on}" class="dataset-toggle${on ? " is-selected" : ""}">
+      <span class="dataset-toggle-swatch" style="background:${on ? d.color : "transparent"};border-color:${d.color};">${on ? "✓" : ""}</span>
+      <span>${esc(d.label)}</span><span class="mono dataset-toggle-coverage">${covLabel}</span></button>`;
   }).join("");
+}
 
-  const rowsData = D.sel.map((d) => {
-    const metric = D.dsMetrics[d.id] || emptyMetric();
-    const noRegion = D.region && metric.eligible_cells === 0;
-    return { label: d.label, color: d.color, pct: metric.percent_expressing || 0, detected: metric.dataset_detection, noRegion };
-  });
-  const maxPct = Math.max(0.001, ...rowsData.map((r) => r.pct));
-  const rows = rowsData.map((r) => `<div style="display:flex;align-items:center;gap:11px;">
-      <span style="width:11px;height:11px;border-radius:3px;flex:none;background:${r.color};"></span>
-      <span style="width:118px;flex:none;font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(r.label)}</span>
-      <div style="flex:1;height:8px;border-radius:4px;background:#efece5;overflow:hidden;"><div style="height:100%;width:${(r.pct / maxPct * 100).toFixed(1)}%;background:${r.color};"></div></div>
-      <span class="mono" style="width:46px;flex:none;text-align:right;font-size:11.5px;font-weight:600;">${r.pct.toFixed(1)}%</span>
-      <span style="${r.noRegion ? "flex:none;font-size:9px;font-weight:600;color:#a7a197;background:#f0ede6;padding:2px 7px;border-radius:4px;white-space:nowrap;" : "flex:none;font-size:9px;font-weight:600;color:#1f8a5b;background:#e7f3ec;padding:2px 7px;border-radius:4px;white-space:nowrap;"}">${r.noRegion ? "unavailable" : (r.detected ? "detected" : "not detected")}</span></div>`).join("");
+function metricInfo(kind, D) {
+  if (state.metricHelp !== kind) return "";
+  const datasetAverage = D.mode === "mode_a_dataset_average";
+  if (kind === "percent" && datasetAverage) return `<div class="metric-popover">
+    <button data-act="metric-help" data-v="percent" class="metric-popover-close" aria-label="Close formula">×</button>
+    <div class="metric-popover-title">Dataset-average % expressing</div>
+    <div class="metric-formula"><span>1</span><span class="formula-rule"></span><span>${fmt(D.agg.dataset_detection_total) || "D"}</span></div>
+    <span class="metric-formula-times">× Σ</span>
+    <div class="metric-fraction"><span># expressing cells</span><span></span><span># eligible cells</span></div>
+    <span class="metric-formula-times">× 100</span>
+    <p>Each selected dataset contributes its own percentage equally; the headline is their average.</p>
+  </div>`;
+  if (kind === "percent") return `<div class="metric-popover">
+    <button data-act="metric-help" data-v="percent" class="metric-popover-close" aria-label="Close formula">×</button>
+    <div class="metric-popover-title">Cell-pooled % expressing</div>
+    <div class="metric-fraction metric-fraction-wide"><span>Σ expressing cells across selected datasets</span><span></span><span>Σ eligible cells across selected datasets</span></div>
+    <span class="metric-formula-times">× 100</span>
+    <p>Every eligible cell has equal weight, so larger datasets contribute more to the headline value.</p>
+  </div>`;
+  const meanFormula = datasetAverage
+    ? `<div class="metric-formula"><span>1</span><span class="formula-rule"></span><span>${fmt(D.agg.dataset_detection_total) || "D"}</span></div><span class="metric-formula-times">× Σ</span><div class="metric-fraction"><span>dataset mean among positive cells</span><span></span><span>1</span></div>`
+    : `<div class="metric-fraction metric-fraction-wide"><span>Σ log-normalized expression in all positive cells</span><span></span><span>Σ positive cells across selected datasets</span></div>`;
+  return `<div class="metric-popover">
+    <button data-act="metric-help" data-v="mean" class="metric-popover-close" aria-label="Close formula">×</button>
+    <div class="metric-popover-title">${datasetAverage ? "Dataset-average" : "Cell-pooled"} mean expression when on</div>
+    ${meanFormula}
+    <p>Expression uses the verified Seurat LogNormalize layer. ${datasetAverage ? "Each dataset mean has equal weight." : "Each positive cell has equal weight."} The bar is scaled to the largest positive-cell value in the selected data.</p>
+  </div>`;
+}
+
+function aggregateCalculationControl(D) {
+  const options = [
+    ["mode_a_dataset_average", "Dataset average", "Each dataset counts equally"],
+    ["mode_b_cell_pooled", "Cell pooled", "Each cell counts equally"],
+  ];
+  return `<div class="aggregate-calculation">
+    <span class="aggregate-calculation-label">Calculation</span>
+    <div class="aggregate-calculation-options" role="group" aria-label="Aggregate calculation method">
+      ${options.map(([mode, label, description]) => {
+        const active = D.mode === mode;
+        return `<button data-act="agg" data-v="${mode}" class="aggregate-calculation-option${active ? " is-active" : ""}" aria-pressed="${active}">
+          <strong>${label}</strong><span>${description}</span>
+        </button>`;
+      }).join("")}
+    </div>
+    ${D.sel.length === 1 ? `<small>Both methods are identical with one selected dataset.</small>` : ""}
+  </div>`;
+}
+
+function viewAggregate(D) {
+  const pooledPct = D.contextTotal ? D.positive / D.contextTotal * 100 : 0;
+  const aggregatePct = D.agg.percent_expressing[D.mode];
+  const aggregateMean = D.agg.mean_expression_positive[D.mode];
+  const calculationLabel = D.mode === "mode_a_dataset_average" ? "dataset average" : "cell pooled";
+  const selectedMetrics = Object.values(D.dsMetrics).filter((metric) => metric.eligible_cells > 0);
+  const meanScale = Math.max(1, ...selectedMetrics.map((metric) =>
+    Number(metric.expression_distribution?.quantiles?.max || metric.mean_expression_positive || 0)));
+  const meanWidth = aggregateMean == null ? 0 : Math.min(100, Number(aggregateMean) / meanScale * 100);
+  const selectionLabel = D.sel.length === model.datasets.length ? "all datasets" : "selected datasets";
+  const empty = D.contextTotal === 0;
 
   return `
-    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;">
-      <span style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Reproducible?</span>
-      <span style="font-size:11.5px;color:#a7a197;">${D.agg.dataset_detection_count} of ${D.agg.dataset_detection_total} datasets</span></div>
-    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">Detection and per-dataset agreement for <span class="mono">${esc(D.info.symbol)}</span> in <b style="color:#211f1b;">${esc(D.contextName)}</b>. Toggle a deposit to include it.</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">${chips}</div>
-    <div style="border:1px solid #e8e4dc;border-radius:11px;padding:18px 20px;">
-      <div style="display:flex;align-items:center;gap:22px;">
-        <div style="flex:none;"><div class="mono" style="font-size:30px;font-weight:700;color:#b23b32;line-height:1;">${fmt1(D.pctExpr)}</div>
-        <div style="font-size:11px;color:#a7a197;margin-top:5px;">${D.sel.length > 1 && D.mode === "mode_a_dataset_average" ? "dataset-average" : "pooled"} % expressing</div></div>
-        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:11px;">${rows || `<div style="font-size:12px;color:#a7a197;">Select at least one deposit.</div>`}</div>
-      </div>
-    </div>`;
+    <div class="aggregate-heading">
+      <div><h2>Aggregate expression</h2><p><i>${esc(D.info.symbol)}</i> across <b>${esc(D.contextName)}</b> and ${D.sel.length} selected dataset${D.sel.length === 1 ? "" : "s"}.</p></div>
+      <div class="aggregate-heading-meta">${computedBadge()}<span>${calculationLabel}</span></div>
+    </div>
+    ${aggregateCalculationControl(D)}
+    ${empty ? `<div class="aggregate-empty">Select a dataset with eligible cells to view aggregate expression.</div>` : `<div class="aggregate-layout">
+      <section class="aggregate-donut-panel" aria-label="${pooledPct.toFixed(1)} percent of cells express ${esc(D.info.symbol)}">
+        <h3>Cells expressing — ${selectionLabel}</h3>
+        <div class="aggregate-legend">
+          <span><i style="background:#b93429;"></i><em>${esc(D.info.symbol)}</em> + <b>${pooledPct.toFixed(1)}%</b></span>
+          <span class="is-negative"><i></i><em>${esc(D.info.symbol)}</em> − <b>${(100 - pooledPct).toFixed(1)}%</b></span>
+        </div>
+        <div class="aggregate-donut" style="background:conic-gradient(#b93429 0 ${pooledPct.toFixed(3)}%,#efddd9 ${pooledPct.toFixed(3)}% 100%);">
+          <div><strong>${fmt(D.positive)}</strong><span>of ${fmt(D.contextTotal)} cells</span></div>
+        </div>
+        <p class="aggregate-donut-note">Absolute counts are always pooled across selected datasets.</p>
+      </section>
+      <section class="aggregate-summary">
+        <div class="aggregate-cards">
+          <article class="aggregate-card">
+            <div class="aggregate-card-label">% <i>${esc(D.info.symbol)}</i>+ · ${calculationLabel}</div>
+            <button data-act="metric-help" data-v="percent" class="metric-help" aria-expanded="${state.metricHelp === "percent"}" aria-label="Explain aggregate percentage">?</button>
+            <div class="aggregate-percent">${aggregatePct == null ? "—" : `${Number(aggregatePct).toFixed(1)}%`}</div>
+            ${metricInfo("percent", D)}
+          </article>
+          <article class="aggregate-card">
+            <div class="aggregate-card-label">Mean expr. (when on)</div>
+            <button data-act="metric-help" data-v="mean" class="metric-help" aria-expanded="${state.metricHelp === "mean"}" aria-label="Explain mean expression">?</button>
+            <div class="aggregate-mean"><strong>${aggregateMean == null ? "—" : Number(aggregateMean).toFixed(2)}</strong><span>/ ${meanScale.toFixed(2)}</span></div>
+            <div class="aggregate-mean-track"><span style="width:${meanWidth.toFixed(1)}%;"></span></div>
+            ${metricInfo("mean", D)}
+          </article>
+        </div>
+        <div class="detection-chip">Detected in <b>${D.agg.dataset_detection_count}</b> / <b>${D.agg.dataset_detection_total}</b> datasets</div>
+      </section>
+    </div>`}`;
+}
+
+function viewByDataset(D) {
+  const rows = D.sel.map((dataset) => {
+    const metric = D.dsMetrics[dataset.id] || emptyMetric();
+    return { dataset, metric, value: Number(metric.percent_expressing || 0) };
+  });
+  const svgW = 1120, svgH = 475, left = 82, right = 30, top = 64, bottom = 142;
+  const plotW = svgW - left - right, plotH = svgH - top - bottom;
+  const contextShort = D.region ? (ABBR[D.region] || D.region) : "Whole hypothalamus";
+  const ticks = [0, 25, 50, 75, 100].map((tick) => {
+    const y = top + plotH - tick / 100 * plotH;
+    return `<line x1="${left}" y1="${y}" x2="${left + plotW}" y2="${y}" class="dataset-grid${tick === 0 ? " is-axis" : ""}"></line>
+      <text x="${left - 14}" y="${y + 4}" text-anchor="end" class="dataset-tick">${tick}</text>`;
+  }).join("");
+  const slot = rows.length ? plotW / rows.length : plotW;
+  const barWidth = Math.min(92, slot * .34);
+  const bars = rows.map(({ dataset, value }, index) => {
+    const x = left + slot * (index + .5), y = top + plotH - value / 100 * plotH;
+    return `<rect x="${(x - barWidth / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${Math.max(0, top + plotH - y).toFixed(1)}" fill="${dataset.color}" class="dataset-bar"></rect>
+      <text x="${x.toFixed(1)}" y="${top + plotH + 27}" text-anchor="end" transform="rotate(-52 ${x.toFixed(1)} ${top + plotH + 27})" class="dataset-label">${esc(dataset.label)}</text>`;
+  }).join("");
+  const cards = rows.map(({ dataset, metric, value }) => {
+    const unavailable = D.region && metric.eligible_cells === 0;
+    return `<article class="dataset-detail-card">
+      <div class="dataset-detail-title"><span style="background:${dataset.color};"></span><div><strong>${esc(dataset.label)}</strong><small>${esc(dataset.sub)}</small></div></div>
+      ${unavailable ? `<div class="dataset-unavailable">No eligible cells in this context</div>` : `<div class="dataset-detail-body">
+        <div class="dataset-mini-donut" style="background:conic-gradient(${dataset.color} 0 ${value.toFixed(3)}%,#eee8e3 ${value.toFixed(3)}% 100%);"><span>${value.toFixed(1)}%</span></div>
+        <dl><div><dt>Cells expr.</dt><dd>${fmt(metric.positive_cells)} <span>/ ${fmt(metric.eligible_cells)}</span></dd></div><div><dt>Mean expr.</dt><dd>${metric.mean_expression_positive == null ? "—" : Number(metric.mean_expression_positive).toFixed(2)}</dd></div></dl>
+      </div>`}
+    </article>`;
+  }).join("");
+
+  return `
+    <div class="dataset-view-heading"><h2>Detection by dataset</h2><p>Per-dataset <i>${esc(D.info.symbol)}</i>+ fraction and expression within <b>${esc(D.contextName)}</b> cells.</p></div>
+    <div class="dataset-toggles">${datasetToggles(D)}</div>
+    ${rows.length ? `<div class="dataset-chart-wrap">
+      <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="Percent ${esc(D.info.symbol)} positive by selected dataset">
+        <text x="${left + plotW / 2}" y="30" text-anchor="middle" class="dataset-chart-title">${esc(contextShort)} <tspan font-style="italic">${esc(D.info.symbol)}</tspan>+ cells</text>
+        ${ticks}<line x1="${left}" y1="${top}" x2="${left}" y2="${top + plotH}" class="dataset-axis"></line>
+        <text x="24" y="${top + plotH / 2}" text-anchor="middle" transform="rotate(-90 24 ${top + plotH / 2})" class="dataset-axis-title">% ${esc(D.info.symbol)}+</text>
+        ${bars}
+      </svg>
+    </div><div class="dataset-detail-grid">${cards}</div>` : `<div class="aggregate-empty">Select at least one dataset to populate this view.</div>`}`;
 }
 
 function viewContext(D) {
@@ -628,7 +739,7 @@ function viewContext(D) {
 
 function render() {
   const D = derive();
-  const body = { overview: viewOverview, identity: viewIdentity, expression: viewExpression, repro: viewRepro, context: viewContext }[state.tab](D);
+  const body = { overview: viewOverview, identity: viewIdentity, aggregate: viewAggregate, dataset: viewByDataset, context: viewContext }[state.tab](D);
   const footer = `
     <footer style="padding:13px 30px;border-top:1px solid #e8e4dc;background:#f9f8f4;border-radius:0 0 14px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <span style="font-size:11px;color:#a7a197;">${D.hypo ? `HypoMap atlas · CZ CELLxGENE d86517f0 · Steuernagel et al. 2022 · ${fmt(D.regionAssigned + D.annotNoRegion)} / ${fmt(D.total)} selected cells matched` : "Native study annotations · as deposited in GEO"}</span>
@@ -641,6 +752,7 @@ function render() {
 function buildModel(data) {
   const genes = data.genes.filter((g) => g.state === "resolved");
   const aliases = new Map();
+  const searchOptions = [];
   for (const gene of genes) {
     const names = new Set([gene.query, gene.resolver?.canonical_gene?.canonical_symbol]);
     for (const mapping of gene.resolver?.dataset_mappings || []) {
@@ -648,6 +760,17 @@ function buildModel(data) {
       names.add(mapping.dataset_gene_symbol);
     }
     for (const name of names) if (name) aliases.set(String(name).toLowerCase(), gene.query);
+    const canonical = gene.resolver?.canonical_gene || {};
+    const symbol = canonical.canonical_symbol || gene.query;
+    const local = GENE_BLURBS[symbol] || GENE_BLURBS[gene.query] || {};
+    const optionAliases = [...names].filter(Boolean).map(String);
+    searchOptions.push({
+      gene: gene.query,
+      symbol,
+      name: local.name || canonical.marker_name || symbol,
+      aliases: [...new Set(optionAliases)],
+      searchText: [symbol, local.name, canonical.marker_name, ...optionAliases].filter(Boolean).join(" ").toLowerCase(),
+    });
   }
   const coverage = Object.fromEntries((data.annotation_coverage?.datasets || []).map((d) => [d.dataset_id, d]));
   const datasets = DATASET_META.map((d) => {
@@ -663,8 +786,26 @@ function buildModel(data) {
     generated_on: data.generated_on,
     genes,
     aliases,
+    searchOptions,
     datasets,
   };
+}
+
+function selectGene(option, query = option.symbol) {
+  state.gene = option.gene;
+  state.geneQuery = option.symbol;
+  state.geneMenuOpen = false;
+  state.geneActiveIndex = 0;
+  state.message = query.toLowerCase() !== option.symbol.toLowerCase() ? `${query} resolved to ${option.symbol}` : "";
+}
+
+function focusGeneInput(cursor = null, selectAll = false, keepClosed = false) {
+  const input = document.querySelector("[data-role='gene-input']");
+  if (!input) return;
+  suppressGeneFocusOpen = keepClosed;
+  input.focus();
+  if (selectAll) input.select();
+  else if (cursor != null) input.setSelectionRange(cursor, cursor);
 }
 
 function handleGeneSubmit() {
@@ -672,10 +813,17 @@ function handleGeneSubmit() {
   const query = input?.value.trim() || "";
   const resolved = model.aliases.get(query.toLowerCase());
   if (resolved) {
-    state.gene = resolved;
-    state.message = query.toLowerCase() !== resolved.toLowerCase() ? `${query} resolved to ${resolved}` : "";
+    const option = model.searchOptions.find((candidate) => candidate.gene === resolved);
+    selectGene(option, query);
   } else {
-    state.message = `${query || "Gene"} is not available in this vertical slice`;
+    const suggestions = geneSuggestions(query);
+    if (suggestions.length === 1) selectGene(suggestions[0], query);
+    else {
+      state.geneQuery = query;
+      state.geneMenuOpen = true;
+      state.geneActiveIndex = 0;
+      state.message = `${query || "Gene"} is not available in this vertical slice`;
+    }
   }
   render();
 }
@@ -687,15 +835,89 @@ document.getElementById("app").addEventListener("submit", (e) => {
   }
 });
 
+document.getElementById("app").addEventListener("focusin", (e) => {
+  const input = e.target.closest("[data-role='gene-input']");
+  if (input && suppressGeneFocusOpen) {
+    suppressGeneFocusOpen = false;
+    return;
+  }
+  if (!input || state.geneMenuOpen) return;
+  state.geneQuery = input.value;
+  state.geneMenuOpen = true;
+  state.geneActiveIndex = 0;
+  render();
+  focusGeneInput(null, true);
+});
+
+document.getElementById("app").addEventListener("input", (e) => {
+  const input = e.target.closest("[data-role='gene-input']");
+  if (!input) return;
+  const cursor = input.selectionStart;
+  state.geneQuery = input.value;
+  state.geneMenuOpen = true;
+  state.geneActiveIndex = 0;
+  state.message = "";
+  render();
+  focusGeneInput(cursor);
+});
+
+document.getElementById("app").addEventListener("keydown", (e) => {
+  if (!e.target.closest("[data-role='gene-input']")) return;
+  const suggestions = geneSuggestions();
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    if (!suggestions.length) return;
+    const delta = e.key === "ArrowDown" ? 1 : -1;
+    state.geneMenuOpen = true;
+    state.geneActiveIndex = (state.geneActiveIndex + delta + suggestions.length) % suggestions.length;
+    render();
+    focusGeneInput(state.geneQuery.length);
+  } else if (e.key === "Enter" && state.geneMenuOpen && suggestions.length) {
+    e.preventDefault();
+    selectGene(suggestions[Math.min(state.geneActiveIndex, suggestions.length - 1)], state.geneQuery);
+    render();
+    focusGeneInput(state.geneQuery.length, false, true);
+  } else if (e.key === "Escape" && state.geneMenuOpen) {
+    e.preventDefault();
+    state.geneQuery = geneInfo(currentGene()).symbol;
+    state.geneMenuOpen = false;
+    state.geneActiveIndex = 0;
+    render();
+    focusGeneInput(state.geneQuery.length, false, true);
+  }
+});
+
 document.getElementById("app").addEventListener("click", (e) => {
   const el = e.target.closest("[data-act]");
   if (!el) {
-    if (state.provOpen) { state.provOpen = false; render(); }
+    let changed = false;
+    if (state.provOpen) { state.provOpen = false; changed = true; }
+    if (state.metricHelp) { state.metricHelp = null; changed = true; }
+    if (state.geneMenuOpen && !e.target.closest("[data-gene-picker]")) {
+      state.geneQuery = geneInfo(currentGene()).symbol;
+      state.geneMenuOpen = false;
+      state.geneActiveIndex = 0;
+      changed = true;
+    }
+    if (changed) render();
     return;
   }
   const act = el.getAttribute("data-act"), v = el.getAttribute("data-v");
+  if (act !== "gene-select" && act !== "gene-form") {
+    state.geneQuery = geneInfo(currentGene()).symbol;
+    state.geneMenuOpen = false;
+    state.geneActiveIndex = 0;
+  }
+  if (act !== "metric-help") state.metricHelp = null;
   switch (act) {
+    case "gene-select": {
+      const option = model.searchOptions.find((candidate) => candidate.gene === v);
+      if (!option) return;
+      selectGene(option, state.geneQuery);
+      break;
+    }
     case "tab": state.tab = v; break;
+    case "metric-help": state.metricHelp = state.metricHelp === v ? null : v; break;
     case "source": state.source = v; state.region = v === "native" ? null : state.region; state.provOpen = false; break;
     case "prov": state.provOpen = !state.provOpen; break;
     case "dataset": state.datasets = { ...state.datasets, [v]: !state.datasets[v] }; break;
