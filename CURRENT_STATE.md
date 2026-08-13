@@ -254,6 +254,12 @@ without a follow-up design pass.
   MGI:3646213 to the native `Gm8773` feature in GSE207736, GSE172461, and GSE93374; both symbols
   are searchable and lead to the same record. Whole-dataset detection is 3/3 datasets (1,224 /
   102,195 pooled expressing cells, 1.198%).
+- ✅ **Gene-specific anatomy schematic added (2026-08-13).** The Overview coronal map now uses
+  raw-count-positive cell number for region colour intensity and prints the same positive-cell
+  counts inside each mapped region. Values react to the active gene and selected datasets; a
+  linear gene-specific scale runs from zero to the largest positive-cell count among the mapped
+  regions. Off-plane regions show both positive count and percentage on the same clamped scale.
+  The legend explicitly states that raw detections use ≥1 count and are not ambient-RNA corrected.
 
 **hypomap-viz app — in progress.** Interactive explorer for the **Romanov_10x** dataset (GEO
 GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hypomap-viz/`
@@ -311,8 +317,9 @@ excluded):
   `hypomap-viz/gene-explorer-js/public/data/gene_metrics_vertical_slice.json`, copied from
   `fvp_export/gene_metrics_vertical_slice.json` after regeneration.
 - **FVP static app UI** — `hypomap-viz/gene-explorer-js/src/main.js` and `src/style.css`, including
-  dynamic gene autocomplete sourced from the loaded metric export, canonical/alias labels, and
-  keyboard selection behavior.
+  dynamic gene autocomplete sourced from the loaded metric export, canonical/alias labels,
+  keyboard selection behavior, and the gene-specific anatomy schematic (raw-count-positive cell
+  colour and labels, with an explicit ambient-RNA caveat).
 - **ARC Gene Explorer handoff (Design source copied into app workspace)** —
   `hypomap-viz/gene-explorer-js/handoff/ARC_Gene_Explorer.html` and
   `hypomap-viz/gene-explorer-js/handoff/RECREATE.md`, extracted from

@@ -101,6 +101,7 @@ const NUCLEI = [
   { abbr: "VMH", key: "Ventromedial hypothalamic nucleus", cx: 448, cy: 346, rx: 41, ry: 39, rot: 0 },
   { abbr: "PVp", key: "Periventricular hyp. n. (posterior)", cx: 406, cy: 302, rx: 10, ry: 92, rot: 0, narrow: true },
 ];
+const MAPPED_REGIONS = [...NUCLEI.map((nucleus) => nucleus.key), "Arcuate hypothalamic nucleus"];
 const OFFMAP = ["(Pre)Mammillary region", "Medial preoptic area", "Suprachiasmatic nucleus", "Anterior hypothalamic nucleus", "(Anterior/Preoptic)Periventricular", "Tuberal nucleus", "Lateral preoptic area", "Periventricular hyp. n. (intermediate)", "Not assigned"];
 const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["aggregate", "Aggregate"], ["dataset", "By dataset"], ["context", "Context"]];
 
@@ -226,15 +227,23 @@ function derive() {
   const dsMetrics = selectedMetrics(sourceMetrics);
   const agg = aggregate(dsMetrics);
   const mode = state.aggregation;
-  const regionCountsDisplay = {};
+  const regionStatsDisplay = {};
   for (const [label, group] of Object.entries(gene.metrics.by_hypomap_region || {})) {
     const metrics = selectedMetrics(group.dataset_metrics);
-    regionCountsDisplay[displayLabel(label)] = Object.values(metrics).reduce((s, m) => s + (m.eligible_cells || 0), 0);
+    const regionAggregate = aggregate(metrics);
+    regionStatsDisplay[displayLabel(label)] = {
+      eligible: regionAggregate.eligible_cells,
+      positive: regionAggregate.positive_cells,
+      percent: regionAggregate.percent_expressing[mode],
+    };
   }
-  const totalRegionAssigned = Object.entries(regionCountsDisplay)
+  const totalRegionAssigned = Object.entries(regionStatsDisplay)
     .filter(([k]) => k !== "Not assigned")
-    .reduce((s, [, n]) => s + n, 0);
-  const maxRegionCount = Math.max(1, ...Object.values(regionCountsDisplay));
+    .reduce((s, [, stats]) => s + stats.eligible, 0);
+  const maxMappedRegionPositive = Math.max(
+    1,
+    ...MAPPED_REGIONS.map((key) => regionStatsDisplay[key]?.positive || 0),
+  );
 
   let total = 0, regionAssigned = 0, annotNoRegion = 0, notCovered = 0, nativeAnnot = 0;
   for (const d of sel) {
@@ -263,8 +272,7 @@ function derive() {
   const positive = agg.positive_cells;
   const pctExpr = agg.percent_expressing[mode];
   const meanExpr = agg.mean_expression_positive[mode];
-  const rc = regionCountsDisplay;
-  const regionTotal = region ? (rc[region] || 0) : regionAssigned;
+  const regionTotal = region ? (regionStatsDisplay[region]?.eligible || 0) : regionAssigned;
   const contextPctLabel = region && regionAssigned ? ` · ${(regionTotal / regionAssigned * 100).toFixed(1)}% of annotated tissue` : "";
   const unsupportedRegion = region && Object.values(dsMetrics).every((m) => m.eligible_cells === 0);
 
@@ -274,7 +282,8 @@ function derive() {
     annotNoRegion, notCovered, nativeAnnot, annotatedTotal: hypo ? regionAssigned + annotNoRegion : nativeAnnot,
     annCov: hypo ? covFor("hypomap") : covFor("native"),
     covNative: covFor("native"), covHypomap: covFor("hypomap"),
-    mode, contextPctLabel, unsupportedRegion, regionCountsDisplay, totalRegionAssigned, maxRegionCount,
+    mode, contextPctLabel, unsupportedRegion, regionStatsDisplay, totalRegionAssigned,
+    maxMappedRegionPositive,
   };
 }
 
@@ -286,9 +295,10 @@ function metricHelp() {
   return `Raw-count positive cells use raw_count ≥ 1. % expressing uses positive / eligible cells. Mean expression uses Seurat LogNormalize among positive cells only.`;
 }
 
-function rampAlpha(c, maxRegionCount) {
-  const max = Math.max(1, maxRegionCount);
-  return 0.13 + 0.64 * Math.sqrt((c || 0) / max);
+function rampAlpha(value, maxValue) {
+  if (value == null || !Number.isFinite(Number(value))) return 0.13;
+  const ratio = Math.min(1, Math.max(0, Number(value) / Math.max(1, maxValue)));
+  return 0.13 + 0.64 * ratio;
 }
 
 function aggregationControl(D) {
@@ -376,29 +386,29 @@ function nav(D) {
 function anatomyMap(D) {
   const hasContext = D.region;
   const styleFor = (key) => {
-    const count = D.regionCountsDisplay[key] || 0;
+    const stats = D.regionStatsDisplay[key] || { eligible: 0, positive: 0, percent: null };
     const on = D.region === key;
     const hov = state.hoverRegion === key;
-    const a = rampAlpha(count, D.maxRegionCount);
+    const a = rampAlpha(stats.positive, D.maxMappedRegionPositive);
     return {
-      count,
-      fill: on ? "#b23b32" : `rgba(178,59,50,${a.toFixed(3)})`,
+      ...stats,
+      fill: `rgba(178,59,50,${a.toFixed(3)})`,
       stroke: on ? "#8f2c25" : (hov ? "#b23b32" : "rgba(122,40,34,.32)"),
       sw: (on || hov) ? 2.4 : 1.1,
       opacity: (hasContext && !on) ? 0.38 : 1,
-      labelColor: on ? "#fff" : (a > 0.5 ? "#fff" : "#5a2b26"),
-      countColor: on ? "rgba(255,255,255,.82)" : (a > 0.5 ? "rgba(255,255,255,.82)" : "#8a5c53"),
+      labelColor: a > 0.5 ? "#fff" : "#5a2b26",
+      countColor: a > 0.5 ? "rgba(255,255,255,.82)" : "#8a5c53",
     };
   };
   const txt = (x, y, fs, fill, fam, w, t) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${fs}" font-weight="${w}" fill="${fill}" style="pointer-events:none;font-family:${fam};">${t}</text>`;
   const SANS = "-apple-system,Helvetica Neue,Arial,sans-serif", MONO = "ui-monospace,Menlo,monospace";
   let shapes = "";
   for (const n of NUCLEI) {
-    const st = styleFor(n.key), labFont = n.narrow ? 11 : 15, showCount = state.mapCounts && !n.narrow;
+    const st = styleFor(n.key), labFont = n.narrow ? 10 : 15, countFont = n.narrow ? 8.5 : 11;
     const one = (cx, tf) => `<g data-act="region" data-v="${esc(n.key)}" data-hover="${esc(n.key)}" opacity="${st.opacity}" style="cursor:pointer;transition:opacity .15s;">
       <ellipse cx="${cx}" cy="${n.cy}" rx="${n.rx}" ry="${n.ry}" transform="${tf}" fill="${st.fill}" stroke="${st.stroke}" stroke-width="${st.sw}"></ellipse>
-      ${txt(cx, n.narrow ? n.cy + 3 : n.cy - 2, labFont, st.labelColor, SANS, 700, n.abbr)}
-      ${showCount ? txt(cx, n.cy + 14, 11, st.countColor, MONO, 400, fmt(st.count)) : ""}</g>`;
+      ${txt(cx, n.narrow ? n.cy - 3 : n.cy - 2, labFont, st.labelColor, SANS, 700, n.abbr)}
+      ${state.mapCounts ? txt(cx, n.narrow ? n.cy + 11 : n.cy + 14, countFont, st.countColor, MONO, 400, fmt(st.positive)) : ""}</g>`;
     const lx = 760 - n.cx;
     shapes += one(n.cx, `rotate(${n.rot} ${n.cx} ${n.cy})`);
     shapes += one(lx, `rotate(${-n.rot} ${lx} ${n.cy})`);
@@ -407,10 +417,11 @@ function anatomyMap(D) {
   const arcG = `<g data-act="region" data-v="Arcuate hypothalamic nucleus" data-hover="Arcuate hypothalamic nucleus" opacity="${arc.opacity}" style="cursor:pointer;transition:opacity .15s;">
     <path d="M380,430 C414,441 420,496 380,510 C340,496 346,441 380,430 Z" fill="${arc.fill}" stroke="${arc.stroke}" stroke-width="${arc.sw}"></path>
     ${txt(380, 466, 14, arc.labelColor, SANS, 700, "ARC")}
-    ${state.mapCounts ? txt(380, 482, 11, arc.countColor, MONO, 400, fmt(arc.count)) : ""}</g>`;
+    ${state.mapCounts ? txt(380, 482, 11, arc.countColor, MONO, 400, fmt(arc.positive)) : ""}</g>`;
   const hov = state.hoverRegion;
+  const hoverStats = hov ? D.regionStatsDisplay[hov] : null;
   const readout = hov
-    ? `<div style="text-align:right;min-width:0;"><div style="font-size:11.5px;font-weight:700;color:#211f1b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(hov)}</div><div style="font-size:10.5px;color:#a7a197;"><span class="mono" style="color:#b23b32;">${fmt(D.regionCountsDisplay[hov] || 0)}</span> · ${pct(D.regionCountsDisplay[hov] || 0, D.totalRegionAssigned).toFixed(1)}%</div></div>`
+    ? `<div style="text-align:right;min-width:0;"><div style="font-size:11.5px;font-weight:700;color:#211f1b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(hov)}</div><div style="font-size:10.5px;color:#a7a197;"><span class="mono" style="color:#b23b32;">${fmt(hoverStats?.positive || 0)} ${esc(D.info.symbol)}+</span> · ${hoverStats?.percent == null ? "—" : `${Number(hoverStats.percent).toFixed(1)}% expressing`}</div></div>`
     : `<span style="font-size:10.5px;color:#bdb7ac;">click a nucleus</span>`;
   return `
   <div style="border:1px solid #e8e4dc;border-radius:12px;overflow:hidden;background:#fbfaf7;">
@@ -429,10 +440,11 @@ function anatomyMap(D) {
       </svg>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:8px 14px 12px;">
-      <span style="font-size:10.5px;color:#a7a197;">fewer</span>
+      <span class="mono" style="font-size:10.5px;color:#a7a197;">0</span>
       <div style="flex:1;height:7px;border-radius:4px;background:linear-gradient(90deg,rgba(178,59,50,.13),rgba(178,59,50,.77));"></div>
-      <span style="font-size:10.5px;color:#a7a197;">more cells</span>
+      <span class="mono" style="font-size:10.5px;color:#a7a197;">${fmt(D.maxMappedRegionPositive)} ${esc(D.info.symbol)}+ cells</span>
     </div>
+    <div style="padding:0 14px 10px;font-size:9.5px;color:#b0a99e;line-height:1.35;">Raw detections ≥1 count · not corrected for ambient RNA</div>
   </div>`;
 }
 
@@ -457,14 +469,14 @@ function viewOverview(D) {
     : anatomyMap(D);
 
   const offRows = D.regionEnabled ? OFFMAP.map((name) => {
-    const count = D.regionCountsDisplay[name] || 0, on = D.region === name, na = name === "Not assigned";
+    const stats = D.regionStatsDisplay[name] || { eligible: 0, positive: 0, percent: null }, on = D.region === name, na = name === "Not assigned";
     const dot = na
       ? "width:11px;height:11px;border-radius:3px;flex:none;background-image:repeating-linear-gradient(45deg,#cbc6bd,#cbc6bd 3px,#bdb7ac 3px,#bdb7ac 6px);"
-      : `width:11px;height:11px;border-radius:3px;flex:none;background:rgba(178,59,50,${rampAlpha(count, D.maxRegionCount).toFixed(3)});border:1px solid rgba(122,40,34,.3);`;
+      : `width:11px;height:11px;border-radius:3px;flex:none;background:rgba(178,59,50,${rampAlpha(stats.positive, D.maxMappedRegionPositive).toFixed(3)});border:1px solid rgba(122,40,34,.3);`;
     return `<div data-act="region" data-v="${esc(name)}" style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:7px;cursor:pointer;background:${on ? "#f5e6e3" : "transparent"};">
       <span style="${dot}"></span>
       <span style="flex:1;font-size:11.5px;line-height:1.25;${on ? "font-weight:700;color:#b23b32;" : (na ? "color:#7b756a;" : "")}">${esc(name)}</span>
-      <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(count)}</span></div>`;
+      <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(stats.positive)} · ${stats.percent == null ? "—" : `${Number(stats.percent).toFixed(1)}%`}</span></div>`;
   }).join("") : "";
   const offBlock = D.regionEnabled ? `
     <div style="width:452px;margin-top:16px;">
