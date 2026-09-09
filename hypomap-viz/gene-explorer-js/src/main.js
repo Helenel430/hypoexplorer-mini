@@ -699,20 +699,45 @@ function viewByDataset(D) {
     const metric = D.dsMetrics[dataset.id] || emptyMetric();
     return { dataset, metric, value: Number(metric.percent_expressing || 0) };
   });
-  const svgW = 1120, svgH = 475, left = 82, right = 30, top = 64, bottom = 142;
+  const svgW = 1120, svgH = 430, left = 82, right = 30, top = 76, bottom = 70;
   const plotW = svgW - left - right, plotH = svgH - top - bottom;
   const contextShort = D.region ? (ABBR[D.region] || D.region) : "Whole hypothalamus";
-  const ticks = [0, 25, 50, 75, 100].map((tick) => {
-    const y = top + plotH - tick / 100 * plotH;
+  const mean = rows.length ? rows.reduce((sum, row) => sum + row.value, 0) / rows.length : 0;
+  const sampleVariance = rows.length > 1
+    ? rows.reduce((sum, row) => sum + (row.value - mean) ** 2, 0) / (rows.length - 1)
+    : 0;
+  const sem = rows.length > 1 ? Math.sqrt(sampleVariance / rows.length) : 0;
+  const semLow = Math.max(0, mean - sem), semHigh = Math.min(100, mean + sem);
+  const highestValue = Math.max(semHigh, ...rows.map((row) => row.value));
+  const paddedMax = Math.max(1, highestValue * 1.12);
+  const tickStep = paddedMax <= 10 ? 2 : paddedMax <= 25 ? 5 : paddedMax <= 50 ? 10 : 20;
+  const axisMax = Math.min(100, Math.max(tickStep, Math.ceil(paddedMax / tickStep) * tickStep));
+  const tickValues = Array.from({ length: Math.round(axisMax / tickStep) + 1 }, (_, index) => index * tickStep);
+  const ticks = tickValues.map((tick) => {
+    const y = top + plotH - tick / axisMax * plotH;
     return `<line x1="${left}" y1="${y}" x2="${left + plotW}" y2="${y}" class="dataset-grid${tick === 0 ? " is-axis" : ""}"></line>
       <text x="${left - 14}" y="${y + 4}" text-anchor="end" class="dataset-tick">${tick}</text>`;
   }).join("");
-  const slot = rows.length ? plotW / rows.length : plotW;
-  const barWidth = Math.min(92, slot * .34);
-  const bars = rows.map(({ dataset, value }, index) => {
-    const x = left + slot * (index + .5), y = top + plotH - value / 100 * plotH;
-    return `<rect x="${(x - barWidth / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${Math.max(0, top + plotH - y).toFixed(1)}" fill="${dataset.color}" class="dataset-bar"></rect>
-      <text x="${x.toFixed(1)}" y="${top + plotH + 27}" text-anchor="end" transform="rotate(-52 ${x.toFixed(1)} ${top + plotH + 27})" class="dataset-label">${esc(dataset.label)}</text>`;
+  const centerX = left + plotW / 2;
+  const meanY = top + plotH - mean / axisMax * plotH;
+  const semHighY = top + plotH - semHigh / axisMax * plotH;
+  const semLowY = top + plotH - semLow / axisMax * plotH;
+  const barWidth = Math.min(260, plotW * .3);
+  const pointSpread = Math.min(82, barWidth / Math.max(rows.length, 2));
+  const points = rows.map(({ dataset, value }, index) => {
+    const x = centerX + (index - (rows.length - 1) / 2) * pointSpread;
+    const y = top + plotH - value / axisMax * plotH;
+    const hoverLabel = `${dataset.label} · ${value.toFixed(1)}%`;
+    const labelWidth = Math.max(114, hoverLabel.length * 7.1 + 20);
+    const labelTop = y < top + 34 ? y + 18 : y - 47;
+    return `<g class="dataset-point-group" tabindex="0" role="img" aria-label="${esc(dataset.label)}: ${value.toFixed(1)} percent expressing">
+      <title>${esc(hoverLabel)}</title>
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="${dataset.color}" class="dataset-point"></circle>
+      <g class="dataset-point-label" transform="translate(${x.toFixed(1)} ${labelTop.toFixed(1)})">
+        <rect x="${(-labelWidth / 2).toFixed(1)}" y="0" width="${labelWidth.toFixed(1)}" height="24" rx="6"></rect>
+        <text x="0" y="16" text-anchor="middle">${esc(hoverLabel)}</text>
+      </g>
+    </g>`;
   }).join("");
   const cards = rows.map(({ dataset, metric, value }) => {
     const unavailable = D.region && metric.eligible_cells === 0;
@@ -729,11 +754,17 @@ function viewByDataset(D) {
     <div class="dataset-view-heading"><h2>Detection by dataset</h2><p>Per-dataset <i>${esc(D.info.symbol)}</i>+ fraction and expression within <b>${esc(D.contextName)}</b> cells.</p></div>
     <div class="dataset-toggles">${datasetToggles(D)}</div>
     ${rows.length ? `<div class="dataset-chart-wrap">
-      <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="Percent ${esc(D.info.symbol)} positive by selected dataset">
-        <text x="${left + plotW / 2}" y="30" text-anchor="middle" class="dataset-chart-title">${esc(contextShort)} <tspan font-style="italic">${esc(D.info.symbol)}</tspan>+ cells</text>
+      <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="Mean percent ${esc(D.info.symbol)} positive with standard error and individual selected datasets">
+        <text x="${left + plotW / 2}" y="28" text-anchor="middle" class="dataset-chart-title">${esc(contextShort)} <tspan font-style="italic">${esc(D.info.symbol)}</tspan>+ detection</text>
+        <text x="${left + plotW / 2}" y="49" text-anchor="middle" class="dataset-chart-subtitle">Bar = selected-dataset mean · error bars = ±SEM · hover points for dataset details</text>
         ${ticks}<line x1="${left}" y1="${top}" x2="${left}" y2="${top + plotH}" class="dataset-axis"></line>
         <text x="24" y="${top + plotH / 2}" text-anchor="middle" transform="rotate(-90 24 ${top + plotH / 2})" class="dataset-axis-title">% ${esc(D.info.symbol)}+</text>
-        ${bars}
+        <rect x="${(centerX - barWidth / 2).toFixed(1)}" y="${meanY.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${Math.max(0, top + plotH - meanY).toFixed(1)}" class="dataset-mean-bar"></rect>
+        <line x1="${centerX}" y1="${semHighY.toFixed(1)}" x2="${centerX}" y2="${semLowY.toFixed(1)}" class="dataset-sem-whisker"></line>
+        <line x1="${centerX - 24}" y1="${semHighY.toFixed(1)}" x2="${centerX + 24}" y2="${semHighY.toFixed(1)}" class="dataset-sem-cap"></line>
+        <line x1="${centerX - 24}" y1="${semLowY.toFixed(1)}" x2="${centerX + 24}" y2="${semLowY.toFixed(1)}" class="dataset-sem-cap"></line>
+        ${points}
+        <text x="${centerX}" y="${top + plotH + 34}" text-anchor="middle" class="dataset-sem-summary">Mean ${mean.toFixed(1)}% · SEM ${sem.toFixed(1)}%</text>
       </svg>
     </div><div class="dataset-detail-grid">${cards}</div>` : `<div class="aggregate-empty">Select at least one dataset to populate this view.</div>`}`;
 }

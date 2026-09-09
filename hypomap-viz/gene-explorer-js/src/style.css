@@ -636,6 +636,11 @@ button {
   font-weight: 700;
 }
 
+.dataset-chart-subtitle {
+  fill: #928b81;
+  font-size: 11px;
+}
+
 .dataset-grid {
   stroke: #e8e4dc;
   stroke-width: 1;
@@ -659,14 +664,64 @@ button {
   font-weight: 700;
 }
 
-.dataset-bar {
-  stroke: #72332c;
-  stroke-width: .8;
+.dataset-sem-whisker,
+.dataset-sem-cap {
+  stroke: #302c27;
+  stroke-width: 2;
 }
 
-.dataset-label {
-  fill: #27231f;
-  font-size: 13px;
+.dataset-mean-bar {
+  fill: #ead0ca;
+  stroke: #7d342d;
+  stroke-width: 1.5;
+}
+
+.dataset-sem-summary {
+  fill: #5f5951;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dataset-point-group {
+  cursor: default;
+  outline: none;
+}
+
+.dataset-point {
+  stroke: #fff;
+  stroke-width: 3;
+  transition: r 120ms ease, stroke-width 120ms ease;
+}
+
+.dataset-point-group:hover .dataset-point,
+.dataset-point-group:focus .dataset-point {
+  r: 13px;
+  stroke: #302c27;
+  stroke-width: 2;
+}
+
+.dataset-point-label {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.dataset-point-label rect {
+  fill: #302c27;
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.dataset-point-label text {
+  fill: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dataset-point-group:hover .dataset-point-label,
+.dataset-point-group:focus .dataset-point-label {
+  opacity: 1;
 }
 
 .dataset-detail-grid {

@@ -46,16 +46,16 @@ without a follow-up design pass.
   type/Coexpression) and the fact there is exactly one navigation surface per tab;
   donut-leads-with-count layout on Overview; dataset rows as the single live filter (color +
   selection state shared across every tab); the "?" info-popover pattern and its exact formula
-  copy; the by-dataset bar chart's axis scale (0–100, 25-increments), color ramp, and
-  label-rotation/anchor behavior.
+  copy; the by-dataset mean bar + ±SEM error-bar definition, overlaid dataset-colored points,
+  point hover/focus labels, and dynamically rounded y-axis ceiling.
 - **Open for implementation flexibility:** real data wiring (prototype uses hardcoded
   placeholder arrays), state-management/routing approach, whether tab state becomes
   URL-addressable, exact colors if a brand palette supersedes the prototype's red, and
   extending the live dataset-filter to the per-dataset detail cards / cell-type table
-  (currently only the Overview aggregate, chip, and bar chart react to selection in the
+  (currently only the Overview aggregate, chip, and detection chart react to selection in the
   prototype — confirm scope before assuming those other views should filter too).
 - **Priority order suggested:** (1) Overview tab incl. dataset filter + info popovers, (2) By
-  dataset tab incl. Prism chart, (3) By cell type tab, (4) Coexpression tab (depends on a
+  dataset tab incl. detection chart, (3) By cell type tab, (4) Coexpression tab (depends on a
   gene-pair picker that isn't designed yet — flag that as a blocker/question rather than
   guessing).
 - Before building empty/loading/error states or accessibility/responsive behavior, come back to
@@ -241,14 +241,18 @@ without a follow-up design pass.
 - ✅ **Aggregate and By dataset views added to `gene-explorer-js` (2026-08-10).** Replaced the
   Expression and Reproducibility tabs at the user's direction. Aggregate now presents the
   count-led expressing-cell donut, across-dataset average, positive-cell mean with scale, formula
-  popovers, and detection chip. By dataset now presents the specified 0–100% bar chart with
-  25-point gridlines, dataset color ramp, 52° labels, live dataset toggles, and per-dataset
-  expression detail cards. All values react to the active gene, context, annotation source, and
+  popovers, and detection chip. The initial By dataset implementation used a fixed 0–100% bar
+  chart with dataset color ramp and rotated labels; this presentation was superseded by the
+  2026-09-09 update below. All values react to the active gene, context, annotation source, and
   selected datasets.
 - ✅ **Aggregate calculation switch added (2026-08-12).** The Aggregate page now exposes
   dataset-average (each dataset weighted equally) versus cell-pooled (each cell weighted equally)
   calculation modes. Both the percentage and positive-cell mean update with the selected mode;
   the donut remains an explicitly labeled pooled absolute cell count.
+- ✅ **By dataset detection plot updated (2026-09-09).** The view now shows a selected-dataset
+  mean bar with ±SEM error bars and overlaid dataset points. Points preserve the shared dataset
+  colour identity and reveal the dataset name plus exact `%Expressing` value on hover. The y-axis
+  uses a padded, rounded upper bound derived from the largest point or error-bar cap.
 - ✅ **Fam237b vertical slice added (2026-08-13).** Expanded the static metric export and
   `gene-explorer-js` lookup from three to four canonical genes. `Fam237b` resolves through
   MGI:3646213 to the native `Gm8773` feature in GSE207736, GSE172461, and GSE93374; both symbols

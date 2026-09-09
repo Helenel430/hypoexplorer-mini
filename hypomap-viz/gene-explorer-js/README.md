@@ -68,8 +68,9 @@ Implemented:
 - count-led Aggregate view with a live expressing-cell donut, across-dataset
   percentage, positive-cell mean expression, metric explainers, detection count,
   and a dataset-average versus cell-pooled calculation switch
-- By dataset view with selectable dataset chips, a fixed 0–100% bar chart, and
-  per-dataset expression detail cards
+- By dataset view with selectable dataset chips, a dynamically scaled mean-detection
+  bar with ±SEM error bars, hoverable dataset points, and per-dataset expression
+  detail cards
 - Overview and Aggregate metric cards backed by raw-count and verified Seurat
   LogNormalize metrics defined in `docs/METRIC_SPEC.md`
 - region-scoped `hypomap_C25` grouping for the Cell Identity tab

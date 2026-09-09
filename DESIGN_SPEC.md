@@ -5,6 +5,8 @@ Canonical UI/UX spec for the HypoMap gene-expression visualizer, extracted from 
 *experience* decisions; the prototype file is the source of truth for exact visual
 detail (spacing, type scale, color values) when this doc is ambiguous.
 
+Last updated: 2026-09-09
+
 **Do not treat this as a rewrite target for `hypomap-viz/`'s existing code.** It describes
 intended behavior; implementation approach (React/Shiny/vanilla JS, state management,
 data-fetching layer) is Claude Code's call inside `hypomap-viz/`.
@@ -75,7 +77,7 @@ legend:
   users can still see what they excluded and re-include it.
 - **Every dataset-scoped stat and chart on every tab must react live to this
   selection**: the Overview aggregate %, the "Detected in N / 3 datasets" chip, and
-  the By-dataset bar chart all filter/recompute from the selected set. (Per-dataset
+  the By-dataset detection chart all filter/recompute from the selected set. (Per-dataset
   detail cards and the cell-type table in the current prototype show fixed
   per-dataset values, not yet filtered — extending the filter to those is reasonable
   scope for implementation, but confirm with design before assuming which other
@@ -107,15 +109,19 @@ Goal: one glance answers "is this gene expressed here, and how much."
   replace or reframe it rather than adding it.
 
 ### By dataset tab
-- **Prism/GraphPad-style bar chart** at the top: one bar per *selected* dataset,
-  0–100% y-axis (gridlines at 0/25/50/75/100), thin (not bold) black axis lines,
-  light-to-dark red color ramp across bars (bars are NOT all one color — ramp
-  reinforces reading them as an ordered small set), thin dark outline per bar,
-  no value labels printed on bars (axis conveys value), x-axis dataset-name labels
-  rotated ~52° with a fixed rotation origin so the label's end aligns exactly to the
-  tick position (not extending above the axis line) — this was tuned iteratively and
-  is a finalized micro-detail, not incidental.
-- Chart title ("ARC {gene}+ cells") is centered over the plot area (offset to
+- **Mean-detection bar with error bars** at the top: one pale summary bar represents
+  the arithmetic mean of `%Expressing` across the *selected* datasets. A centered
+  vertical error bar shows mean ± SEM, where SEM is the sample standard deviation of
+  the selected dataset percentages divided by the square root of the selected dataset
+  count. With one selected dataset, SEM is displayed as 0.
+- **Individual dataset points are overlaid on the bar.** Each point keeps the dataset's
+  established light-to-dark red identity color. Hovering or keyboard-focusing a point
+  reveals the dataset name and exact `%Expressing` value; dataset names are not printed
+  permanently on the x-axis.
+- The y-axis begins at 0 and uses a padded, rounded upper bound derived from the larger
+  of the maximum dataset value or the upper SEM cap. Tick intervals adapt to the range
+  so low detection percentages remain legible; the upper bound never exceeds 100%.
+- Chart title ("{context} {gene}+ detection") is centered over the plot area (offset to
   account for the y-axis-label gutter), and the y-axis title ("% {gene}+") is
   centered vertically alongside the numeric ticks, rotated 180° reading top-to-bottom.
 - **Per-dataset detail cards below**, one per dataset, each with: a small donut
@@ -159,7 +165,7 @@ Goal: one glance answers "is this gene expressed here, and how much."
   name and region spelled out underneath in regular weight — symbol is always the
   visually dominant element, full name is supporting text.
 - Dataset identity is consistent system-wide: same name string, same color swatch,
-  wherever a dataset appears (sidebar, bar chart, per-dataset cards, dot matrix
+  wherever a dataset appears (sidebar, detection-chart points, per-dataset cards, dot matrix
   columns). Never reassign a dataset's color between views.
 - Every derived/aggregate statistic that isn't self-evident gets a **"?" info
   affordance** (see §9) rather than a permanent inline caption — keeps the primary
@@ -169,10 +175,10 @@ Goal: one glance answers "is this gene expressed here, and how much."
 
 - Sidebar dataset rows: background tint on hover (signals clickability of the whole
   row, not just the swatch).
-- No chart-level hover/tooltip behavior (per-bar or per-dot value-on-hover) was
-  designed yet in the prototype — bars/dots currently only convey value via
-  size/position. If exact per-bar/per-cell-type numeric readout on hover is wanted,
-  that's additional scope to confirm with design, not something to invent silently.
+- By-dataset points: enlarge slightly and reveal a compact label containing dataset
+  name and exact `%Expressing` value on hover or keyboard focus.
+- Other chart-level hover/tooltip behavior remains undesigned. If exact numeric
+  readout is wanted elsewhere, that is additional scope to confirm with design.
 
 ## 9. Comparison / explain-yourself workflows
 
@@ -245,10 +251,9 @@ implementation:
   provided no interaction value once the app already had per-dataset data to filter
   by — reusing it as a toggle turns passive information into active exploration
   at no added visual cost.
-- **Bar chart labels rotate to end exactly at the axis**, tuned through several
-  passes (30°→61°→52°, then anchor-point corrected) specifically so long dataset
-  names don't visually intrude into the plot area above the axis line — treat the
-  current angle/anchor as deliberate, not a placeholder.
+- **The By-dataset scale follows the observed range**, rather than always extending to
+  100%, so differences among low detection percentages remain readable. Dataset labels
+  move into point tooltips to keep the summary plot compact and uncluttered.
 - **"Top type" chip removed**, not merely reworded, because usability review (the
   user, directly) found the phrase not self-explanatory even with a real value next
   to it — the lesson for future stats is: a metric needs either an obvious label or
