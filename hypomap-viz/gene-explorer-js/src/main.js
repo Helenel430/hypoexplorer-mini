@@ -109,7 +109,7 @@ const NUCLEI = [
 ];
 const MAPPED_REGIONS = [...NUCLEI.map((nucleus) => nucleus.key), "Arcuate hypothalamic nucleus"];
 const OFFMAP = ["(Pre)Mammillary region", "Medial preoptic area", "Suprachiasmatic nucleus", "Anterior hypothalamic nucleus", "(Anterior/Preoptic)Periventricular", "Tuberal nucleus", "Lateral preoptic area", "Periventricular hyp. n. (intermediate)", "Not assigned"];
-const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["aggregate", "Aggregate"], ["dataset", "By dataset"], ["coexpression", "Coexpression"]];
+const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["dataset", "By dataset"], ["coexpression", "Coexpression"]];
 const COEXPRESSION_QUADRANTS = [
   { key: "both_positive", color: "#124e88" },
   { key: "gene_a_only", color: "#2f75b5" },
@@ -501,7 +501,7 @@ function nav(D) {
   <nav style="position:sticky;top:59px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 26px;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #e8e4dc;">
     <div style="display:flex;align-items:stretch;gap:2px;">${tabs}</div>
     <div style="display:flex;align-items:center;gap:11px;min-width:0;">
-      ${state.tab === "aggregate" || state.tab === "dataset" || isCoexpression ? "" : aggregationControl(D)}
+      ${state.tab === "overview" || state.tab === "dataset" || isCoexpression ? "" : aggregationControl(D)}
       <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#bdb7ac;white-space:nowrap;">Viewing</span>
       <span style="font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;">${esc(viewingLabel)}</span>
       <span style="font-size:11px;color:#a7a197;white-space:nowrap;"><span class="mono" style="color:#2563a6;font-weight:600;">${fmt(viewingTotal)}</span> cells</span>
@@ -577,16 +577,57 @@ function anatomyMap(D) {
 
 function viewOverview(D) {
   const disabled = !D.regionEnabled;
-  const cards = [
-    { label: "% expressing", value: D.pctExpr == null ? "—" : Number(D.pctExpr).toFixed(1), unit: "%", sub: D.sel.length > 1 ? (D.mode === "mode_a_dataset_average" ? "dataset-average" : "cell-pooled") : "positive fraction", color: "#2563a6" },
-    { label: "Positive cells", value: fmt(D.positive), unit: "cells", sub: `of ${fmt(D.contextTotal)} in context`, color: "#211f1b" },
-    { label: "Mean expression", value: D.meanExpr == null ? "—" : Number(D.meanExpr).toFixed(2), unit: LOG_EXPRESSION_UNIT, sub: "across raw-count-positive cells", color: "#211f1b" },
-    { label: "Detected in", value: `${D.agg.dataset_detection_count}/${D.agg.dataset_detection_total}`, unit: "datasets", sub: "present in selected deposits", color: "#211f1b" },
-  ].map((m) => `<div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 16px;">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:9px;min-height:16px;">
-        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#8a847a;">${m.label}</span>${computedBadge()}</div>
-      <div style="display:flex;align-items:baseline;gap:4px;"><span class="mono" style="font-size:25px;font-weight:700;color:${m.color};letter-spacing:-.01em;">${m.value}</span><span style="font-size:12px;color:#a7a197;">${m.unit}</span></div>
-      <div style="font-size:11px;color:#a7a197;margin-top:4px;line-height:1.35;">${m.sub}</div></div>`).join("");
+  const pooledPct = D.contextTotal ? D.positive / D.contextTotal * 100 : 0;
+  const aggregatePct = D.agg.percent_expressing[D.mode];
+  const aggregateMean = D.agg.mean_expression_positive[D.mode];
+  const selectedDatasetMetrics = Object.values(D.dsMetrics).filter((metric) => metric.eligible_cells > 0);
+  const meanScale = Math.max(1, ...selectedDatasetMetrics.map((metric) =>
+    Number(metric.expression_distribution?.quantiles?.max || metric.mean_expression_positive || 0)));
+  const meanWidth = aggregateMean == null ? 0 : Math.min(100, Number(aggregateMean) / meanScale * 100);
+  const selectionLabel = D.sel.length === model.datasets.length ? "all datasets" : "selected datasets";
+  const empty = D.contextTotal === 0;
+  const expressionSummary = `
+    <section class="overview-expression" aria-label="Aggregated expression summary">
+      ${aggregateCalculationControl(D)}
+      ${empty ? `<div class="aggregate-empty">Select a dataset with eligible cells to view expression summary.</div>` : `<div class="overview-expression-content">
+        <div class="overview-summary-heading">
+          <div><h3>Expression summary</h3><p>${esc(D.contextName)} · ${D.sel.length} selected dataset${D.sel.length === 1 ? "" : "s"}</p></div>
+          ${computedBadge()}
+        </div>
+        <div class="overview-aggregate-layout">
+        <section class="aggregate-donut-panel overview-donut-panel" aria-label="${pooledPct.toFixed(1)} percent of cells express ${esc(D.info.symbol)}">
+          <h3>Cells expressing · ${selectionLabel}</h3>
+          <div class="aggregate-legend">
+            <span><i style="background:#2c6fae;"></i><em>${esc(D.info.symbol)}</em> + expressing</span>
+            <span class="is-negative"><i></i><em>${esc(D.info.symbol)}</em> − not expressing</span>
+          </div>
+          <div class="aggregate-donut overview-donut" style="background:conic-gradient(#2c6fae 0 ${pooledPct.toFixed(3)}%,#dceaf7 ${pooledPct.toFixed(3)}% 100%);">
+            <div><strong>${fmt(D.positive)}</strong><span>of ${fmt(D.contextTotal)} cells</span></div>
+          </div>
+          <p class="aggregate-donut-note">Absolute counts are always pooled across selected datasets.</p>
+        </section>
+        <section class="overview-summary">
+          <div class="aggregate-cards overview-cards">
+            <article class="aggregate-card overview-stat-card">
+              <div class="aggregate-card-label">% <i>${esc(D.info.symbol)}</i>+ · ${D.mode === "mode_a_dataset_average" ? "dataset average" : "cell pooled"}</div>
+              <button data-act="metric-help" data-v="percent" class="metric-help" aria-expanded="${state.metricHelp === "percent"}" aria-label="Explain expression percentage">?</button>
+              <div class="aggregate-percent">${aggregatePct == null ? "—" : `${Number(aggregatePct).toFixed(1)}%`}</div>
+              ${metricInfo("percent", D)}
+            </article>
+            <article class="aggregate-card overview-stat-card">
+              <div class="aggregate-card-label">Mean expr. (when on)</div>
+              <button data-act="metric-help" data-v="mean" class="metric-help" aria-expanded="${state.metricHelp === "mean"}" aria-label="Explain mean expression">?</button>
+              <div class="aggregate-mean"><strong>${aggregateMean == null ? "—" : Number(aggregateMean).toFixed(2)}</strong><span>${LOG_EXPRESSION_UNIT}</span></div>
+              <div class="aggregate-mean-track"><span style="width:${meanWidth.toFixed(1)}%;"></span></div>
+              <div class="aggregate-mean-scale">Visual scale: 0–${meanScale.toFixed(2)}</div>
+              ${metricInfo("mean", D)}
+            </article>
+          </div>
+          <div class="detection-chip">Detected in <b>${D.agg.dataset_detection_count}</b> / <b>${D.agg.dataset_detection_total}</b> datasets</div>
+        </section>
+        </div>
+      </div>`}
+    </section>`;
 
   const left = disabled
     ? `<div style="border:1px dashed #ddd7cc;border-radius:12px;background:#faf9f6;padding:22px 20px;text-align:center;">
@@ -606,7 +647,7 @@ function viewOverview(D) {
       <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(stats.positive)} · ${stats.percent == null ? "—" : `${Number(stats.percent).toFixed(1)}%`}</span></div>`;
   }).join("") : "";
   const offBlock = D.regionEnabled ? `
-    <div style="width:452px;margin-top:16px;">
+    <div class="overview-offplane">
       <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#8a847a;margin-bottom:3px;">Off this plane</div>
       <div style="font-size:10.5px;color:#bdb7ac;line-height:1.45;margin-bottom:8px;">Nuclei at other rostro-caudal levels — selectable all the same.</div>
       <div style="display:flex;flex-direction:column;gap:1px;">${offRows}</div>
@@ -618,18 +659,20 @@ function viewOverview(D) {
       <span style="font-size:32px;font-weight:700;letter-spacing:-.02em;">${esc(D.info.symbol)}</span>
       <span style="font-size:14px;color:#7b756a;">${esc(D.info.name)}</span>
     </div>
-    <div style="margin-top:22px;border:1px solid #e8e4dc;border-radius:11px;padding:16px 18px;background:#fbfaf7;width:922px;">
+    <div class="overview-about">
       <div style="font-size:12px;font-weight:700;margin-bottom:6px;">About this gene</div>
       <div style="font-size:12.5px;color:#7b756a;line-height:1.6;">${esc(D.info.blurb)}</div>
     </div>
-    <div style="width:452px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#8a847a;margin-top:20px;margin-bottom:9px;">Anatomy · click a nucleus to set context</div>
-    <div style="display:flex;gap:30px;align-items:center;">
-      <div style="width:452px;flex:none;">${left}</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-size:12.5px;color:#a7a197;margin-bottom:22px;line-height:1.5;">Hypothalamus · Mus musculus · expression across <b style="color:#7b756a;">${esc(D.contextName)}</b>${D.contextPctLabel}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">${cards}</div>${unsupported}
-      </div>
-    </div>${offBlock}`;
+    <div class="overview-workspace">
+      <section class="overview-anatomy-column">
+        <div class="overview-section-label">Anatomy · click a nucleus to set context</div>
+        ${left}${offBlock}
+      </section>
+      <section class="overview-expression-column">
+        <div style="font-size:12.5px;color:#a7a197;margin-bottom:14px;line-height:1.5;">Hypothalamus · Mus musculus · expression across <b style="color:#7b756a;">${esc(D.contextName)}</b>${D.contextPctLabel}</div>
+        ${expressionSummary}${unsupported}
+      </section>
+    </div>`;
 }
 
 function viewIdentity(D) {
@@ -768,58 +811,6 @@ function aggregateCalculationControl(D) {
     </div>
     ${D.sel.length === 1 ? `<small>Both methods are identical with one selected dataset.</small>` : ""}
   </div>`;
-}
-
-function viewAggregate(D) {
-  const pooledPct = D.contextTotal ? D.positive / D.contextTotal * 100 : 0;
-  const aggregatePct = D.agg.percent_expressing[D.mode];
-  const aggregateMean = D.agg.mean_expression_positive[D.mode];
-  const calculationLabel = D.mode === "mode_a_dataset_average" ? "dataset average" : "cell pooled";
-  const selectedMetrics = Object.values(D.dsMetrics).filter((metric) => metric.eligible_cells > 0);
-  const meanScale = Math.max(1, ...selectedMetrics.map((metric) =>
-    Number(metric.expression_distribution?.quantiles?.max || metric.mean_expression_positive || 0)));
-  const meanWidth = aggregateMean == null ? 0 : Math.min(100, Number(aggregateMean) / meanScale * 100);
-  const selectionLabel = D.sel.length === model.datasets.length ? "all datasets" : "selected datasets";
-  const empty = D.contextTotal === 0;
-
-  return `
-    <div class="aggregate-heading">
-      <div><h2>Aggregate expression</h2><p><i>${esc(D.info.symbol)}</i> across <b>${esc(D.contextName)}</b> and ${D.sel.length} selected dataset${D.sel.length === 1 ? "" : "s"}.</p></div>
-      <div class="aggregate-heading-meta">${computedBadge()}<span>${calculationLabel}</span></div>
-    </div>
-    ${aggregateCalculationControl(D)}
-    ${empty ? `<div class="aggregate-empty">Select a dataset with eligible cells to view aggregate expression.</div>` : `<div class="aggregate-layout">
-      <section class="aggregate-donut-panel" aria-label="${pooledPct.toFixed(1)} percent of cells express ${esc(D.info.symbol)}">
-        <h3>Cells expressing — ${selectionLabel}</h3>
-        <div class="aggregate-legend">
-          <span><i style="background:#2c6fae;"></i><em>${esc(D.info.symbol)}</em> + <b>${pooledPct.toFixed(1)}%</b></span>
-          <span class="is-negative"><i></i><em>${esc(D.info.symbol)}</em> − <b>${(100 - pooledPct).toFixed(1)}%</b></span>
-        </div>
-        <div class="aggregate-donut" style="background:conic-gradient(#2c6fae 0 ${pooledPct.toFixed(3)}%,#dceaf7 ${pooledPct.toFixed(3)}% 100%);">
-          <div><strong>${fmt(D.positive)}</strong><span>of ${fmt(D.contextTotal)} cells</span></div>
-        </div>
-        <p class="aggregate-donut-note">Absolute counts are always pooled across selected datasets.</p>
-      </section>
-      <section class="aggregate-summary">
-        <div class="aggregate-cards">
-          <article class="aggregate-card">
-            <div class="aggregate-card-label">% <i>${esc(D.info.symbol)}</i>+ · ${calculationLabel}</div>
-            <button data-act="metric-help" data-v="percent" class="metric-help" aria-expanded="${state.metricHelp === "percent"}" aria-label="Explain aggregate percentage">?</button>
-            <div class="aggregate-percent">${aggregatePct == null ? "—" : `${Number(aggregatePct).toFixed(1)}%`}</div>
-            ${metricInfo("percent", D)}
-          </article>
-          <article class="aggregate-card">
-            <div class="aggregate-card-label">Mean expr. (when on)</div>
-            <button data-act="metric-help" data-v="mean" class="metric-help" aria-expanded="${state.metricHelp === "mean"}" aria-label="Explain mean expression">?</button>
-            <div class="aggregate-mean"><strong>${aggregateMean == null ? "—" : Number(aggregateMean).toFixed(2)}</strong><span>${LOG_EXPRESSION_UNIT}</span></div>
-            <div class="aggregate-mean-track"><span style="width:${meanWidth.toFixed(1)}%;"></span></div>
-            <div class="aggregate-mean-scale">Visual scale: 0–${meanScale.toFixed(2)}</div>
-            ${metricInfo("mean", D)}
-          </article>
-        </div>
-        <div class="detection-chip">Detected in <b>${D.agg.dataset_detection_count}</b> / <b>${D.agg.dataset_detection_total}</b> datasets</div>
-      </section>
-    </div>`}`;
 }
 
 function chartScale(maxValue, maxCap = null) {
@@ -1110,7 +1101,7 @@ function viewCoexpression(D) {
 
 function render() {
   const D = derive();
-  const body = { overview: viewOverview, identity: viewIdentity, aggregate: viewAggregate, dataset: viewByDataset, coexpression: viewCoexpression }[state.tab](D);
+  const body = { overview: viewOverview, identity: viewIdentity, dataset: viewByDataset, coexpression: viewCoexpression }[state.tab](D);
   const footer = `
     <footer style="padding:13px 30px;border-top:1px solid #e8e4dc;background:#f9f8f4;border-radius:0 0 14px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <span style="font-size:11px;color:#a7a197;">${D.hypo ? `HypoMap atlas · CZ CELLxGENE d86517f0 · Steuernagel et al. 2022 · ${fmt(D.regionAssigned + D.annotNoRegion)} / ${fmt(D.total)} selected cells matched` : "Native study annotations · as deposited in GEO"}</span>

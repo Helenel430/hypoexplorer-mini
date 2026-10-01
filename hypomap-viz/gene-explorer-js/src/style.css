@@ -281,6 +281,199 @@ button {
   min-height: 450px;
 }
 
+.overview-expression {
+  min-width: 0;
+}
+
+.overview-about {
+  width: min(100%, 1380px);
+  margin: 22px auto 0;
+  padding: 16px 18px;
+  border: 1px solid #e8e4dc;
+  border-radius: 11px;
+  background: #fbfaf7;
+}
+
+.overview-workspace {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 32px;
+  width: min(100%, 1600px);
+  margin: 20px auto 0;
+}
+
+.overview-anatomy-column,
+.overview-expression-column {
+  width: 100%;
+  min-width: 0;
+  justify-self: center;
+}
+
+.overview-anatomy-column {
+  max-width: 650px;
+}
+
+.overview-expression-column {
+  max-width: 760px;
+}
+
+.overview-section-label {
+  margin: 0 0 9px;
+  color: #8a847a;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.overview-offplane {
+  width: 100%;
+  max-width: 600px;
+  margin: 16px auto 0;
+}
+
+.overview-expression .aggregate-calculation {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+}
+
+.overview-aggregate-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.overview-donut-panel {
+  min-width: 0;
+  width: 100%;
+  padding-top: 0;
+}
+
+.overview-donut-panel h3 {
+  max-width: none;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.overview-donut-panel .aggregate-legend {
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 10px;
+  font-size: 11px;
+}
+
+.overview-donut-panel .aggregate-legend em {
+  font-size: 12px;
+}
+
+.overview-expression .overview-donut {
+  width: 210px;
+  height: 210px;
+}
+
+.overview-expression .overview-donut > div {
+  width: 108px;
+  height: 108px;
+}
+
+.overview-expression .overview-donut strong {
+  font-size: 27px;
+}
+
+.overview-expression .overview-donut span {
+  font-size: 11px;
+}
+
+.overview-donut-panel .aggregate-donut-note {
+  max-width: 230px;
+  margin-top: 8px;
+}
+
+.overview-summary {
+  min-width: 0;
+}
+
+.overview-summary-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.overview-summary-heading h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.overview-summary-heading p {
+  margin: 3px 0 0;
+  color: #918b82;
+  font-size: 10px;
+}
+
+.overview-summary-heading .computed-badge {
+  flex: none;
+}
+
+.overview-cards {
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.overview-stat-card {
+  min-height: 144px;
+  padding: 17px 16px;
+  border-radius: 11px;
+}
+
+.overview-stat-card .aggregate-card-label {
+  font-size: 10px;
+}
+
+.overview-stat-card .metric-help {
+  top: 11px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+}
+
+.overview-stat-card .aggregate-percent {
+  margin-top: 18px;
+  font-size: 32px;
+}
+
+.overview-stat-card .aggregate-mean {
+  gap: 5px;
+  margin-top: 18px;
+}
+
+.overview-stat-card .aggregate-mean strong {
+  font-size: 30px;
+}
+
+.overview-stat-card .aggregate-mean span {
+  font-size: 9px;
+}
+
+.overview-stat-card .aggregate-mean-track {
+  height: 7px;
+  margin-top: 14px;
+}
+
+.overview-stat-card .aggregate-mean-scale {
+  font-size: 9px;
+}
+
+.overview-summary .detection-chip {
+  margin-top: 10px;
+  padding: 7px 12px;
+  font-size: 11px;
+}
+
 .aggregate-donut-panel {
   display: flex;
   flex-direction: column;
@@ -876,6 +1069,17 @@ button {
 @media (max-width: 1050px) {
   .dataset-chart-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .overview-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
+    gap: 26px;
+  }
+
+  .overview-anatomy-column,
+  .overview-expression-column {
+    max-width: 760px;
   }
 }
 
