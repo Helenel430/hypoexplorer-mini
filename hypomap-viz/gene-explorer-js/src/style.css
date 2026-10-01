@@ -860,13 +860,15 @@ button {
 
 .dataset-chart-title {
   fill: #211f1b;
-  font-size: 19px;
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .dataset-chart-subtitle {
   fill: #928b81;
-  font-size: 10.5px;
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 10px;
 }
 
 .dataset-grid {
@@ -882,13 +884,14 @@ button {
 
 .dataset-tick {
   fill: #34312d;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 12px;
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
 }
 
 .dataset-axis-title {
   fill: #211f1b;
-  font-size: 12px;
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
   font-weight: 700;
 }
 
@@ -907,18 +910,19 @@ button {
 .dataset-sem-summary {
   fill: #5f5951;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 600;
 }
 
 .dataset-x-axis-title {
   fill: #211f1b;
-  font-size: 14px;
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
   font-weight: 700;
 }
 
 .dataset-point-group {
-  cursor: default;
+  cursor: pointer;
   outline: none;
 }
 
@@ -929,10 +933,12 @@ button {
 }
 
 .dataset-point-group:hover .dataset-point,
-.dataset-point-group:focus .dataset-point {
+.dataset-point-group:focus-visible .dataset-point,
+.dataset-point-group.is-open .dataset-point {
   r: 13px;
-  stroke: #302c27;
+  stroke: #fff;
   stroke-width: 2;
+  filter: drop-shadow(0 1px 3px rgba(33,31,27,.35));
 }
 
 .dataset-point-label {
@@ -960,27 +966,44 @@ button {
 
 .dataset-detail-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
   gap: 14px;
-  margin-top: 4px;
+  margin-top: 14px;
 }
 
 .dataset-detail-card {
-  padding: 15px 16px;
+  padding: 20px 22px;
   border: 1px solid #e5e0d8;
   border-radius: 11px;
+  background: #fff;
+  animation: dataset-detail-in 160ms ease-out;
+}
+
+@keyframes dataset-detail-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dataset-detail-hint {
+  margin: 14px 0;
+  padding: 10px 12px;
+  border: 1px dashed #e5e0d8;
+  border-radius: 9px;
+  color: #8a847a;
+  font-size: 11.5px;
+  text-align: center;
 }
 
 .dataset-detail-title {
   display: flex;
   align-items: center;
   gap: 9px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .dataset-detail-title > span {
-  width: 11px;
-  height: 11px;
+  width: 14px;
+  height: 14px;
   flex: none;
   border-radius: 3px;
 }
@@ -991,24 +1014,42 @@ button {
 }
 
 .dataset-detail-title strong {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .dataset-detail-title small {
   margin-top: 2px;
   color: #aaa398;
-  font-size: 9.5px;
+  font-size: 11.5px;
+}
+
+.dataset-detail-close {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #8a847a;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dataset-detail-close:hover {
+  background: #f4f1ec;
+  color: #211f1b;
 }
 
 .dataset-detail-body {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
 }
 
 .dataset-mini-donut {
-  width: 82px;
-  height: 82px;
+  width: 104px;
+  height: 104px;
   flex: none;
   display: grid;
   place-items: center;
@@ -1016,14 +1057,14 @@ button {
 }
 
 .dataset-mini-donut span {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   background: #fff;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -1036,19 +1077,19 @@ button {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  padding: 6px 0;
+  padding: 9px 0;
   border-bottom: 1px solid #f0ede8;
 }
 
 .dataset-detail-body dt {
   color: #8a847a;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .dataset-detail-body dd {
   margin: 0;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -1059,9 +1100,9 @@ button {
 
 .dataset-detail-body dd .dataset-expression-unit {
   display: block;
-  max-width: 126px;
+  max-width: 150px;
   margin-top: 2px;
-  font-size: 8px;
+  font-size: 9.5px;
   line-height: 1.2;
   text-align: right;
 }

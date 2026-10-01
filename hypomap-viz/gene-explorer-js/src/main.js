@@ -74,27 +74,32 @@ const TREE_BASE = [
 const GENE_BLURBS = {
   Pomc: {
     name: "Proopiomelanocortin",
-    blurb: "Proopiomelanocortin encodes a polypeptide precursor cleaved into melanocortins (α-MSH) and β-endorphin. In the hypothalamus its expression is concentrated in the arcuate nucleus, where POMC neurons drive satiety signaling — a canonical marker for anorexigenic energy-balance circuits.",
+    function: "A precursor protein that is processed into several biologically active peptides, including melanocortins and opioid peptides.",
+    uniprot: "P01193",
     marks: ["Pomc", "GLU-5"],
   },
   Agrp: {
     name: "Agouti related neuropeptide",
-    blurb: "Agouti related neuropeptide is a canonical orexigenic arcuate nucleus marker. AGRP neurons participate in hunger and energy-balance circuits and are commonly contrasted with POMC populations in the ARC.",
+    function: "A signaling protein that antagonizes melanocyte-stimulating hormone receptors MC3R and MC4R, inhibiting receptor-induced cAMP production; it is also involved in feeding behavior through the central melanocortin system.",
+    uniprot: "P56473",
     marks: ["Agrp", "GABA-4"],
   },
   Ccn1: {
     name: "Cellular communication network factor 1",
-    blurb: "Cellular communication network factor 1, historically known as Cyr61, is an extracellular matrix-associated signaling gene. In this slice the query resolves across datasets through the MGI alias layer rather than being treated as absent.",
+    function: "An extracellular signaling protein reported to promote cell proliferation, chemotaxis, angiogenesis, and cell adhesion.",
+    uniprot: "P18406",
     marks: ["Ccn1", "Cyr61"],
   },
   Fam237b: {
     name: "Family with sequence similarity 237, member B",
-    blurb: "Fam237b, historically annotated as Gm8773, encodes a small secreted protein associated with orexigenic signaling. Its hypothalamic expression is enriched in arcuate NPY/AgRP neurons; in this slice the current symbol resolves to the native Gm8773 feature in all three datasets.",
+    function: "UniProt annotates this protein as possibly activating the GPR83 receptor through the GNAQ signaling pathway.",
+    uniprot: "Q3UQ24",
     marks: ["Fam237b", "Gm8773", "GABA-4"],
   },
   Npy: {
     name: "Neuropeptide Y",
-    blurb: "Neuropeptide Y is a canonical marker of orexigenic arcuate neurons and a central regulator of feeding and energy balance. In this slice Npy resolves directly to the native Npy feature in all three datasets.",
+    function: "A precursor processed into neuropeptide Y and the C-flanking peptide of NPY (CPON). Neuropeptide Y is implicated in control of feeding and gonadotrophin-releasing hormone secretion.",
+    uniprot: "P57774",
     marks: ["Npy", "GABA-4"],
   },
 };
@@ -121,6 +126,7 @@ const state = {
   tab: "overview",
   source: "hypomap",
   datasets: { GSE207736: true, GSE172461: true, GSE93374: true },
+  datasetDetails: [],
   region: null,
   resolution: "C25",
   aggregation: "mode_b_cell_pooled",
@@ -303,7 +309,8 @@ function geneInfo(gene) {
   return {
     symbol: canonical.canonical_symbol || gene.query,
     name: local.name || canonical.marker_name || gene.query,
-    blurb: local.blurb || canonical.marker_name || "",
+    function: local.function || "",
+    uniprot: local.uniprot || "",
     marks: local.marks || [gene.query],
   };
 }
@@ -661,7 +668,8 @@ function viewOverview(D) {
     </div>
     <div class="overview-about">
       <div style="font-size:12px;font-weight:700;margin-bottom:6px;">About this gene</div>
-      <div style="font-size:12.5px;color:#7b756a;line-height:1.6;">${esc(D.info.blurb)}</div>
+      <div style="font-size:11px;font-weight:700;color:#393631;margin:8px 0 3px;">Protein function</div>
+      <div style="font-size:12.5px;color:#7b756a;line-height:1.6;">${esc(D.info.function)} <a href="https://www.uniprot.org/uniprotkb/${encodeURIComponent(D.info.uniprot)}/entry" target="_blank" rel="noopener noreferrer" style="color:#2563a6;white-space:nowrap;">UniProtKB ${esc(D.info.uniprot)} ↗</a></div>
     </div>
     <div class="overview-workspace">
       <section class="overview-anatomy-column">
@@ -833,7 +841,7 @@ function datasetSummaryChart({ rows, title, unit, axisTitle, valueDigits, maxCap
     return `<section class="dataset-chart-panel"><h3>${esc(title)}</h3><div class="dataset-chart-empty">No dataset has a defined value in this context.</div></section>`;
   }
 
-  const svgW = 560, svgH = 440, left = 82, right = 30, top = 76, bottom = 76;
+  const svgW = 560, svgH = 420, left = 76, right = 26, top = 64, bottom = 66;
   const plotW = svgW - left - right, plotH = svgH - top - bottom;
   const values = rows.map((row) => row.value);
   const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
@@ -859,7 +867,8 @@ function datasetSummaryChart({ rows, title, unit, axisTitle, valueDigits, maxCap
     const hoverLabel = `${dataset.label} · ${valueLabel}`;
     const labelWidth = Math.max(114, hoverLabel.length * 6.5 + 20);
     const labelTop = y < top + 34 ? y + 18 : y - 47;
-    return `<g class="dataset-point-group" tabindex="0" role="img" aria-label="${esc(dataset.label)}: ${esc(valueLabel)}">
+    const detailOpen = state.datasetDetails.includes(dataset.id);
+    return `<g class="dataset-point-group${detailOpen ? " is-open" : ""}" tabindex="0" role="button" aria-pressed="${detailOpen}" data-act="dataset-detail" data-v="${esc(dataset.id)}" aria-label="Show ${esc(dataset.label)} details: ${esc(valueLabel)}">
       <title>${esc(hoverLabel)}</title>
       <circle cx="${centerX.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="${dataset.color}" class="dataset-point"></circle>
       <g class="dataset-point-label" transform="translate(${centerX.toFixed(1)} ${labelTop.toFixed(1)})">
@@ -922,11 +931,11 @@ function viewByDataset(D) {
       geneSymbol: D.info.symbol,
     }),
   ].join("");
-  const cards = detailRows.map(({ dataset, metric, detectionValue, meanValue }) => {
+  const cards = detailRows.filter(({ dataset }) => state.datasetDetails.includes(dataset.id)).map(({ dataset, metric, detectionValue, meanValue }) => {
     const unavailable = D.region && metric.eligible_cells === 0;
     const value = Number(detectionValue || 0);
-    return `<article class="dataset-detail-card">
-      <div class="dataset-detail-title"><span style="background:${dataset.color};"></span><div><strong>${esc(dataset.label)}</strong><small>${esc(dataset.sub)}</small></div></div>
+    return `<article class="dataset-detail-card" id="dataset-detail-${esc(dataset.id)}">
+      <div class="dataset-detail-title"><span style="background:${dataset.color};"></span><div><strong>${esc(dataset.label)}</strong><small>${esc(dataset.sub)}</small></div><button class="dataset-detail-close" data-act="dataset-detail-close" data-v="${esc(dataset.id)}" aria-label="Close ${esc(dataset.label)} details">×</button></div>
       ${unavailable ? `<div class="dataset-unavailable">No eligible cells in this context</div>` : `<div class="dataset-detail-body">
         <div class="dataset-mini-donut" style="background:conic-gradient(${dataset.color} 0 ${value.toFixed(3)}%,#eee8e3 ${value.toFixed(3)}% 100%);"><span>${value.toFixed(1)}%</span></div>
         <dl><div><dt>Cells expr.</dt><dd>${fmt(metric.positive_cells)} <span>of ${fmt(metric.eligible_cells)}</span></dd></div><div><dt>Mean expr.</dt><dd>${meanValue == null ? "Not detected" : Number(meanValue).toFixed(2)} <span class="dataset-expression-unit">${meanValue == null ? "" : LOG_EXPRESSION_UNIT}</span></dd></div></dl>
@@ -937,7 +946,7 @@ function viewByDataset(D) {
   return `
     <div class="dataset-view-heading"><h2>Detection by dataset</h2><p>Per-dataset <i>${esc(D.info.symbol)}</i>+ fraction and expression within <b>${esc(D.contextName)}</b> cells.</p></div>
     <div class="dataset-toggles">${datasetToggles(D)}</div>
-    ${detailRows.length ? `<div class="dataset-chart-grid">${charts}</div><div class="dataset-detail-grid">${cards}</div>` : `<div class="aggregate-empty">Select at least one dataset to populate this view.</div>`}`;
+    ${detailRows.length ? `<div class="dataset-chart-grid">${charts}</div>${cards ? `<div class="dataset-detail-grid">${cards}</div>` : `<div class="dataset-detail-hint">Select a point on either chart to open its dataset details.</div>`}` : `<div class="aggregate-empty">Select at least one dataset to populate this view.</div>`}`;
 }
 
 function coexpressionLabel(key, geneA, geneB) {
@@ -1159,6 +1168,7 @@ function buildModel(data) {
 
 function selectGene(option, query = option.symbol) {
   state.gene = option.gene;
+  state.datasetDetails = [];
   state.geneQuery = option.symbol;
   state.geneMenuOpen = false;
   state.geneActiveIndex = 0;
@@ -1298,6 +1308,12 @@ document.getElementById("app").addEventListener("change", (e) => {
 });
 
 document.getElementById("app").addEventListener("keydown", (e) => {
+  const datasetPoint = e.target.closest(".dataset-point-group");
+  if (datasetPoint && (e.key === "Enter" || e.key === " ")) {
+    e.preventDefault();
+    datasetPoint.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    return;
+  }
   if (e.target.closest("[data-role='gene-input']")) {
     const suggestions = geneSuggestions();
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -1403,7 +1419,14 @@ document.getElementById("app").addEventListener("click", (e) => {
     case "metric-help": state.metricHelp = state.metricHelp === v ? null : v; break;
     case "source": state.source = v; state.region = v === "native" ? null : state.region; state.provOpen = false; break;
     case "prov": state.provOpen = !state.provOpen; break;
-    case "dataset": state.datasets = { ...state.datasets, [v]: !state.datasets[v] }; break;
+    case "dataset": {
+      const enabled = !state.datasets[v];
+      state.datasets = { ...state.datasets, [v]: enabled };
+      if (!enabled) state.datasetDetails = state.datasetDetails.filter((id) => id !== v);
+      break;
+    }
+    case "dataset-detail": state.datasetDetails = state.datasetDetails.includes(v) ? state.datasetDetails : [...state.datasetDetails, v]; break;
+    case "dataset-detail-close": state.datasetDetails = state.datasetDetails.filter((id) => id !== v); break;
     case "region": state.region = state.region === v ? null : v; break;
     case "whole": state.region = null; break;
     case "res": state.resolution = v; break;

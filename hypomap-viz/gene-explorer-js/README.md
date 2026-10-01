@@ -84,3 +84,15 @@ Not implemented yet:
   and quadrant formulas are specified.
 - C7, C66/C185, and C286 cell-identity rows are still structural handoff
   placeholders. The current export provides validated `hypomap_C25` groups only.
+
+## Gene descriptions and dataset details
+
+The Overview's protein-function summary is a locally maintained, concise
+paraphrase of the linked mouse UniProtKB entry. Each supported gene shows its
+accession link; the text is bundled with the app and is not fetched at runtime.
+Current accessions are Pomc `P01193`, Agrp `P56473`, Ccn1 `P18406`, Fam237b
+`Q3UQ24`, and Npy `P57774`.
+
+In **By dataset**, select a point on either plot to open that dataset's detail
+card. Cards appear beside one another as points are selected and can be closed
+individually. The points also work with the keyboard.
