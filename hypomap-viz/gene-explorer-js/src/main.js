@@ -1,9 +1,10 @@
 const DATA_URL = "/data/gene_metrics_vertical_slice.json";
+const LOG_EXPRESSION_UNIT = "ln(1 + counts per 10k)";
 
 const DATASET_META = [
-  { id: "GSE207736", label: "Dowsett10xnuc", sub: "GSE207736 · 10x snRNA-seq", native: 0, color: "#e3a092" },
-  { id: "GSE172461", label: "Rupp10x", sub: "GSE172461 · 10x, per-cell metadata", native: 36523, color: "#ce6d5b" },
-  { id: "GSE93374", label: "CampbellDropseq", sub: "GSE93374 · Drop-seq", native: 21086, color: "#a92d21" },
+  { id: "GSE207736", label: "Dowsett10xnuc", sub: "GSE207736 · 10x snRNA-seq", native: 0, color: "#91c3f2" },
+  { id: "GSE172461", label: "Rupp10x", sub: "GSE172461 · 10x, per-cell metadata", native: 36523, color: "#4f8dcc" },
+  { id: "GSE93374", label: "CampbellDropseq", sub: "GSE93374 · Drop-seq", native: 21086, color: "#165b9e" },
 ];
 
 const REGION_LABELS = {
@@ -91,6 +92,11 @@ const GENE_BLURBS = {
     blurb: "Fam237b, historically annotated as Gm8773, encodes a small secreted protein associated with orexigenic signaling. Its hypothalamic expression is enriched in arcuate NPY/AgRP neurons; in this slice the current symbol resolves to the native Gm8773 feature in all three datasets.",
     marks: ["Fam237b", "Gm8773", "GABA-4"],
   },
+  Npy: {
+    name: "Neuropeptide Y",
+    blurb: "Neuropeptide Y is a canonical marker of orexigenic arcuate neurons and a central regulator of feeding and energy balance. In this slice Npy resolves directly to the native Npy feature in all three datasets.",
+    marks: ["Npy", "GABA-4"],
+  },
 };
 
 const NUCLEI = [
@@ -103,12 +109,18 @@ const NUCLEI = [
 ];
 const MAPPED_REGIONS = [...NUCLEI.map((nucleus) => nucleus.key), "Arcuate hypothalamic nucleus"];
 const OFFMAP = ["(Pre)Mammillary region", "Medial preoptic area", "Suprachiasmatic nucleus", "Anterior hypothalamic nucleus", "(Anterior/Preoptic)Periventricular", "Tuberal nucleus", "Lateral preoptic area", "Periventricular hyp. n. (intermediate)", "Not assigned"];
-const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["aggregate", "Aggregate"], ["dataset", "By dataset"], ["context", "Context"]];
+const TABS = [["overview", "Overview"], ["identity", "Cell Identity"], ["aggregate", "Aggregate"], ["dataset", "By dataset"], ["coexpression", "Coexpression"]];
+const COEXPRESSION_QUADRANTS = [
+  { key: "both_positive", color: "#124e88" },
+  { key: "gene_a_only", color: "#2f75b5" },
+  { key: "gene_b_only", color: "#8bb9e1" },
+  { key: "neither", color: "#e1e8ef" },
+];
 
 const state = {
   tab: "overview",
   source: "hypomap",
-  datasets: { GSE207736: true, GSE172461: false, GSE93374: false },
+  datasets: { GSE207736: true, GSE172461: true, GSE93374: true },
   region: null,
   resolution: "C25",
   aggregation: "mode_b_cell_pooled",
@@ -116,6 +128,13 @@ const state = {
   geneQuery: "Pomc",
   geneMenuOpen: false,
   geneActiveIndex: 0,
+  coexpressionPartner: "Agrp",
+  coexpressionPartnerQuery: "Agrp",
+  coexpressionPartnerMenuOpen: false,
+  coexpressionPartnerActiveIndex: 0,
+  coexpressionMessage: "",
+  coexpressionLineage: "whole",
+  expandedCoexpressionQuadrant: null,
   expanded: { "C7-1: GLU": true },
   hoverRegion: null,
   provOpen: false,
@@ -126,6 +145,7 @@ const state = {
 
 let model = null;
 let suppressGeneFocusOpen = false;
+let suppressCoexpressionFocusOpen = false;
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (n) => n == null || !Number.isFinite(Number(n)) ? "—" : Math.round(Number(n)).toLocaleString("en-US");
@@ -167,6 +187,106 @@ function aggregate(metricsByDataset) {
     dataset_detection_count: vals.filter((m) => m.dataset_detection).length,
     dataset_detection_total: vals.length,
   };
+}
+
+function aggregateCoexpression(metricsByDataset) {
+  const vals = Object.values(metricsByDataset).filter((metric) => metric && metric.eligible_cells > 0);
+  const eligibleCells = vals.reduce((sum, metric) => sum + metric.eligible_cells, 0);
+  const quadrantCounts = Object.fromEntries(COEXPRESSION_QUADRANTS.map(({ key }) => [
+    key,
+    vals.reduce((sum, metric) => sum + (metric.quadrant_counts?.[key] || 0), 0),
+  ]));
+  return {
+    eligible_cells: eligibleCells,
+    quadrant_counts: quadrantCounts,
+    quadrant_percentages: Object.fromEntries(COEXPRESSION_QUADRANTS.map(({ key }) => [
+      key,
+      eligibleCells ? quadrantCounts[key] / eligibleCells * 100 : null,
+    ])),
+  };
+}
+
+function selectedCoexpressionPopulation(population) {
+  return aggregateCoexpression(Object.fromEntries(selectedDS().map((dataset) => [
+    dataset.id,
+    population?.dataset_metrics?.[dataset.id],
+  ])));
+}
+
+function orientCoexpression(metric, reversed) {
+  if (!reversed) return metric;
+  return {
+    ...metric,
+    quadrant_counts: {
+      ...metric.quadrant_counts,
+      gene_a_only: metric.quadrant_counts.gene_b_only,
+      gene_b_only: metric.quadrant_counts.gene_a_only,
+    },
+    quadrant_percentages: {
+      ...metric.quadrant_percentages,
+      gene_a_only: metric.quadrant_percentages.gene_b_only,
+      gene_b_only: metric.quadrant_percentages.gene_a_only,
+    },
+  };
+}
+
+function currentCoexpressionPilot() {
+  const geneA = geneInfo(currentGene()).symbol;
+  const geneB = state.coexpressionPartner;
+  const direct = model.coexpressionPilots.find((pilot) => pilot.gene_a === geneA && pilot.gene_b === geneB);
+  if (direct) return { pilot: direct, reversed: false };
+  const reverse = model.coexpressionPilots.find((pilot) => pilot.gene_a === geneB && pilot.gene_b === geneA);
+  return reverse ? { pilot: reverse, reversed: true } : { pilot: null, reversed: false };
+}
+
+function currentCoexpressionRegion() {
+  return state.region;
+}
+
+function currentCoexpressionPopulation(pilot) {
+  const region = currentCoexpressionRegion();
+  if (!region) return pilot?.populations?.find((population) => population.scope === "whole_dataset") || null;
+  return pilot?.populations?.find((population) => population.region === dataLabel(region)) || null;
+}
+
+function currentCoexpressionRegionLabel() {
+  const region = currentCoexpressionRegion();
+  return region ? (ABBR[region] || region) : "Whole hypothalamus";
+}
+
+function coexpressionPartnerSuggestions(query = state.coexpressionPartnerQuery) {
+  const currentSymbol = geneInfo(currentGene()).symbol;
+  const needle = query.trim().toLowerCase();
+  return model.searchOptions
+    .filter((option) => model.coexpressionGenes.includes(option.symbol) && option.symbol !== currentSymbol)
+    .filter((option) => !needle || option.searchText.includes(needle))
+    .sort((a, b) => {
+      const rank = (option) => {
+        if (!needle) return 2;
+        if (option.symbol.toLowerCase().startsWith(needle)) return 0;
+        if (option.aliases.some((alias) => alias.toLowerCase().startsWith(needle))) return 1;
+        return 2;
+      };
+      return rank(a) - rank(b) || a.symbol.localeCompare(b.symbol);
+    });
+}
+
+function selectCoexpressionPartner(option, query = option.symbol) {
+  state.coexpressionPartner = option.symbol;
+  state.coexpressionPartnerQuery = option.symbol;
+  state.coexpressionPartnerMenuOpen = false;
+  state.coexpressionPartnerActiveIndex = 0;
+  state.coexpressionMessage = query.toLowerCase() !== option.symbol.toLowerCase() ? `${query} resolved to ${option.symbol}` : "";
+}
+
+function syncCoexpressionPartner(currentSymbol) {
+  if (state.coexpressionPartner !== currentSymbol && model.coexpressionGenes.includes(state.coexpressionPartner)) return;
+  const fallback = model.coexpressionGenes.find((gene) => gene !== currentSymbol);
+  state.coexpressionPartner = fallback || "";
+  state.coexpressionPartnerQuery = fallback || "";
+  state.coexpressionPartnerMenuOpen = false;
+  state.coexpressionPartnerActiveIndex = 0;
+  state.coexpressionMessage = "";
 }
 
 function selectedMetrics(metricsByDataset) {
@@ -292,7 +412,7 @@ function computedBadge(label = "computed") {
 }
 
 function metricHelp() {
-  return `Raw-count positive cells use raw_count ≥ 1. % expressing uses positive / eligible cells. Mean expression uses Seurat LogNormalize among positive cells only.`;
+  return `Raw-count positive cells use raw_count ≥ 1. % expressing uses positive / eligible cells. Mean expression uses Seurat LogNormalize among positive cells only, in ${LOG_EXPRESSION_UNIT}. This is not TPM: no transcript-length correction is applied.`;
 }
 
 function rampAlpha(value, maxValue) {
@@ -305,8 +425,8 @@ function aggregationControl(D) {
   if (D.sel.length <= 1) return "";
   const btn = (mode, label, sub) => {
     const active = D.mode === mode;
-    return `<button data-act="agg" data-v="${mode}" style="display:flex;flex-direction:column;gap:1px;padding:6px 9px;border:none;border-right:1px solid #ddd7cc;cursor:pointer;background:${active ? "#b23b32" : "#fff"};color:${active ? "#fff" : "#7b756a"};font-size:11px;font-weight:700;">
-      <span>${label}</span><span style="font-size:9px;font-weight:500;color:${active ? "#f0cfca" : "#b8b2a7"};">${sub}</span></button>`;
+    return `<button data-act="agg" data-v="${mode}" style="display:flex;flex-direction:column;gap:1px;padding:6px 9px;border:none;border-right:1px solid #ddd7cc;cursor:pointer;background:${active ? "#2563a6" : "#fff"};color:${active ? "#fff" : "#7b756a"};font-size:11px;font-weight:700;">
+      <span>${label}</span><span style="font-size:9px;font-weight:500;color:${active ? "#d8e8f7" : "#b8b2a7"};">${sub}</span></button>`;
   };
   return `<div style="display:inline-flex;border:1px solid #ddd7cc;border-radius:8px;overflow:hidden;">${btn("mode_a_dataset_average", "Dataset avg", "equal")} ${btn("mode_b_cell_pooled", "Cell pooled", "pooled")}</div>`;
 }
@@ -315,9 +435,9 @@ function header(D) {
   const opts = ["native", "hypomap"].map((k) => {
     const active = (k === "hypomap") === D.hypo;
     const cov = fmt0(k === "hypomap" ? D.covHypomap : D.covNative);
-    return `<button data-act="source" data-v="${k}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 10px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;${active ? "background:#b23b32;color:#fff;" : "background:#f6f4ef;color:#7b756a;"}">
+    return `<button data-act="source" data-v="${k}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 10px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;${active ? "background:#2563a6;color:#fff;" : "background:#f6f4ef;color:#7b756a;"}">
       <span>${k === "hypomap" ? "HypoMap" : "Native"}</span>
-      <span class="mono" style="font-size:9.5px;font-weight:600;${active ? "color:#f0cfca;" : "color:#b8b2a7;"}">${cov}</span></button>`;
+      <span class="mono" style="font-size:9.5px;font-weight:600;${active ? "color:#d8e8f7;" : "color:#b8b2a7;"}">${cov}</span></button>`;
   }).join("");
   const provText = D.hypo
     ? `HypoMap atlas · CZ CELLxGENE d86517f0 · Steuernagel et al. 2022. ${fmt(D.regionAssigned + D.annotNoRegion)} / ${fmt(D.total)} selected cells matched; ${fmt(D.regionAssigned)} carry a nucleus assignment.`
@@ -355,7 +475,7 @@ function header(D) {
     </div>
     <div style="position:relative;flex:none;">
       <button data-act="prov" style="display:flex;align-items:center;gap:9px;padding:7px 12px;border:1px solid #e2ddd3;border-radius:9px;background:#faf9f6;cursor:pointer;">
-        <span style="width:8px;height:8px;border-radius:50%;background:${D.hypo ? "#b23b32" : "#8a847a"};flex:none;"></span>
+        <span style="width:8px;height:8px;border-radius:50%;background:${D.hypo ? "#2563a6" : "#8a847a"};flex:none;"></span>
         <span style="font-size:12px;font-weight:600;color:#3a352d;">${D.hypo ? "HypoMap" : "Native"}</span>
         <span style="font-size:11px;color:#a7a197;">${fmt0(D.annCov)} coverage</span>
         <span style="font-size:9px;color:#bdb7ac;">▾</span>
@@ -367,17 +487,24 @@ function header(D) {
 function nav(D) {
   const tabs = TABS.map(([k, label]) => {
     const active = state.tab === k;
-    return `<button data-act="tab" data-v="${k}" style="padding:13px 15px;border:none;background:none;cursor:pointer;font-size:13px;letter-spacing:-.005em;white-space:nowrap;font-weight:${active ? "700" : "500"};color:${active ? "#211f1b" : "#a7a197"};border-bottom:2px solid ${active ? "#b23b32" : "transparent"};margin-bottom:-1px;">${label}</button>`;
+    return `<button data-act="tab" data-v="${k}" style="padding:13px 15px;border:none;background:none;cursor:pointer;font-size:13px;letter-spacing:-.005em;white-space:nowrap;font-weight:${active ? "700" : "500"};color:${active ? "#211f1b" : "#a7a197"};border-bottom:2px solid ${active ? "#2563a6" : "transparent"};margin-bottom:-1px;">${label}</button>`;
   }).join("");
-  const whole = D.region ? `<button data-act="whole" style="flex:none;padding:4px 9px;border:1px solid #ddd7cc;border-radius:6px;background:#fff;font-size:11px;font-weight:600;color:#7b756a;cursor:pointer;white-space:nowrap;">↩ Whole</button>` : "";
+  const isCoexpression = state.tab === "coexpression";
+  const { pilot } = currentCoexpressionPilot();
+  const regionPopulation = currentCoexpressionPopulation(pilot);
+  const selectedLineage = LINEAGE_PREVIEW.find((item) => item.id === state.coexpressionLineage);
+  const coexpressionTotal = selectedLineage?.count || (regionPopulation ? selectedCoexpressionPopulation(regionPopulation).eligible_cells : 0);
+  const viewingLabel = isCoexpression ? `${selectedLineage?.id || currentCoexpressionRegionLabel()} cells` : D.contextName;
+  const viewingTotal = isCoexpression ? coexpressionTotal : D.contextTotal;
+  const whole = D.region && !isCoexpression ? `<button data-act="whole" style="flex:none;padding:4px 9px;border:1px solid #ddd7cc;border-radius:6px;background:#fff;font-size:11px;font-weight:600;color:#7b756a;cursor:pointer;white-space:nowrap;">↩ Whole</button>` : "";
   return `
   <nav style="position:sticky;top:59px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 26px;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #e8e4dc;">
     <div style="display:flex;align-items:stretch;gap:2px;">${tabs}</div>
     <div style="display:flex;align-items:center;gap:11px;min-width:0;">
-      ${state.tab === "aggregate" || state.tab === "dataset" ? "" : aggregationControl(D)}
+      ${state.tab === "aggregate" || state.tab === "dataset" || isCoexpression ? "" : aggregationControl(D)}
       <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#bdb7ac;white-space:nowrap;">Viewing</span>
-      <span style="font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;">${esc(D.contextName)}</span>
-      <span style="font-size:11px;color:#a7a197;white-space:nowrap;"><span class="mono" style="color:#b23b32;font-weight:600;">${fmt(D.contextTotal)}</span> cells</span>
+      <span style="font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;">${esc(viewingLabel)}</span>
+      <span style="font-size:11px;color:#a7a197;white-space:nowrap;"><span class="mono" style="color:#2563a6;font-weight:600;">${fmt(viewingTotal)}</span> cells</span>
       ${whole}
     </div>
   </nav>`;
@@ -392,12 +519,12 @@ function anatomyMap(D) {
     const a = rampAlpha(stats.positive, D.maxMappedRegionPositive);
     return {
       ...stats,
-      fill: `rgba(178,59,50,${a.toFixed(3)})`,
-      stroke: on ? "#8f2c25" : (hov ? "#b23b32" : "rgba(122,40,34,.32)"),
+      fill: `rgba(37,99,166,${a.toFixed(3)})`,
+      stroke: on ? "#1d4f8a" : (hov ? "#2563a6" : "rgba(25,78,130,.32)"),
       sw: (on || hov) ? 2.4 : 1.1,
       opacity: (hasContext && !on) ? 0.38 : 1,
-      labelColor: a > 0.5 ? "#fff" : "#5a2b26",
-      countColor: a > 0.5 ? "rgba(255,255,255,.82)" : "#8a5c53",
+      labelColor: a > 0.5 ? "#fff" : "#243f5a",
+      countColor: a > 0.5 ? "rgba(255,255,255,.82)" : "#57718a",
     };
   };
   const txt = (x, y, fs, fill, fam, w, t) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${fs}" font-weight="${w}" fill="${fill}" style="pointer-events:none;font-family:${fam};">${t}</text>`;
@@ -421,7 +548,7 @@ function anatomyMap(D) {
   const hov = state.hoverRegion;
   const hoverStats = hov ? D.regionStatsDisplay[hov] : null;
   const readout = hov
-    ? `<div style="text-align:right;min-width:0;"><div style="font-size:11.5px;font-weight:700;color:#211f1b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(hov)}</div><div style="font-size:10.5px;color:#a7a197;"><span class="mono" style="color:#b23b32;">${fmt(hoverStats?.positive || 0)} ${esc(D.info.symbol)}+</span> · ${hoverStats?.percent == null ? "—" : `${Number(hoverStats.percent).toFixed(1)}% expressing`}</div></div>`
+    ? `<div style="text-align:right;min-width:0;"><div style="font-size:11.5px;font-weight:700;color:#211f1b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(hov)}</div><div style="font-size:10.5px;color:#a7a197;"><span class="mono" style="color:#2563a6;">${fmt(hoverStats?.positive || 0)} ${esc(D.info.symbol)}+</span> · ${hoverStats?.percent == null ? "—" : `${Number(hoverStats.percent).toFixed(1)}% expressing`}</div></div>`
     : `<span style="font-size:10.5px;color:#bdb7ac;">click a nucleus</span>`;
   return `
   <div style="border:1px solid #e8e4dc;border-radius:12px;overflow:hidden;background:#fbfaf7;">
@@ -441,7 +568,7 @@ function anatomyMap(D) {
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:8px 14px 12px;">
       <span class="mono" style="font-size:10.5px;color:#a7a197;">0</span>
-      <div style="flex:1;height:7px;border-radius:4px;background:linear-gradient(90deg,rgba(178,59,50,.13),rgba(178,59,50,.77));"></div>
+      <div style="flex:1;height:7px;border-radius:4px;background:linear-gradient(90deg,rgba(37,99,166,.13),rgba(37,99,166,.77));"></div>
       <span class="mono" style="font-size:10.5px;color:#a7a197;">${fmt(D.maxMappedRegionPositive)} ${esc(D.info.symbol)}+ cells</span>
     </div>
     <div style="padding:0 14px 10px;font-size:9.5px;color:#b0a99e;line-height:1.35;">Raw detections ≥1 count · not corrected for ambient RNA</div>
@@ -451,9 +578,9 @@ function anatomyMap(D) {
 function viewOverview(D) {
   const disabled = !D.regionEnabled;
   const cards = [
-    { label: "% expressing", value: D.pctExpr == null ? "—" : Number(D.pctExpr).toFixed(1), unit: "%", sub: D.sel.length > 1 ? (D.mode === "mode_a_dataset_average" ? "dataset-average" : "cell-pooled") : "positive fraction", color: "#b23b32" },
+    { label: "% expressing", value: D.pctExpr == null ? "—" : Number(D.pctExpr).toFixed(1), unit: "%", sub: D.sel.length > 1 ? (D.mode === "mode_a_dataset_average" ? "dataset-average" : "cell-pooled") : "positive fraction", color: "#2563a6" },
     { label: "Positive cells", value: fmt(D.positive), unit: "cells", sub: `of ${fmt(D.contextTotal)} in context`, color: "#211f1b" },
-    { label: "Mean expression", value: D.meanExpr == null ? "—" : Number(D.meanExpr).toFixed(2), unit: "log-norm", sub: "across positive cells", color: "#211f1b" },
+    { label: "Mean expression", value: D.meanExpr == null ? "—" : Number(D.meanExpr).toFixed(2), unit: LOG_EXPRESSION_UNIT, sub: "across raw-count-positive cells", color: "#211f1b" },
     { label: "Detected in", value: `${D.agg.dataset_detection_count}/${D.agg.dataset_detection_total}`, unit: "datasets", sub: "present in selected deposits", color: "#211f1b" },
   ].map((m) => `<div style="border:1px solid #e8e4dc;border-radius:11px;padding:15px 16px;">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:9px;min-height:16px;">
@@ -465,17 +592,17 @@ function viewOverview(D) {
     ? `<div style="border:1px dashed #ddd7cc;border-radius:12px;background:#faf9f6;padding:22px 20px;text-align:center;">
         <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Spatial view needs HypoMap</div>
         <div style="font-size:11.5px;color:#8a6d47;line-height:1.55;margin-bottom:14px;">Nucleus placement comes from the HypoMap <span class="mono">hypomap_region</span> field. Native deposits carry only a study-level region.</div>
-        <button data-act="source" data-v="hypomap" style="padding:8px 15px;border:none;border-radius:8px;background:#b23b32;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Switch to HypoMap</button></div>`
+        <button data-act="source" data-v="hypomap" style="padding:8px 15px;border:none;border-radius:8px;background:#2563a6;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Switch to HypoMap</button></div>`
     : anatomyMap(D);
 
   const offRows = D.regionEnabled ? OFFMAP.map((name) => {
     const stats = D.regionStatsDisplay[name] || { eligible: 0, positive: 0, percent: null }, on = D.region === name, na = name === "Not assigned";
     const dot = na
       ? "width:11px;height:11px;border-radius:3px;flex:none;background-image:repeating-linear-gradient(45deg,#cbc6bd,#cbc6bd 3px,#bdb7ac 3px,#bdb7ac 6px);"
-      : `width:11px;height:11px;border-radius:3px;flex:none;background:rgba(178,59,50,${rampAlpha(stats.positive, D.maxMappedRegionPositive).toFixed(3)});border:1px solid rgba(122,40,34,.3);`;
-    return `<div data-act="region" data-v="${esc(name)}" style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:7px;cursor:pointer;background:${on ? "#f5e6e3" : "transparent"};">
+      : `width:11px;height:11px;border-radius:3px;flex:none;background:rgba(37,99,166,${rampAlpha(stats.positive, D.maxMappedRegionPositive).toFixed(3)});border:1px solid rgba(25,78,130,.3);`;
+    return `<div data-act="region" data-v="${esc(name)}" style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:7px;cursor:pointer;background:${on ? "#e8f1fa" : "transparent"};">
       <span style="${dot}"></span>
-      <span style="flex:1;font-size:11.5px;line-height:1.25;${on ? "font-weight:700;color:#b23b32;" : (na ? "color:#7b756a;" : "")}">${esc(name)}</span>
+      <span style="flex:1;font-size:11.5px;line-height:1.25;${on ? "font-weight:700;color:#2563a6;" : (na ? "color:#7b756a;" : "")}">${esc(name)}</span>
       <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(stats.positive)} · ${stats.percent == null ? "—" : `${Number(stats.percent).toFixed(1)}%`}</span></div>`;
   }).join("") : "";
   const offBlock = D.regionEnabled ? `
@@ -511,11 +638,11 @@ function viewIdentity(D) {
       <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">HypoMap lineage within <b style="color:#211f1b;">${esc(D.contextName)}</b>.</div>
       <div style="border:1px dashed #ddd7cc;background:#faf9f6;border-radius:11px;padding:22px;text-align:center;">
         <div style="font-size:12.5px;color:#8a6d47;line-height:1.55;max-width:440px;margin:0 auto 14px;">The C7 → C465 tree is a HypoMap integrated annotation, unavailable for native-only labels.</div>
-        <button data-act="source" data-v="hypomap" style="padding:8px 15px;border:none;border-radius:8px;background:#b23b32;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Switch to HypoMap</button></div>`;
+        <button data-act="source" data-v="hypomap" style="padding:8px 15px;border:none;border-radius:8px;background:#2563a6;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">Switch to HypoMap</button></div>`;
   }
   const resBtns = RES.map(([k, n]) => {
     const active = k === state.resolution;
-    return `<button data-act="res" data-v="${k}" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border:none;border-right:1px solid #ddd7cc;cursor:pointer;font-size:12px;font-weight:600;${active ? "background:#b23b32;color:#fff;" : "background:#fff;color:#7b756a;"}">${k}<span class="mono" style="font-size:9.5px;font-weight:400;${active ? "color:#f0cfca;" : "color:#b8b2a7;"}">${n}</span></button>`;
+    return `<button data-act="res" data-v="${k}" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border:none;border-right:1px solid #ddd7cc;cursor:pointer;font-size:12px;font-weight:600;${active ? "background:#2563a6;color:#fff;" : "background:#fff;color:#7b756a;"}">${k}<span class="mono" style="font-size:9.5px;font-weight:400;${active ? "color:#d8e8f7;" : "color:#b8b2a7;"}">${n}</span></button>`;
   }).join("");
 
   const tree = markTree(TREE_BASE, D.info.marks);
@@ -523,10 +650,10 @@ function viewIdentity(D) {
   const walk = (nodes, depth) => {
     for (const node of nodes) {
       const open = !!state.expanded[node.id], hasKids = node.kids && node.kids.length > 0;
-      const caretStyle = `width:14px;flex:none;text-align:center;font-size:${hasKids ? 11 : 13}px;color:${hasKids ? "#b23b32" : "#cbc6bd"};`;
+      const caretStyle = `width:14px;flex:none;text-align:center;font-size:${hasKids ? 11 : 13}px;color:${hasKids ? "#2563a6" : "#cbc6bd"};`;
       const labelWeight = depth === 0 ? "font-weight:600;" : (depth === 1 ? "font-weight:500;color:#3a352d;" : "color:#7b756a;");
-      const markSpan = node.mark ? `<span style="font-size:8.5px;font-weight:700;color:#b23b32;background:#f5e6e3;padding:1px 5px;border-radius:4px;margin-left:6px;">${esc(D.info.symbol)}⁺</span>` : "";
-      treeRows += `<div ${hasKids ? `data-act="node" data-v="${esc(node.id)}"` : ""} style="display:flex;align-items:center;gap:7px;padding:6px 8px;padding-left:${8 + depth * 18}px;border-radius:6px;cursor:${hasKids ? "pointer" : "default"};background:${node.mark ? "#faf1ef" : "transparent"};">
+      const markSpan = node.mark ? `<span style="font-size:8.5px;font-weight:700;color:#2563a6;background:#e8f1fa;padding:1px 5px;border-radius:4px;margin-left:6px;">${esc(D.info.symbol)}⁺</span>` : "";
+      treeRows += `<div ${hasKids ? `data-act="node" data-v="${esc(node.id)}"` : ""} style="display:flex;align-items:center;gap:7px;padding:6px 8px;padding-left:${8 + depth * 18}px;border-radius:6px;cursor:${hasKids ? "pointer" : "default"};background:${node.mark ? "#f0f6fc" : "transparent"};">
         <span style="${caretStyle}">${hasKids ? (open ? "▾" : "▸") : "·"}</span>
         <span style="flex:1;font-size:11.5px;${labelWeight}">${esc(node.id)}${markSpan}</span>
         <span class="mono" style="font-size:10px;color:#a7a197;">${fmt(node.n)}</span></div>`;
@@ -551,11 +678,11 @@ function viewIdentity(D) {
     const max = src[0]?.[1] || 1;
     const denom = state.resolution === "C25" ? D.contextTotal : D.annotatedTotal;
     return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f4f1ea;">
-      <div style="flex:1;min-width:0;"><div style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(label)}${mark ? `<span style="font-size:8.5px;font-weight:700;color:#b23b32;margin-left:5px;">${esc(D.info.symbol)}⁺</span>` : ""}</div>
-      <div style="height:5px;border-radius:3px;background:#efece5;overflow:hidden;margin-top:4px;"><div style="height:100%;width:${(count / max * 100).toFixed(1)}%;background:#b23b32;"></div></div></div>
+      <div style="flex:1;min-width:0;"><div style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(label)}${mark ? `<span style="font-size:8.5px;font-weight:700;color:#2563a6;margin-left:5px;">${esc(D.info.symbol)}⁺</span>` : ""}</div>
+      <div style="height:5px;border-radius:3px;background:#efece5;overflow:hidden;margin-top:4px;"><div style="height:100%;width:${(count / max * 100).toFixed(1)}%;background:#2563a6;"></div></div></div>
       <span class="mono" style="font-size:10.5px;width:48px;text-align:right;">${fmt(count)}</span>
       <span class="mono" style="font-size:10px;color:#a7a197;width:40px;text-align:right;">${denom ? (count / denom * 100).toFixed(1) : "—"}%</span></div>`;
-  }).join("")}</div>` : `<div style="padding:20px 8px;text-align:center;"><div class="mono" style="font-size:22px;font-weight:700;color:#b23b32;">${resMeta[1]}</div>
+  }).join("")}</div>` : `<div style="padding:20px 8px;text-align:center;"><div class="mono" style="font-size:22px;font-weight:700;color:#2563a6;">${resMeta[1]}</div>
       <div style="font-size:11.5px;color:#7b756a;margin-top:6px;line-height:1.5;">clusters at ${state.resolution} — too many to rank flat. Drill a lineage instead.</div></div>`;
 
   return `
@@ -620,7 +747,7 @@ function metricInfo(kind, D) {
     <button data-act="metric-help" data-v="mean" class="metric-popover-close" aria-label="Close formula">×</button>
     <div class="metric-popover-title">${datasetAverage ? "Dataset-average" : "Cell-pooled"} mean expression when on</div>
     ${meanFormula}
-    <p>Expression uses the verified Seurat LogNormalize layer. ${datasetAverage ? "Each dataset mean has equal weight." : "Each positive cell has equal weight."} The bar is scaled to the largest positive-cell value in the selected data.</p>
+    <p>Expression uses the verified Seurat LogNormalize layer in ${LOG_EXPRESSION_UNIT}. ${datasetAverage ? "Each dataset mean has equal weight." : "Each positive cell has equal weight."} This is not TPM because transcript length is not used. The bar is scaled to the largest positive-cell value in the selected data.</p>
   </div>`;
 }
 
@@ -665,10 +792,10 @@ function viewAggregate(D) {
       <section class="aggregate-donut-panel" aria-label="${pooledPct.toFixed(1)} percent of cells express ${esc(D.info.symbol)}">
         <h3>Cells expressing — ${selectionLabel}</h3>
         <div class="aggregate-legend">
-          <span><i style="background:#b93429;"></i><em>${esc(D.info.symbol)}</em> + <b>${pooledPct.toFixed(1)}%</b></span>
+          <span><i style="background:#2c6fae;"></i><em>${esc(D.info.symbol)}</em> + <b>${pooledPct.toFixed(1)}%</b></span>
           <span class="is-negative"><i></i><em>${esc(D.info.symbol)}</em> − <b>${(100 - pooledPct).toFixed(1)}%</b></span>
         </div>
-        <div class="aggregate-donut" style="background:conic-gradient(#b93429 0 ${pooledPct.toFixed(3)}%,#efddd9 ${pooledPct.toFixed(3)}% 100%);">
+        <div class="aggregate-donut" style="background:conic-gradient(#2c6fae 0 ${pooledPct.toFixed(3)}%,#dceaf7 ${pooledPct.toFixed(3)}% 100%);">
           <div><strong>${fmt(D.positive)}</strong><span>of ${fmt(D.contextTotal)} cells</span></div>
         </div>
         <p class="aggregate-donut-note">Absolute counts are always pooled across selected datasets.</p>
@@ -684,8 +811,9 @@ function viewAggregate(D) {
           <article class="aggregate-card">
             <div class="aggregate-card-label">Mean expr. (when on)</div>
             <button data-act="metric-help" data-v="mean" class="metric-help" aria-expanded="${state.metricHelp === "mean"}" aria-label="Explain mean expression">?</button>
-            <div class="aggregate-mean"><strong>${aggregateMean == null ? "—" : Number(aggregateMean).toFixed(2)}</strong><span>/ ${meanScale.toFixed(2)}</span></div>
+            <div class="aggregate-mean"><strong>${aggregateMean == null ? "—" : Number(aggregateMean).toFixed(2)}</strong><span>${LOG_EXPRESSION_UNIT}</span></div>
             <div class="aggregate-mean-track"><span style="width:${meanWidth.toFixed(1)}%;"></span></div>
+            <div class="aggregate-mean-scale">Visual scale: 0–${meanScale.toFixed(2)}</div>
             ${metricInfo("mean", D)}
           </article>
         </div>
@@ -694,58 +822,123 @@ function viewAggregate(D) {
     </div>`}`;
 }
 
-function viewByDataset(D) {
-  const rows = D.sel.map((dataset) => {
-    const metric = D.dsMetrics[dataset.id] || emptyMetric();
-    return { dataset, metric, value: Number(metric.percent_expressing || 0) };
-  });
-  const svgW = 1120, svgH = 430, left = 82, right = 30, top = 76, bottom = 70;
+function chartScale(maxValue, maxCap = null) {
+  const minimum = maxCap === 100 ? 1 : 0.1;
+  const paddedMax = Math.max(minimum, maxValue * 1.12);
+  const rawStep = paddedMax / 5;
+  const magnitude = 10 ** Math.floor(Math.log10(rawStep));
+  const normalizedStep = rawStep / magnitude;
+  const factor = normalizedStep <= 1 ? 1 : normalizedStep <= 2 ? 2 : normalizedStep <= 2.5 ? 2.5 : normalizedStep <= 5 ? 5 : 10;
+  const step = factor * magnitude;
+  let axisMax = Math.max(step, Math.ceil(paddedMax / step) * step);
+  if (maxCap != null) axisMax = Math.min(maxCap, axisMax);
+  const decimals = step < 0.1 ? 2 : step < 1 ? 1 : 0;
+  const ticks = Array.from({ length: Math.round(axisMax / step) + 1 }, (_, index) => index * step);
+  return { axisMax, decimals, ticks };
+}
+
+function datasetSummaryChart({ rows, title, unit, axisTitle, valueDigits, maxCap, contextShort, geneSymbol }) {
+  if (!rows.length) {
+    return `<section class="dataset-chart-panel"><h3>${esc(title)}</h3><div class="dataset-chart-empty">No dataset has a defined value in this context.</div></section>`;
+  }
+
+  const svgW = 560, svgH = 440, left = 82, right = 30, top = 76, bottom = 76;
   const plotW = svgW - left - right, plotH = svgH - top - bottom;
-  const contextShort = D.region ? (ABBR[D.region] || D.region) : "Whole hypothalamus";
-  const mean = rows.length ? rows.reduce((sum, row) => sum + row.value, 0) / rows.length : 0;
-  const sampleVariance = rows.length > 1
-    ? rows.reduce((sum, row) => sum + (row.value - mean) ** 2, 0) / (rows.length - 1)
+  const values = rows.map((row) => row.value);
+  const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+  const sampleVariance = values.length > 1
+    ? values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / (values.length - 1)
     : 0;
-  const sem = rows.length > 1 ? Math.sqrt(sampleVariance / rows.length) : 0;
-  const semLow = Math.max(0, mean - sem), semHigh = Math.min(100, mean + sem);
-  const highestValue = Math.max(semHigh, ...rows.map((row) => row.value));
-  const paddedMax = Math.max(1, highestValue * 1.12);
-  const tickStep = paddedMax <= 10 ? 2 : paddedMax <= 25 ? 5 : paddedMax <= 50 ? 10 : 20;
-  const axisMax = Math.min(100, Math.max(tickStep, Math.ceil(paddedMax / tickStep) * tickStep));
-  const tickValues = Array.from({ length: Math.round(axisMax / tickStep) + 1 }, (_, index) => index * tickStep);
+  const sem = values.length > 1 ? Math.sqrt(sampleVariance / values.length) : 0;
+  const semLow = Math.max(0, mean - sem);
+  const semHigh = maxCap == null ? mean + sem : Math.min(maxCap, mean + sem);
+  const { axisMax, decimals: tickDigits, ticks: tickValues } = chartScale(Math.max(semHigh, ...values), maxCap);
   const ticks = tickValues.map((tick) => {
     const y = top + plotH - tick / axisMax * plotH;
     return `<line x1="${left}" y1="${y}" x2="${left + plotW}" y2="${y}" class="dataset-grid${tick === 0 ? " is-axis" : ""}"></line>
-      <text x="${left - 14}" y="${y + 4}" text-anchor="end" class="dataset-tick">${tick}</text>`;
+      <text x="${left - 14}" y="${y + 4}" text-anchor="end" class="dataset-tick">${tick.toFixed(tickDigits)}</text>`;
   }).join("");
   const centerX = left + plotW / 2;
-  const meanY = top + plotH - mean / axisMax * plotH;
-  const semHighY = top + plotH - semHigh / axisMax * plotH;
-  const semLowY = top + plotH - semLow / axisMax * plotH;
-  const barWidth = Math.min(260, plotW * .3);
-  const pointSpread = Math.min(82, barWidth / Math.max(rows.length, 2));
-  const points = rows.map(({ dataset, value }, index) => {
-    const x = centerX + (index - (rows.length - 1) / 2) * pointSpread;
-    const y = top + plotH - value / axisMax * plotH;
-    const hoverLabel = `${dataset.label} · ${value.toFixed(1)}%`;
-    const labelWidth = Math.max(114, hoverLabel.length * 7.1 + 20);
+  const yFor = (value) => top + plotH - value / axisMax * plotH;
+  const meanY = yFor(mean), semHighY = yFor(semHigh), semLowY = yFor(semLow);
+  const barWidth = Math.min(210, plotW * .38);
+  const points = rows.map(({ dataset, value }) => {
+    const y = yFor(value);
+    const valueLabel = unit === "%" ? `${value.toFixed(valueDigits)}%` : `${value.toFixed(valueDigits)} ${unit}`;
+    const hoverLabel = `${dataset.label} · ${valueLabel}`;
+    const labelWidth = Math.max(114, hoverLabel.length * 6.5 + 20);
     const labelTop = y < top + 34 ? y + 18 : y - 47;
-    return `<g class="dataset-point-group" tabindex="0" role="img" aria-label="${esc(dataset.label)}: ${value.toFixed(1)} percent expressing">
+    return `<g class="dataset-point-group" tabindex="0" role="img" aria-label="${esc(dataset.label)}: ${esc(valueLabel)}">
       <title>${esc(hoverLabel)}</title>
-      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="${dataset.color}" class="dataset-point"></circle>
-      <g class="dataset-point-label" transform="translate(${x.toFixed(1)} ${labelTop.toFixed(1)})">
+      <circle cx="${centerX.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="${dataset.color}" class="dataset-point"></circle>
+      <g class="dataset-point-label" transform="translate(${centerX.toFixed(1)} ${labelTop.toFixed(1)})">
         <rect x="${(-labelWidth / 2).toFixed(1)}" y="0" width="${labelWidth.toFixed(1)}" height="24" rx="6"></rect>
         <text x="0" y="16" text-anchor="middle">${esc(hoverLabel)}</text>
       </g>
     </g>`;
   }).join("");
-  const cards = rows.map(({ dataset, metric, value }) => {
+  const summaryUnit = unit === "%" ? "%" : unit;
+  const axisLabel = unit ? `${axisTitle} [${unit}]` : axisTitle;
+
+  return `<section class="dataset-chart-panel">
+    <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="${esc(title)} for ${esc(geneSymbol)} with standard error and individual eligible datasets">
+      <text x="${left + plotW / 2}" y="27" text-anchor="middle" class="dataset-chart-title">${esc(contextShort)} <tspan font-style="italic">${esc(geneSymbol)}</tspan> · ${esc(title)}</text>
+      <text x="${left + plotW / 2}" y="52" text-anchor="middle" class="dataset-chart-subtitle">Mean ± SEM</text>
+      ${ticks}<line x1="${left}" y1="${top}" x2="${left}" y2="${top + plotH}" class="dataset-axis"></line>
+      <text x="24" y="${top + plotH / 2}" text-anchor="middle" transform="rotate(-90 24 ${top + plotH / 2})" class="dataset-axis-title">${esc(axisLabel)}</text>
+      <rect x="${(centerX - barWidth / 2).toFixed(1)}" y="${meanY.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${Math.max(0, top + plotH - meanY).toFixed(1)}" class="dataset-mean-bar"></rect>
+      <line x1="${centerX}" y1="${semHighY.toFixed(1)}" x2="${centerX}" y2="${semLowY.toFixed(1)}" class="dataset-sem-whisker"></line>
+      <line x1="${centerX - 24}" y1="${semHighY.toFixed(1)}" x2="${centerX + 24}" y2="${semHighY.toFixed(1)}" class="dataset-sem-cap"></line>
+      <line x1="${centerX - 24}" y1="${semLowY.toFixed(1)}" x2="${centerX + 24}" y2="${semLowY.toFixed(1)}" class="dataset-sem-cap"></line>
+      ${points}
+      <text x="${centerX}" y="${top + plotH + 28}" text-anchor="middle" class="dataset-x-axis-title">Eligible selected datasets</text>
+      <text x="${centerX}" y="${top + plotH + 55}" text-anchor="middle" class="dataset-sem-summary">Mean ${mean.toFixed(valueDigits)} · SEM ${sem.toFixed(valueDigits)} ${esc(summaryUnit)}</text>
+    </svg>
+  </section>`;
+}
+
+function viewByDataset(D) {
+  const detailRows = D.sel.map((dataset) => {
+    const metric = D.dsMetrics[dataset.id] || emptyMetric();
+    return { dataset, metric, detectionValue: metric.percent_expressing, meanValue: metric.mean_expression_positive };
+  });
+  const detectionRows = detailRows
+    .filter(({ metric, detectionValue }) => metric.eligible_cells > 0 && detectionValue != null)
+    .map(({ dataset, detectionValue }) => ({ dataset, value: Number(detectionValue) }));
+  const meanRows = detailRows
+    .filter(({ metric, meanValue }) => metric.eligible_cells > 0 && meanValue != null)
+    .map(({ dataset, meanValue }) => ({ dataset, value: Number(meanValue) }));
+  const contextShort = D.region ? (ABBR[D.region] || D.region) : "Whole hypothalamus";
+  const charts = [
+    datasetSummaryChart({
+      rows: detectionRows,
+      title: "% expressing by dataset",
+      unit: "% of eligible cells",
+      axisTitle: "Expressing cells",
+      valueDigits: 1,
+      maxCap: 100,
+      contextShort,
+      geneSymbol: D.info.symbol,
+    }),
+    datasetSummaryChart({
+      rows: meanRows,
+      title: "Mean expression when on",
+      unit: LOG_EXPRESSION_UNIT,
+      axisTitle: "Mean expression",
+      valueDigits: 2,
+      maxCap: null,
+      contextShort,
+      geneSymbol: D.info.symbol,
+    }),
+  ].join("");
+  const cards = detailRows.map(({ dataset, metric, detectionValue, meanValue }) => {
     const unavailable = D.region && metric.eligible_cells === 0;
+    const value = Number(detectionValue || 0);
     return `<article class="dataset-detail-card">
       <div class="dataset-detail-title"><span style="background:${dataset.color};"></span><div><strong>${esc(dataset.label)}</strong><small>${esc(dataset.sub)}</small></div></div>
       ${unavailable ? `<div class="dataset-unavailable">No eligible cells in this context</div>` : `<div class="dataset-detail-body">
         <div class="dataset-mini-donut" style="background:conic-gradient(${dataset.color} 0 ${value.toFixed(3)}%,#eee8e3 ${value.toFixed(3)}% 100%);"><span>${value.toFixed(1)}%</span></div>
-        <dl><div><dt>Cells expr.</dt><dd>${fmt(metric.positive_cells)} <span>/ ${fmt(metric.eligible_cells)}</span></dd></div><div><dt>Mean expr.</dt><dd>${metric.mean_expression_positive == null ? "—" : Number(metric.mean_expression_positive).toFixed(2)}</dd></div></dl>
+        <dl><div><dt>Cells expr.</dt><dd>${fmt(metric.positive_cells)} <span>of ${fmt(metric.eligible_cells)}</span></dd></div><div><dt>Mean expr.</dt><dd>${meanValue == null ? "Not detected" : Number(meanValue).toFixed(2)} <span class="dataset-expression-unit">${meanValue == null ? "" : LOG_EXPRESSION_UNIT}</span></dd></div></dl>
       </div>`}
     </article>`;
   }).join("");
@@ -753,36 +946,171 @@ function viewByDataset(D) {
   return `
     <div class="dataset-view-heading"><h2>Detection by dataset</h2><p>Per-dataset <i>${esc(D.info.symbol)}</i>+ fraction and expression within <b>${esc(D.contextName)}</b> cells.</p></div>
     <div class="dataset-toggles">${datasetToggles(D)}</div>
-    ${rows.length ? `<div class="dataset-chart-wrap">
-      <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="Mean percent ${esc(D.info.symbol)} positive with standard error and individual selected datasets">
-        <text x="${left + plotW / 2}" y="28" text-anchor="middle" class="dataset-chart-title">${esc(contextShort)} <tspan font-style="italic">${esc(D.info.symbol)}</tspan>+ detection</text>
-        <text x="${left + plotW / 2}" y="49" text-anchor="middle" class="dataset-chart-subtitle">Bar = selected-dataset mean · error bars = ±SEM · hover points for dataset details</text>
-        ${ticks}<line x1="${left}" y1="${top}" x2="${left}" y2="${top + plotH}" class="dataset-axis"></line>
-        <text x="24" y="${top + plotH / 2}" text-anchor="middle" transform="rotate(-90 24 ${top + plotH / 2})" class="dataset-axis-title">% ${esc(D.info.symbol)}+</text>
-        <rect x="${(centerX - barWidth / 2).toFixed(1)}" y="${meanY.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${Math.max(0, top + plotH - meanY).toFixed(1)}" class="dataset-mean-bar"></rect>
-        <line x1="${centerX}" y1="${semHighY.toFixed(1)}" x2="${centerX}" y2="${semLowY.toFixed(1)}" class="dataset-sem-whisker"></line>
-        <line x1="${centerX - 24}" y1="${semHighY.toFixed(1)}" x2="${centerX + 24}" y2="${semHighY.toFixed(1)}" class="dataset-sem-cap"></line>
-        <line x1="${centerX - 24}" y1="${semLowY.toFixed(1)}" x2="${centerX + 24}" y2="${semLowY.toFixed(1)}" class="dataset-sem-cap"></line>
-        ${points}
-        <text x="${centerX}" y="${top + plotH + 34}" text-anchor="middle" class="dataset-sem-summary">Mean ${mean.toFixed(1)}% · SEM ${sem.toFixed(1)}%</text>
-      </svg>
-    </div><div class="dataset-detail-grid">${cards}</div>` : `<div class="aggregate-empty">Select at least one dataset to populate this view.</div>`}`;
+    ${detailRows.length ? `<div class="dataset-chart-grid">${charts}</div><div class="dataset-detail-grid">${cards}</div>` : `<div class="aggregate-empty">Select at least one dataset to populate this view.</div>`}`;
 }
 
-function viewContext(D) {
+function coexpressionLabel(key, geneA, geneB) {
+  const a = `<i>${esc(geneA)}</i>`;
+  const b = `<i>${esc(geneB)}</i>`;
+  return {
+    both_positive: `${a}+ ${b}+`,
+    gene_a_only: `${a}+ ${b}−`,
+    gene_b_only: `${a}− ${b}+`,
+    neither: `${a}− ${b}−`,
+  }[key];
+}
+
+function coexpressionDonut(metric) {
+  let cursor = 0;
+  const stops = COEXPRESSION_QUADRANTS.map(({ key, color }) => {
+    const value = metric.quadrant_percentages[key] || 0;
+    const start = cursor;
+    cursor += value;
+    return `${color} ${start.toFixed(4)}% ${cursor.toFixed(4)}%`;
+  });
+  return `conic-gradient(${stops.join(",")})`;
+}
+
+function coexpressionPanel(population, geneA, geneB, reversed) {
+  const lineage = LINEAGE_PREVIEW.find((item) => item.id === state.coexpressionLineage);
+  const measured = orientCoexpression(selectedCoexpressionPopulation(population), reversed);
+  const metric = lineage ? previewLineageMetric(lineage) : measured;
+  if (!metric.eligible_cells) {
+    return `<article class="coexpression-panel"><h3>${esc(population.label)}</h3><div class="coexpression-empty">No eligible cells in the selected datasets.</div></article>`;
+  }
+  const maxPercent = Math.max(...Object.values(metric.quadrant_percentages));
+  const legend = COEXPRESSION_QUADRANTS.map(({ key, color }) => `
+    <li><span class="coexpression-swatch" style="background:${color};"></span><span>${coexpressionLabel(key, geneA, geneB)}</span><b>${metric.quadrant_percentages[key].toFixed(2)}%</b><small>${fmt(metric.quadrant_counts[key])}</small></li>`).join("");
+  const canExpand = !lineage && !state.region;
+  const tile = (key) => {
+    const value = metric.quadrant_percentages[key];
+    const alpha = maxPercent ? .14 + .76 * value / maxPercent : .14;
+    const active = state.expandedCoexpressionQuadrant === key;
+    return `<button class="coexpression-tile${active ? " is-expanded" : ""}" data-act="coexpression-quadrant" data-v="${key}" aria-expanded="${active}" ${canExpand ? "" : "disabled"} style="background:rgba(37,99,166,${alpha.toFixed(3)});"><b>${value.toFixed(2)}%</b><small>${fmt(metric.quadrant_counts[key])} cells</small></button>`;
+  };
+  const breakdown = canExpand && state.expandedCoexpressionQuadrant
+    ? lineageBreakdown(metric, state.expandedCoexpressionQuadrant, geneA, geneB, population.label)
+    : "";
+  return `<article class="coexpression-panel">
+    <div class="coexpression-panel-heading">${lineageMockup(metric.eligible_cells)}</div>
+    <div class="coexpression-panel-body">
+      <div class="coexpression-figure">
+        <div class="coexpression-donut" role="img" aria-label="Four-way ${esc(geneA)} and ${esc(geneB)} coexpression split among ${esc(population.label)}" style="background:${coexpressionDonut(metric)};"><div><strong>${fmt(metric.eligible_cells)}</strong><span>eligible cells</span></div></div>
+        <ul class="coexpression-legend">${legend}</ul>
+      </div>
+      <div><div class="coexpression-matrix-help">${canExpand ? "Click a quadrant to expand its C7 lineage composition." : (lineage ? "Illustrative quadrant profile for this selected lineage." : "Choose Whole hypothalamus to expand quadrants into C7 lineages.")}</div><div class="coexpression-matrix" aria-label="Coexpression quadrant matrix">
+        <span></span><b><i>${esc(geneB)}</i> +</b><b><i>${esc(geneB)}</i> −</b>
+        <b><i>${esc(geneA)}</i> +</b>${tile("both_positive")}${tile("gene_a_only")}
+        <b><i>${esc(geneA)}</i> −</b>${tile("gene_b_only")}${tile("neither")}
+      </div></div>
+    </div>
+    ${breakdown}
+  </article>`;
+}
+
+// UX-only lineage mock data. Replace with C7-stratified coexpression metrics
+// when those are added to the metric export; this preview must not imply these
+// counts are measured from the current datasets.
+const LINEAGE_PREVIEW = [
+  { id: "C7-1: GLU", count: 17279, color: "#2563a6" },
+  { id: "C7-2: GABA", count: 13826, color: "#4f8dcc" },
+  { id: "C7-4: Oligo+Precursor", count: 2194, color: "#78a9d5" },
+  { id: "C7-3: Astro-Ependymal", count: 2102, color: "#9bbddd" },
+  { id: "C7-5: Immune", count: 298, color: "#b9cfe2" },
+  { id: "C7-7: Vascular", count: 170, color: "#d1deea" },
+  { id: "C7-6: ParsTuber", count: 76, color: "#e4ebf1" },
+];
+const QUADRANT_PREVIEW = [
+  { key: "both_positive", color: "#124e88", pct: 18 },
+  { key: "gene_a_only", color: "#2f75b5", pct: 22 },
+  { key: "gene_b_only", color: "#8bb9e1", pct: 16 },
+  { key: "neither", color: "#e1e8ef", pct: 44 },
+];
+
+function previewLineageMetric(lineage) {
+  const quadrantCounts = Object.fromEntries(QUADRANT_PREVIEW.map(({ key, pct }) => [key, Math.round(lineage.count * pct / 100)]));
+  const adjustment = lineage.count - Object.values(quadrantCounts).reduce((sum, count) => sum + count, 0);
+  quadrantCounts.neither += adjustment;
+  return {
+    eligible_cells: lineage.count,
+    quadrant_counts: quadrantCounts,
+    quadrant_percentages: Object.fromEntries(QUADRANT_PREVIEW.map(({ key }) => [key, quadrantCounts[key] / lineage.count * 100])),
+  };
+}
+
+function lineageBreakdown(metric, key, geneA, geneB, populationLabel) {
+  const target = metric.quadrant_counts[key];
+  const base = LINEAGE_PREVIEW.reduce((sum, item) => sum + item.count, 0);
+  let cursor = 0, assigned = 0;
+  const slices = LINEAGE_PREVIEW.map((item, i) => {
+    const amount = i === LINEAGE_PREVIEW.length - 1 ? 100 - cursor : item.count / base * 100;
+    const start = cursor; cursor += amount;
+    return `${item.color} ${start.toFixed(3)}% ${cursor.toFixed(3)}%`;
+  });
+  const rows = LINEAGE_PREVIEW.map((item, index) => {
+    const n = index === LINEAGE_PREVIEW.length - 1 ? target - assigned : Math.round(target * item.count / base);
+    assigned += n;
+    return `<li><span style="background:${item.color}"></span><span>${esc(item.id)}</span><b>${fmt(n)}</b></li>`;
+  }).join("");
+  const label = coexpressionLabel(key, geneA, geneB);
+  return `<section class="lineage-breakdown"><div><h4>${label} · C7 lineage counts</h4><p>Illustrative split within ${esc(populationLabel)} · n = ${fmt(target)}</p><div class="lineage-pie" role="img" aria-label="Illustrative C7 lineage counts for ${esc(label.replace(/<[^>]*>/g, ""))}" style="background:conic-gradient(${slices.join(",")});"><span>${fmt(target)}<small>cells</small></span></div></div><ul>${rows}</ul></section>`;
+}
+
+function lineageMockup(total) {
+  const lineage = LINEAGE_PREVIEW.find((item) => item.id === state.coexpressionLineage);
+  const options = [`<option value="whole" ${!lineage ? "selected" : ""}>Whole hypothalamus cells</option>`, ...LINEAGE_PREVIEW.map((item) => `<option value="${esc(item.id)}" ${state.coexpressionLineage === item.id ? "selected" : ""}>${esc(item.id)}</option>`)].join("");
+  return `<div class="lineage-selector-row"><label>Cell population<select data-act="lineage-select">${options}</select></label><span class="mono">n = ${fmt(total)}</span></div>`;
+}
+
+function viewCoexpression(D) {
+  const { pilot, reversed } = currentCoexpressionPilot();
+  if (!D.hypo) {
+    return `<div class="coexpression-heading"><h2>Coexpression</h2><p>Region-level coexpression requires HypoMap region annotations.</p></div>
+      <div class="aggregate-empty"><button data-act="source" data-v="hypomap" class="coexpression-source-button">Switch to HypoMap</button></div>`;
+  }
+  if (!pilot || pilot.state !== "resolved") {
+    return `<div class="coexpression-heading"><h2>Coexpression</h2><p>The fixed pair is unavailable because one or more genes did not resolve.</p></div>`;
+  }
+  const geneA = D.info.symbol;
+  const geneB = state.coexpressionPartner;
+  const region = currentCoexpressionRegion();
+  const regionLabel = currentCoexpressionRegionLabel();
+  const selectedLineage = LINEAGE_PREVIEW.find((item) => item.id === state.coexpressionLineage);
+  const population = currentCoexpressionPopulation(pilot);
+  const suggestions = coexpressionPartnerSuggestions();
+  const partnerDropdown = state.coexpressionPartnerMenuOpen ? `
+    <div class="gene-menu coexpression-gene-menu" id="coexpression-gene-suggestions" role="listbox" aria-label="Available partner genes">
+      ${suggestions.length ? suggestions.map((option, index) => {
+        const aliasMatches = option.aliases.filter((alias) => alias.toLowerCase() !== option.symbol.toLowerCase());
+        return `<button type="button" id="coexpression-gene-option-${index}" class="gene-option${index === state.coexpressionPartnerActiveIndex ? " is-active" : ""}" role="option" aria-selected="${index === state.coexpressionPartnerActiveIndex}" data-act="coexpression-select" data-v="${esc(option.gene)}">
+          <span class="gene-option-copy"><span class="gene-option-symbol mono">${esc(option.symbol)}</span><span class="gene-option-name">${esc(option.name)}</span></span>
+          ${aliasMatches.length ? `<span class="gene-option-alias mono">alias ${esc(aliasMatches.join(", "))}</span>` : ""}
+        </button>`;
+      }).join("") : `<div class="gene-menu-empty">No available partner matches “${esc(state.coexpressionPartnerQuery)}”</div>`}
+      <div class="gene-menu-meta">${suggestions.length} partner gene${suggestions.length === 1 ? "" : "s"} available</div>
+    </div>` : "";
+  const missingRegion = D.sel.reduce((sum, dataset) => sum + Math.max(0, dataset.cells - (dataset.hypoRegion || 0)), 0);
   return `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-      <span style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Baseline coexpression</span>
-      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:#c19a4e;padding:3px 7px;border-radius:5px;">Next</span></div>
-    <div style="font-size:12.5px;color:#7b756a;margin-bottom:18px;line-height:1.5;">Gene context for <span class="mono">${esc(D.info.symbol)}</span>. More context analyses (differential coexpression, pathways, gene programs) will land here later.</div>
-    <div style="border:1px dashed #ddd7cc;border-radius:11px;padding:20px 22px;background:#faf9f6;">
-      <div style="font-size:12.5px;color:#7b756a;line-height:1.6;max-width:640px;">The gene-pair workflow inherits everything set elsewhere — the active <b style="color:#211f1b;">annotation source</b>, the <b style="color:#211f1b;">${esc(D.contextName)}</b> context, and the cluster <b style="color:#211f1b;">resolution</b>. Coexpression values are not computed until their canonical denominator and quadrant formulas are specified.</div>
-    </div>`;
+    <div class="coexpression-heading">
+      <div><h2>Coexpression · <i>${esc(geneA)}</i> × <i>${esc(geneB)}</i></h2><p>${selectedLineage ? "Illustrative coexpression profile for" : "Four-way raw-count detection among"} <b>${esc(selectedLineage?.id || regionLabel)} cells</b>${selectedLineage ? " · preview values" : ". Region selection follows the Overview map."}</p></div>
+      <div class="coexpression-pair" aria-label="Coexpression gene pair">
+        <label><small>Current gene</small><span class="coexpression-fixed-gene mono"><i>${esc(geneA)}</i></span></label>
+        <span class="coexpression-times">×</span>
+        <label><small>Partner gene</small><form data-act="coexpression-form" data-coexpression-picker class="coexpression-search"><input data-role="coexpression-input" value="${esc(state.coexpressionPartnerQuery)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="coexpression-gene-suggestions" aria-expanded="${state.coexpressionPartnerMenuOpen}" ${state.coexpressionPartnerMenuOpen && suggestions.length ? `aria-activedescendant="coexpression-gene-option-${state.coexpressionPartnerActiveIndex}"` : ""}><button type="submit">Set</button>${partnerDropdown}</form></label>
+      </div>
+    </div>
+    ${state.coexpressionMessage ? `<div class="coexpression-resolution-message">${esc(state.coexpressionMessage)}</div>` : ""}
+    <div class="dataset-toggles coexpression-datasets">${datasetToggles(D)}</div>
+    <div class="coexpression-method"><b>Cell pooled</b> · raw count ≥1 defines positivity · percentages are recomputed from integer counts after dataset filtering.</div>
+    ${D.sel.length && population ? `<div class="coexpression-grid">${coexpressionPanel({ ...population, label: `${LINEAGE_PREVIEW.find((item) => item.id === state.coexpressionLineage)?.id || regionLabel} cells` }, geneA, geneB, reversed)}</div>` : `<div class="aggregate-empty">${D.sel.length ? "This selection has no assigned HypoMap region, so coexpression is unavailable." : "Select at least one dataset to populate this view."}</div>`}
+    <div class="coexpression-coverage"><b>Preview interaction</b> · C7 lineage coexpression values and quadrant lineage splits are illustrative; the current export contains measured whole and region-level coexpression.</div>
+    ${!selectedLineage ? `<div class="coexpression-coverage"><b>${fmt(missingRegion)}</b> selected cells lack a HypoMap region assignment and are ${region ? "excluded from this region denominator" : "included in the whole-hypothalamus denominator"}.</div>` : ""}
+    ${population && !selectedLineage ? `<details class="coexpression-definitions"><summary>Population and quadrant definitions</summary><div><p><b>${esc(regionLabel)} cells:</b> <span class="mono">${esc(population.definition)}</span></p><p>Both+, gene-A-only, gene-B-only, and neither are exhaustive within this context. Positivity uses uncorrected raw detection.</p></div></details>` : ""}`;
 }
 
 function render() {
   const D = derive();
-  const body = { overview: viewOverview, identity: viewIdentity, aggregate: viewAggregate, dataset: viewByDataset, context: viewContext }[state.tab](D);
+  const body = { overview: viewOverview, identity: viewIdentity, aggregate: viewAggregate, dataset: viewByDataset, coexpression: viewCoexpression }[state.tab](D);
   const footer = `
     <footer style="padding:13px 30px;border-top:1px solid #e8e4dc;background:#f9f8f4;border-radius:0 0 14px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <span style="font-size:11px;color:#a7a197;">${D.hypo ? `HypoMap atlas · CZ CELLxGENE d86517f0 · Steuernagel et al. 2022 · ${fmt(D.regionAssigned + D.annotNoRegion)} / ${fmt(D.total)} selected cells matched` : "Native study annotations · as deposited in GEO"}</span>
@@ -825,12 +1153,16 @@ function buildModel(data) {
       hypoRegion: c.nonblank_hypomap_region ?? null,
     };
   });
+  const coexpressionPilots = (data.coexpression_pilots || []).filter((pilot) => pilot.state === "resolved");
+  const coexpressionGenes = [...new Set(coexpressionPilots.flatMap((pilot) => [pilot.gene_a, pilot.gene_b]))];
   return {
     generated_on: data.generated_on,
     genes,
     aliases,
     searchOptions,
     datasets,
+    coexpressionPilots,
+    coexpressionGenes,
   };
 }
 
@@ -840,6 +1172,7 @@ function selectGene(option, query = option.symbol) {
   state.geneMenuOpen = false;
   state.geneActiveIndex = 0;
   state.message = query.toLowerCase() !== option.symbol.toLowerCase() ? `${query} resolved to ${option.symbol}` : "";
+  syncCoexpressionPartner(option.symbol);
 }
 
 function focusGeneInput(cursor = null, selectAll = false, keepClosed = false) {
@@ -871,62 +1204,156 @@ function handleGeneSubmit() {
   render();
 }
 
+function focusCoexpressionInput(cursor = null, selectAll = false, keepClosed = false) {
+  const input = document.querySelector("[data-role='coexpression-input']");
+  if (!input) return;
+  suppressCoexpressionFocusOpen = keepClosed;
+  input.focus();
+  if (selectAll) input.select();
+  else if (cursor != null) input.setSelectionRange(cursor, cursor);
+}
+
+function handleCoexpressionSubmit() {
+  const input = document.querySelector("[data-role='coexpression-input']");
+  const query = input?.value.trim() || "";
+  const currentSymbol = geneInfo(currentGene()).symbol;
+  const resolved = model.aliases.get(query.toLowerCase());
+  const exact = model.searchOptions.find((option) => option.gene === resolved && option.symbol !== currentSymbol);
+  if (exact && model.coexpressionGenes.includes(exact.symbol)) {
+    selectCoexpressionPartner(exact, query);
+  } else {
+    const suggestions = coexpressionPartnerSuggestions(query);
+    if (suggestions.length === 1) selectCoexpressionPartner(suggestions[0], query);
+    else {
+      state.coexpressionPartnerQuery = query;
+      state.coexpressionPartnerMenuOpen = true;
+      state.coexpressionPartnerActiveIndex = 0;
+      state.coexpressionMessage = query.toLowerCase() === currentSymbol.toLowerCase()
+        ? "Choose a different gene for coexpression"
+        : `${query || "Gene"} is not an available partner in this vertical slice`;
+    }
+  }
+  render();
+}
+
 document.getElementById("app").addEventListener("submit", (e) => {
   if (e.target.closest("[data-act='gene-form']")) {
     e.preventDefault();
     handleGeneSubmit();
+  } else if (e.target.closest("[data-act='coexpression-form']")) {
+    e.preventDefault();
+    handleCoexpressionSubmit();
   }
 });
 
 document.getElementById("app").addEventListener("focusin", (e) => {
-  const input = e.target.closest("[data-role='gene-input']");
-  if (input && suppressGeneFocusOpen) {
-    suppressGeneFocusOpen = false;
+  const geneInput = e.target.closest("[data-role='gene-input']");
+  if (geneInput) {
+    if (suppressGeneFocusOpen) {
+      suppressGeneFocusOpen = false;
+      return;
+    }
+    if (state.geneMenuOpen) return;
+    state.geneQuery = geneInput.value;
+    state.geneMenuOpen = true;
+    state.geneActiveIndex = 0;
+    render();
+    focusGeneInput(null, true);
     return;
   }
-  if (!input || state.geneMenuOpen) return;
-  state.geneQuery = input.value;
-  state.geneMenuOpen = true;
-  state.geneActiveIndex = 0;
+  const partnerInput = e.target.closest("[data-role='coexpression-input']");
+  if (!partnerInput) return;
+  if (suppressCoexpressionFocusOpen) {
+    suppressCoexpressionFocusOpen = false;
+    return;
+  }
+  if (state.coexpressionPartnerMenuOpen) return;
+  state.coexpressionPartnerQuery = partnerInput.value;
+  state.coexpressionPartnerMenuOpen = true;
+  state.coexpressionPartnerActiveIndex = 0;
   render();
-  focusGeneInput(null, true);
+  focusCoexpressionInput(null, true);
 });
 
 document.getElementById("app").addEventListener("input", (e) => {
-  const input = e.target.closest("[data-role='gene-input']");
-  if (!input) return;
-  const cursor = input.selectionStart;
-  state.geneQuery = input.value;
-  state.geneMenuOpen = true;
-  state.geneActiveIndex = 0;
-  state.message = "";
+  const geneInput = e.target.closest("[data-role='gene-input']");
+  if (geneInput) {
+    const cursor = geneInput.selectionStart;
+    state.geneQuery = geneInput.value;
+    state.geneMenuOpen = true;
+    state.geneActiveIndex = 0;
+    state.message = "";
+    render();
+    focusGeneInput(cursor);
+    return;
+  }
+  const partnerInput = e.target.closest("[data-role='coexpression-input']");
+  if (!partnerInput) return;
+  const cursor = partnerInput.selectionStart;
+  state.coexpressionPartnerQuery = partnerInput.value;
+  state.coexpressionPartnerMenuOpen = true;
+  state.coexpressionPartnerActiveIndex = 0;
+  state.coexpressionMessage = "";
   render();
-  focusGeneInput(cursor);
+  focusCoexpressionInput(cursor);
+});
+
+document.getElementById("app").addEventListener("change", (e) => {
+  if (!e.target.matches("[data-act='lineage-select']")) return;
+  state.coexpressionLineage = e.target.value;
+  state.region = null;
+  state.expandedCoexpressionQuadrant = null;
+  render();
 });
 
 document.getElementById("app").addEventListener("keydown", (e) => {
-  if (!e.target.closest("[data-role='gene-input']")) return;
-  const suggestions = geneSuggestions();
+  if (e.target.closest("[data-role='gene-input']")) {
+    const suggestions = geneSuggestions();
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!suggestions.length) return;
+      const delta = e.key === "ArrowDown" ? 1 : -1;
+      state.geneMenuOpen = true;
+      state.geneActiveIndex = (state.geneActiveIndex + delta + suggestions.length) % suggestions.length;
+      render();
+      focusGeneInput(state.geneQuery.length);
+    } else if (e.key === "Enter" && state.geneMenuOpen && suggestions.length) {
+      e.preventDefault();
+      selectGene(suggestions[Math.min(state.geneActiveIndex, suggestions.length - 1)], state.geneQuery);
+      render();
+      focusGeneInput(state.geneQuery.length, false, true);
+    } else if (e.key === "Escape" && state.geneMenuOpen) {
+      e.preventDefault();
+      state.geneQuery = geneInfo(currentGene()).symbol;
+      state.geneMenuOpen = false;
+      state.geneActiveIndex = 0;
+      render();
+      focusGeneInput(state.geneQuery.length, false, true);
+    }
+    return;
+  }
+  if (!e.target.closest("[data-role='coexpression-input']")) return;
+  const suggestions = coexpressionPartnerSuggestions();
   if (e.key === "ArrowDown" || e.key === "ArrowUp") {
     e.preventDefault();
     if (!suggestions.length) return;
     const delta = e.key === "ArrowDown" ? 1 : -1;
-    state.geneMenuOpen = true;
-    state.geneActiveIndex = (state.geneActiveIndex + delta + suggestions.length) % suggestions.length;
+    state.coexpressionPartnerMenuOpen = true;
+    state.coexpressionPartnerActiveIndex = (state.coexpressionPartnerActiveIndex + delta + suggestions.length) % suggestions.length;
     render();
-    focusGeneInput(state.geneQuery.length);
-  } else if (e.key === "Enter" && state.geneMenuOpen && suggestions.length) {
+    focusCoexpressionInput(state.coexpressionPartnerQuery.length);
+  } else if (e.key === "Enter" && state.coexpressionPartnerMenuOpen && suggestions.length) {
     e.preventDefault();
-    selectGene(suggestions[Math.min(state.geneActiveIndex, suggestions.length - 1)], state.geneQuery);
+    selectCoexpressionPartner(suggestions[Math.min(state.coexpressionPartnerActiveIndex, suggestions.length - 1)], state.coexpressionPartnerQuery);
     render();
-    focusGeneInput(state.geneQuery.length, false, true);
-  } else if (e.key === "Escape" && state.geneMenuOpen) {
+    focusCoexpressionInput(state.coexpressionPartnerQuery.length, false, true);
+  } else if (e.key === "Escape" && state.coexpressionPartnerMenuOpen) {
     e.preventDefault();
-    state.geneQuery = geneInfo(currentGene()).symbol;
-    state.geneMenuOpen = false;
-    state.geneActiveIndex = 0;
+    state.coexpressionPartnerQuery = state.coexpressionPartner;
+    state.coexpressionPartnerMenuOpen = false;
+    state.coexpressionPartnerActiveIndex = 0;
     render();
-    focusGeneInput(state.geneQuery.length, false, true);
+    focusCoexpressionInput(state.coexpressionPartnerQuery.length, false, true);
   }
 });
 
@@ -942,6 +1369,12 @@ document.getElementById("app").addEventListener("click", (e) => {
       state.geneActiveIndex = 0;
       changed = true;
     }
+    if (state.coexpressionPartnerMenuOpen && !e.target.closest("[data-coexpression-picker]")) {
+      state.coexpressionPartnerQuery = state.coexpressionPartner;
+      state.coexpressionPartnerMenuOpen = false;
+      state.coexpressionPartnerActiveIndex = 0;
+      changed = true;
+    }
     if (changed) render();
     return;
   }
@@ -951,6 +1384,11 @@ document.getElementById("app").addEventListener("click", (e) => {
     state.geneMenuOpen = false;
     state.geneActiveIndex = 0;
   }
+  if (act !== "coexpression-select" && act !== "coexpression-form") {
+    state.coexpressionPartnerQuery = state.coexpressionPartner;
+    state.coexpressionPartnerMenuOpen = false;
+    state.coexpressionPartnerActiveIndex = 0;
+  }
   if (act !== "metric-help") state.metricHelp = null;
   switch (act) {
     case "gene-select": {
@@ -959,7 +1397,18 @@ document.getElementById("app").addEventListener("click", (e) => {
       selectGene(option, state.geneQuery);
       break;
     }
-    case "tab": state.tab = v; break;
+    case "coexpression-select": {
+      const option = model.searchOptions.find((candidate) => candidate.gene === v);
+      if (!option || option.symbol === geneInfo(currentGene()).symbol) return;
+      selectCoexpressionPartner(option, state.coexpressionPartnerQuery);
+      break;
+    }
+    case "tab":
+      state.tab = v;
+      if (v === "coexpression") {
+        state.source = "hypomap";
+      }
+      break;
     case "metric-help": state.metricHelp = state.metricHelp === v ? null : v; break;
     case "source": state.source = v; state.region = v === "native" ? null : state.region; state.provOpen = false; break;
     case "prov": state.provOpen = !state.provOpen; break;
@@ -969,6 +1418,7 @@ document.getElementById("app").addEventListener("click", (e) => {
     case "res": state.resolution = v; break;
     case "agg": state.aggregation = v; break;
     case "node": { const ex = { ...state.expanded }; ex[v] ? delete ex[v] : ex[v] = true; state.expanded = ex; break; }
+    case "coexpression-quadrant": state.expandedCoexpressionQuadrant = state.expandedCoexpressionQuadrant === v ? null : v; break;
     default: return;
   }
   e.stopPropagation();
