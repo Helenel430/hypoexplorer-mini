@@ -9,6 +9,7 @@ Seurat LogNormalize matrices for magnitude metrics.
 from __future__ import annotations
 
 import argparse
+from itertools import combinations
 import json
 from pathlib import Path
 from typing import Iterable
@@ -20,7 +21,9 @@ from scipy.sparse import load_npz
 from gene_harmonization_lib import DATASETS, resolve_query
 
 
-DEFAULT_GENES = ["Pomc", "Agrp", "Ccn1", "Fam237b"]
+DEFAULT_GENES = ["Pomc", "Agrp", "Ccn1", "Fam237b", "Npy"]
+COEXPRESSION_GENES = DEFAULT_GENES
+QUADRANT_KEYS = ("both_positive", "gene_a_only", "gene_b_only", "neither")
 NO_REGION_LABEL = "No HypoMap region"
 NO_C25_LABEL = "Unannotated C25"
 MISSING_SAMPLE_LABEL = "Missing sample identity"
@@ -183,6 +186,242 @@ def find_gene_index(genes: pd.DataFrame, dataset_gene_id: str, dataset_gene_symb
     if len(symbol_matches) == 1:
         return int(symbol_matches[0])
     return None
+
+
+def resolve_gene_columns(
+    query: str,
+    *,
+    datasets: dict[str, dict],
+    harmonization_csv: Path,
+    mgi_source_dir: Path,
+    dataset_ids: list[str],
+) -> tuple[dict, dict[str, int]]:
+    """Resolve one gene and return its matrix column in every selected dataset."""
+    resolver = resolve_query(
+        query,
+        harmonization_csv=harmonization_csv,
+        mgi_source_dir=mgi_source_dir,
+        selected_datasets=dataset_ids,
+    )
+    if resolver["state"] != "resolved":
+        return resolver, {}
+
+    columns: dict[str, int] = {}
+    for mapping in resolver["dataset_mappings"]:
+        dataset_id = mapping["dataset_id"]
+        if mapping["state"] != "resolved":
+            continue
+        gene_idx = find_gene_index(
+            datasets[dataset_id]["genes"],
+            mapping["dataset_gene_id"],
+            mapping["dataset_gene_symbol"],
+        )
+        if gene_idx is not None:
+            columns[dataset_id] = gene_idx
+    return resolver, columns
+
+
+def compute_coexpression_metrics(
+    raw_a: np.ndarray,
+    raw_b: np.ndarray,
+    eligible: np.ndarray,
+) -> dict:
+    """Return the exhaustive four-way raw-count detection split for a population."""
+    eligible = eligible.astype(bool)
+    eligible_cells = int(eligible.sum())
+    a_positive = raw_a >= 1
+    b_positive = raw_b >= 1
+    counts = {
+        "both_positive": int((eligible & a_positive & b_positive).sum()),
+        "gene_a_only": int((eligible & a_positive & ~b_positive).sum()),
+        "gene_b_only": int((eligible & ~a_positive & b_positive).sum()),
+        "neither": int((eligible & ~a_positive & ~b_positive).sum()),
+    }
+    if sum(counts.values()) != eligible_cells:
+        raise ValueError("coexpression quadrants do not partition the eligible population")
+    percentages = {
+        key: (value / eligible_cells * 100) if eligible_cells else None
+        for key, value in counts.items()
+    }
+    return {
+        "eligible_cells": eligible_cells,
+        "quadrant_counts": counts,
+        "quadrant_percentages": percentages,
+    }
+
+
+def aggregate_coexpression_metrics(metrics_by_dataset: dict[str, dict]) -> dict:
+    """Cell-pooled coexpression summary computed from integer dataset counts."""
+    available = {
+        dataset_id: metric
+        for dataset_id, metric in metrics_by_dataset.items()
+        if metric.get("eligible_cells", 0) > 0
+    }
+    total = int(sum(metric["eligible_cells"] for metric in available.values()))
+    counts = {
+        key: int(sum(metric["quadrant_counts"][key] for metric in available.values()))
+        for key in QUADRANT_KEYS
+    }
+    if sum(counts.values()) != total:
+        raise ValueError("aggregated coexpression quadrants do not sum to the pooled denominator")
+    return {
+        "aggregation": "cell_pooled",
+        "datasets_available": list(available),
+        "datasets_unavailable_zero_eligible": [
+            dataset_id for dataset_id in metrics_by_dataset if dataset_id not in available
+        ],
+        "eligible_cells": total,
+        "quadrant_counts": counts,
+        "quadrant_percentages": {
+            key: (value / total * 100) if total else None for key, value in counts.items()
+        },
+    }
+
+
+def export_coexpression_pilot(
+    gene_a: str,
+    gene_b: str,
+    *,
+    datasets: dict[str, dict],
+    harmonization_csv: Path,
+    mgi_source_dir: Path,
+    dataset_ids: list[str],
+) -> dict:
+    """Export one selectable vertical-slice pair across annotated HypoMap regions."""
+    if gene_a == gene_b:
+        raise ValueError("coexpression genes must be distinct")
+    pilot_id = f"{gene_a.lower()}_{gene_b.lower()}_regions"
+    queries = [gene_a, gene_b]
+    resolved = {
+        query: resolve_gene_columns(
+            query,
+            datasets=datasets,
+            harmonization_csv=harmonization_csv,
+            mgi_source_dir=mgi_source_dir,
+            dataset_ids=dataset_ids,
+        )
+        for query in queries
+    }
+    unsupported = {
+        query: resolver["state"]
+        for query, (resolver, columns) in resolved.items()
+        if resolver["state"] != "resolved" or set(columns) != set(dataset_ids)
+    }
+    if unsupported:
+        return {
+            "id": pilot_id,
+            "gene_a": gene_a,
+            "gene_b": gene_b,
+            "state": "unsupported",
+            "unsupported_genes": unsupported,
+            "resolvers": {query: resolver for query, (resolver, _) in resolved.items()},
+            "populations": [],
+        }
+
+    region_labels = sorted(
+        {
+            str(region).strip()
+            for dataset_id in dataset_ids
+            for region in datasets[dataset_id]["cells"]["hypomap_region"]
+            if str(region).strip()
+        }
+    )
+    population_specs = [
+        {
+            "id": "whole_dataset",
+            "scope": "whole_dataset",
+            "region": None,
+            "label": "Whole hypothalamus cells",
+            "definition": "all imported cells in the selected hypothalamic datasets",
+        },
+        *[
+        {
+            "id": f"region::{region}",
+            "scope": "hypomap_region",
+            "region": region,
+            "label": f"{region} cells",
+            "definition": f'hypomap_region == "{region}"',
+        }
+        for region in region_labels
+        ],
+    ]
+    metrics_by_population = {spec["id"]: {} for spec in population_specs}
+    context_by_dataset: dict[str, dict] = {}
+
+    for dataset_id in dataset_ids:
+        data = datasets[dataset_id]
+        cells = data["cells"]
+        raw_columns = {
+            query: data["raw"][:, resolved[query][1][dataset_id]].toarray().ravel()
+            for query in queries
+        }
+        cell_regions = cells["hypomap_region"].astype(str).str.strip()
+        population_masks = {
+            spec["id"]: (
+                np.ones(len(cells), dtype=bool)
+                if spec["scope"] == "whole_dataset"
+                else cell_regions.eq(spec["region"]).to_numpy()
+            )
+            for spec in population_specs
+        }
+        context_by_dataset[dataset_id] = {
+            "total_imported_cells": int(len(cells)),
+            "cells_with_hypomap_region": int(cell_regions.ne("").sum()),
+            "cells_without_hypomap_region": int(cell_regions.eq("").sum()),
+            "region_cells": {
+                region: int(cell_regions.eq(region).sum()) for region in region_labels
+            },
+        }
+        for population_id, eligible in population_masks.items():
+            metric = compute_coexpression_metrics(
+                raw_columns[gene_a],
+                raw_columns[gene_b],
+                eligible,
+            )
+            swapped = compute_coexpression_metrics(
+                raw_columns[gene_b],
+                raw_columns[gene_a],
+                eligible,
+            )
+            if (
+                metric["quadrant_counts"]["both_positive"] != swapped["quadrant_counts"]["both_positive"]
+                or metric["quadrant_counts"]["gene_a_only"] != swapped["quadrant_counts"]["gene_b_only"]
+                or metric["quadrant_counts"]["gene_b_only"] != swapped["quadrant_counts"]["gene_a_only"]
+                or metric["quadrant_counts"]["neither"] != swapped["quadrant_counts"]["neither"]
+            ):
+                raise ValueError(f"{dataset_id} {population_id}: gene-swap symmetry failed")
+            metrics_by_population[population_id][dataset_id] = metric
+
+    populations = []
+    for spec in population_specs:
+        dataset_metrics = metrics_by_population[spec["id"]]
+        populations.append(
+            {
+                **spec,
+                "dataset_metrics": dataset_metrics,
+                "cross_dataset": aggregate_coexpression_metrics(dataset_metrics),
+            }
+        )
+
+    return {
+        "id": pilot_id,
+        "gene_a": gene_a,
+        "gene_b": gene_b,
+        "state": "resolved",
+        "gene_a_resolver": resolved[gene_a][0],
+        "gene_b_resolver": resolved[gene_b][0],
+        "metric_contract": {
+            "positivity": "raw_count >= 1",
+            "denominator": "all imported cells, or cells assigned to the selected HypoMap region",
+            "aggregation": "cell-pooled sums of integer per-dataset quadrant counts",
+            "quadrant_order": list(QUADRANT_KEYS),
+            "missing_region_handling": (
+                "cells with blank hypomap_region are included in whole-dataset metrics, excluded from region denominators, and reported"
+            ),
+        },
+        "context_by_dataset": context_by_dataset,
+        "populations": populations,
+    }
 
 
 def context_entries(
@@ -452,7 +691,7 @@ def main() -> None:
             annotation_coverage = json.load(fh)
 
     export = {
-        "generated_on": "2026-08-13",
+        "generated_on": "2026-09-18",
         "description": "Lightweight FVP vertical-slice gene metrics with MGI-backed alias resolution.",
         "metric_contract": {
             "positivity": "raw_count >= 1",
@@ -464,6 +703,8 @@ def main() -> None:
             "blank_region_label": NO_REGION_LABEL,
             "blank_c25_label": NO_C25_LABEL,
             "blank_sample_id_label": MISSING_SAMPLE_LABEL,
+            "coexpression_positivity": "raw_count(gene) >= 1",
+            "coexpression_aggregation": "cell-pooled quadrant counts",
         },
         "selected_datasets": args.datasets,
         "annotation_coverage": annotation_coverage,
@@ -478,6 +719,17 @@ def main() -> None:
                 bins=args.bins,
             )
             for gene in args.genes
+        ],
+        "coexpression_pilots": [
+            export_coexpression_pilot(
+                gene_a,
+                gene_b,
+                datasets=datasets,
+                harmonization_csv=args.harmonization_csv,
+                mgi_source_dir=args.mgi_source_dir,
+                dataset_ids=args.datasets,
+            )
+            for gene_a, gene_b in combinations(COEXPRESSION_GENES, 2)
         ],
     }
     args.out.write_text(json.dumps(export, indent=2) + "\n")
@@ -494,6 +746,17 @@ def main() -> None:
             f"dataset avg %={whole['percent_expressing']['mode_a_dataset_average']:.3f}; "
             f"detected={whole['dataset_detection_count']}/{whole['dataset_detection_total']}"
         )
+    for pilot in export["coexpression_pilots"]:
+        print(f"{pilot['id']}: {pilot['state']}")
+        for population in pilot.get("populations", []):
+            metric = population["cross_dataset"]
+            print(
+                f"  {population['label']}: n={metric['eligible_cells']}; "
+                + ", ".join(
+                    f"{key}={metric['quadrant_percentages'][key]:.3f}%"
+                    for key in QUADRANT_KEYS
+                )
+            )
 
 
 if __name__ == "__main__":

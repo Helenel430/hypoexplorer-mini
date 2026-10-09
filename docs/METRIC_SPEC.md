@@ -5,7 +5,7 @@ Explorer. Implementation code and UI "How it's calculated" explanations must
 derive from this document. Do not substitute alternate statistical definitions
 without updating this specification and getting explicit approval.
 
-Last updated: 2026-07-20
+Last updated: 2026-10-09
 
 ## Scope
 
@@ -17,6 +17,7 @@ This specification covers the First Viable Product Gene Explorer metrics for:
 - expression distribution
 - cross-dataset percent-expressing summaries
 - dataset detection
+- selectable-pair coexpression quadrants for the five-gene vertical slice
 
 The current target datasets are:
 
@@ -243,6 +244,18 @@ log_normalized_expression(cell, gene) =
 The scale factor is fixed at `10000`. The logarithm is the natural log via
 `log1p`, matching Seurat `LogNormalize`.
 
+The UI unit label for this value is:
+
+```text
+ln(1 + counts per 10k)
+```
+
+This is **not TPM, FPKM, or RPKM**. Seurat `LogNormalize` corrects for each
+cell's library size but does not divide by gene or transcript length. If a
+visual progress bar uses the largest observed positive-cell value as its
+reference, label that reference as a scale range such as `0–7.80`; do not show
+`mean / maximum`, because the maximum is not a statistical denominator.
+
 Formula:
 
 ```text
@@ -412,6 +425,107 @@ dataset_detects_gene =
 If a more biologically appropriate threshold is warranted, for example requiring
 a minimum number or fraction of expressing cells, document the proposed change
 and rationale here before implementing it.
+
+### Vertical-Slice Coexpression Pilot
+
+The first coexpression implementation supports any two distinct genes from the
+current vertical slice: `Pomc`, `Agrp`, `Ccn1`, `Fam237b`, and `Npy`. The static export
+contains all ten unordered pairs. This is not yet an arbitrary atlas-wide
+gene-pair search. In the UI, gene A is the currently browsed gene and gene B is
+selected through an alias-aware partner picker that excludes gene A. Both
+selected genes must resolve successfully in every selected dataset before
+metrics are computed. An unresolved gene is unsupported, never zero.
+
+Coexpression positivity uses the same raw-count rule as single-gene detection:
+
+```text
+A_positive(cell) = raw_count(cell, geneA) >= 1
+B_positive(cell) = raw_count(cell, geneB) >= 1
+```
+
+The denominator is every imported cell for Whole hypothalamus, or every cell
+assigned to the selected `hypomap_region` for a region context. It is not
+restricted to `geneA+`, `geneB+`, or the current single-gene search. This is
+required for all four quadrants to be meaningful.
+
+The region follows the Overview coronal-map selection and is retained when the
+user changes tabs. With no explicit selection, both By dataset and Coexpression
+use the Whole hypothalamus context. Coexpression displays one context card at a
+time. For example:
+
+```text
+Whole hypothalamus cells =
+  all imported cells in the selected hypothalamic datasets
+
+ARC cells =
+  cells where hypomap_region == "Arcuate hypothalamic nucleus"
+
+LHA cells =
+  cells where hypomap_region == "Lateral hypothalamic area"
+```
+
+For eligible population `S`, the four exhaustive counts are:
+
+```text
+Both+       = count(S where A_positive and B_positive)
+Gene A only = count(S where A_positive and not B_positive)
+Gene B only = count(S where not A_positive and B_positive)
+Neither     = count(S where not A_positive and not B_positive)
+
+N = Both+ + Gene A only + Gene B only + Neither
+%Quadrant = Quadrant count / N * 100
+```
+
+The pilot uses cell-pooled aggregation. Integer quadrant counts are exported per
+dataset; after applying the selected-dataset filter, corresponding counts are
+summed and percentages are recomputed from the pooled denominator. Rounded
+percentages must never be averaged. If no dataset is selected, or the pooled
+denominator is zero, all percentages are undefined.
+
+Region eligibility requires a populated matching `hypomap_region`. Cells with a
+blank region remain in the processed data and in the Whole hypothalamus
+denominator, but are excluded from named-region denominators and reported as
+lacking the annotation required for region calculations. Cells assigned to
+another named region are outside the selected context, not missing.
+
+Required invariants:
+
+- the four counts sum exactly to the eligible denominator;
+- unrounded percentages sum to 100% whenever `N > 0`;
+- swapping A and B preserves Both+/Neither and swaps the two single-positive
+  quadrants;
+- every whole-hypothalamus denominator exactly matches the dataset's imported
+  cell count;
+- every region denominator exactly matches the dataset's cells carrying that
+  `hypomap_region` value.
+
+### Navigation Top 5 quadrants (2026-10-09)
+
+The standalone navigation route supports measured quadrants for partners in the
+queried gene's exported Top 5. This whole-hypothalamus population is exactly the
+recommendation's dataset list, which includes every dataset uniquely mapping the
+query and requires a unique partner mapping in those same datasets. No regional,
+C7, or dataset-subset intersections are available from this pooled record.
+
+The existing intersection plus the partner shard's whole-dataset marginals gives:
+
+```text
+N = sum(eligible cells in recommendation datasets)
+A+ = recommendation queried_gene_positive
+B+ = sum(partner positive cells in those same datasets)
+Both = recommendation both_positive
+A only = A+ - Both
+B only = B+ - Both
+Neither = N - A+ - B+ + Both
+% quadrant = count / N * 100
+```
+
+Require nonnegative integer counts summing to N. Unsupported mappings or invalid
+counts must show unavailable quadrants. The UI displays exact counts and all-cell
+percentages in a 2×2 detection table. The conditional recommendation score uses
+Both / A+, a separate denominator. Loading a partner shard does not change the
+export; arbitrary pairs outside the Top 5 still need measured intersections from
+a backend or additional pair export.
 
 ## UI Explanation Source Text
 
@@ -969,6 +1083,8 @@ outputs for whole-dataset contexts:
 - expression distribution, using verified Seurat LogNormalize matrices
 - cross-dataset gene lookup for exact-symbol and alias-drift genes when the
   harmonization resolver returns `state = resolved`
+- any pair of distinct genes from `Pomc`, `Agrp`, `Ccn1`, `Fam237b`, and `Npy` for the
+  selected annotated HypoMap region, using cell-pooled per-dataset integer counts
 
 Stop and resolve the relevant blocker before implementing any unsupported
 metric.

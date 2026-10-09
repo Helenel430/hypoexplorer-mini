@@ -68,6 +68,111 @@ without a follow-up design pass.
 ## Implementation Status
 <!-- Owned by Claude Code -->
 
+**Navigation integration — checkpoints 1–5 complete (2026-10-09).** The standalone
+route resolves the exported all-gene index (case, aliases, explicit ambiguity), then
+loads and caches the selected gene's shard. Whole-hypothalamus counts, percentages,
+and positive-cell means pool supported datasets. Spatial shading uses exported
+regional positive-cell means for seven mapped nuclei; ME is unavailable because
+no separate exported region exists. Native mappings and blank-region counts are
+disclosed. By dataset uses exact counts, equal-weight means ± SEM, and accumulating
+point-selected detail cards. Missing/duplicate mappings are unsupported; zero
+positives have undefined expression means. The Top 5 panel now loads measured whole-hypothalamus conditional co-detection:
+percentage, exact both/query-positive counts, and contributing datasets. Partner
+identity comes from the initial index. Recommendation clicks and alias/ambiguity-aware
+secondary search show measured Top 5 pair summaries; other pair scores remain
+unavailable pending an on-demand backend. Scores are directional and do not adjust
+for background expression. Short/empty lists, retry, and stale-response guards are
+implemented. The four-tab FVP
+app is unchanged. Vite serves the root export and copies it into builds.
+
+Checkpoint-2 automated checks cover shard caching, Pomc exported counts and pooled/
+ARC values, alias navigation, missing/duplicate mappings, zero/empty contexts, and
+the actual page/detail renderer. Production build passes. A user-requested progress
+validation and demo (2026-10-09) additionally verified all 158 export payloads,
+39,583 gene/recommendation records, and 255 five-pilot dataset/context blocks against
+the existing FVP reference. Browser checks passed for Pomc metrics and recommendations,
+mouse/keyboard accumulating dataset cards, formula popover, alias deep link,
+ambiguity selection, and a real zero-detection gene. No browser warnings/errors.
+The preview is running at `http://127.0.0.1:5173/navigation-prototype.html?gene=Pomc`;
+report: `docs/NAVIGATION_VALIDATION.md`, screenshots: `tmp/navigation-validation/`.
+The early progress validation was followed by final checkpoint-5 checks after
+checkpoint 4, as recorded below. Checkpoint-4 state presentation is now complete: initial index,
+gene-shard, and recommendation loading with busy announcements; preserved queries;
+recoverable index/shard errors with Retry; distinct missing-gene and zero-expression
+states; unsupported dataset notices; undefined mean explanations in gene/dataset
+views; readable zero-region labels. Controlled tests pass for index and shard
+failure/retry, loading state, and stale responses after missing queries. Browser
+checks confirm missing-query recovery and Platr11 zero detection in both views.
+Checkpoint-3 checks cover Pomc/Agrp recommendation counts and scores, identity
+lookup without partner shards, shared payload caching, secondary resolution,
+unavailable pairs, retry, stale responses, and short/empty lists. Build passes.
+Checkpoint 5 is complete (2026-10-09): reproducible final audit checks all five
+pilot genes in 255 metric blocks and all 25 Top 5 quadrant reconstructions; all 158
+production payloads match root-export bytes. Browser-displayed counts/percentages/
+means for all five genes and both aliases pass. Integration tests and production
+build pass; no browser warnings/errors. The local production preview is open on
+Pomc × Malat1 at the URL above. Results: `docs/navigation_validation_results.json`;
+report: `docs/NAVIGATION_VALIDATION.md`; screenshot: `tmp/navigation-validation/final-preview.jpg`.
+The five requested checkpoints are complete. Measured C7 pair values and arbitrary
+pair intersections outside Top 5 remain separate data-layer tasks.
+Integration instructions are updated in the app README, visualizer README,
+navigation-export README, and navigation prototype spec.
+
+**Navigation quadrant restoration (2026-10-09).** At the user's request, selecting
+a Top 5 partner now loads its cached shard and derives the four whole-hypothalamus
+quadrants from the exported both-positive count and same-dataset marginals. Counts
+and percentages of all eligible cells appear in a 2×2 table under the conditional
+summary. Export size is unchanged. Arbitrary pairs outside Top 5 remain unavailable.
+Tests pass for exact counts/sums, restricted dataset scope, invalid input rejection,
+partner loading/retry, and stale selections. Build and Pomc × Malat1 browser demo
+pass with no warnings/errors. Screenshot: `tmp/navigation-validation/pomc-quadrants.jpg`.
+Final checkpoint-5 validation is complete, as recorded above.
+
+**Coexpression prototype formatting (2026-10-09).** At the user's request, the
+navigation comparison now follows the earlier Coexpression view: population
+selector, count-centered donut, four-row legend, blue clickable quadrant matrix,
+and C7 expansion under Whole hypothalamus and each quadrant. C7 eligible populations
+are measured over the same pair datasets; Unannotated C7 is retained. The earlier
+view's C7 pair profiles and splits were illustrative. Current C7 pair values remain
+explicitly unavailable; no whole-population counts are relabeled as C7. Tests/build
+pass for population totals, unannotated retention, expansion, unavailable profile,
+and state resets. Measured C7 pair data is still a separate outstanding task.
+
+**Coexpression simplification (2026-10-09).** Following user feedback, consolidated
+Top 5, pair summary, and quadrants into one card. Top 5 buttons show gene + score,
+with exact counts in accessible labels/tooltips. Recommendation selection opens the
+comparison directly. Formula, scope, and dataset detail moved to existing dismissible
+`?` popovers. One population selector replaces duplicated C7 navigation; unavailable
+C7 profiles use one message, and quadrant expansion shows one concise C7 availability
+note. Whole-population counts are unchanged. Updated interaction tests, build, final
+255-block/25-pair audit, and browser checks pass. Screenshot:
+`tmp/navigation-validation/coexpression-simplified.jpg`.
+
+**UniProt descriptions restored (2026-10-09).** At the user's request, restored
+the previous About this gene / Protein function block beneath the navigation gene
+heading, with curated summaries and direct UniProtKB links for Pomc, Agrp, Ccn1,
+Fam237b, and Npy. Extracted existing descriptions unchanged into the shared app
+`gene-descriptions.mjs`, used by the FVP and standalone route; Vite copies the module
+into the build. No description is inferred for other genes. Existing tests, build,
+and final audit pass. Browser checks verify Pomc and alias Cyr61 → Ccn1 descriptions
+and accession links; no errors/warnings. Screenshot:
+`tmp/navigation-validation/uniprot-description.jpg`.
+
+**All-gene navigation export (2026-10-08).** New standalone exporter
+`tools/export_navigation_metrics.py` generates lazy-loadable whole-dataset and
+regional summaries for 39,583 canonical genes in `navigation_export/`, without
+C25, histograms, or all-pair tables. Dataset mappings preserve missing and duplicate
+states. `tools/export_navigation_recommendations.py` adds Top 5 whole-hypothalamus
+recommendations ranked by raw-count co-detection among query-positive cells,
+as authorized by the user. C7 eligible-cell metadata is included; measured arbitrary
+C7 pair comparisons still require an on-demand backend. Schema, loading rules,
+validation, and reproducibility are documented in `navigation_export/README.md`.
+The export is now wired to the standalone navigation route; the existing FVP
+uses its separate five-gene data file.
+Measured compressed JSON payload: **14.23 MB**, below the 30–50 MB planning
+budget. All 158 gzip files and 39,583 recommendation records validate; 250
+reference expression blocks and exhaustive five-pilot recommendation rankings pass.
+
 **Metadata curation — done.**
 - ✅ Per-study display card `HypoMap_study_display_card.csv`, validated against the paper's
   Supplementary Table 1 (cell counts sum to 384,925).
@@ -225,15 +330,16 @@ without a follow-up design pass.
   Romanov-only lookup surface and temporary four-tab shell with the frozen
   `ARC_Gene_Explorer.html` handoff, backed by
   `public/data/gene_metrics_vertical_slice.json`. Implemented gene lookup for `Pomc`, `Agrp`,
-  and `Ccn1`/`Cyr61`, defaulting to Dowsett10xnuc / `GSE207736` only. Additional target datasets
-  (`GSE172461`, `GSE93374`) remain selectable for multi-dataset analysis, and dataset-average vs
+  and `Ccn1`/`Cyr61`. At that milestone, the app defaulted to Dowsett10xnuc / `GSE207736` only;
+  the current all-three-dataset default is documented below. Additional target datasets
+  (`GSE172461`, `GSE93374`) were selectable for multi-dataset analysis, and dataset-average vs
   cell-pooled aggregation controls are revealed only when more than one dataset is selected.
   Whole/ARC/PVN/VMH/DMH context switching and the five-view shell were implemented from the
   handoff. Extended `tools/export_fvp_metrics.py` to
   include `hypomap_C25` groups within each `hypomap_region`, so the Cell Identity tab uses
-  region-scoped values when ARC/PVN/VMH/DMH is selected. Context/coexpression is intentionally a
-  metric-definition-needed state; no quadrant values are computed or substituted until the
-  canonical coexpression denominator/formulas are specified.
+  region-scoped values when ARC/PVN/VMH/DMH is selected. At this milestone, Context/coexpression
+  intentionally remained a metric-definition-needed state; that blocker was subsequently resolved
+  by the region-linked pilot documented below.
 - ✅ **Dynamic gene autocomplete added to `gene-explorer-js` (2026-08-10).** The header search
   now filters the genes present in the loaded metric export as the user types, exposes canonical
   names and dataset aliases in a dropdown, supports mouse and arrow-key/Enter selection, and
@@ -253,17 +359,67 @@ without a follow-up design pass.
   mean bar with ±SEM error bars and overlaid dataset points. Points preserve the shared dataset
   colour identity and reveal the dataset name plus exact `%Expressing` value on hover. The y-axis
   uses a padded, rounded upper bound derived from the largest point or error-bar cap.
+- ✅ **By dataset plot width tightened (2026-09-17).** The single-bar summary chart is now
+  centered at a compact 620px maximum width instead of stretching across the full three-card row;
+  the per-dataset detail cards remain full width below it. The mean/SEM readout is emphasized and
+  the x-axis is explicitly labelled as the selected datasets.
+- ✅ **Mean-expression unit and By dataset comparison audited (2026-09-20).** Confirmed from
+  raw matrices, verified derived layers, export code, and all 15 whole-dataset gene×dataset
+  blocks that mean expression is Seurat LogNormalize among raw-count-positive cells:
+  `ln(1 + counts / cell library size × 10,000)`, not TPM (no transcript-length correction).
+  The UI now labels this as `ln(1 + counts per 10k)`, presents the Aggregate progress scale as
+  `0–max` instead of the misleading `value / max`, and places side-by-side `% expressing` and
+  mean-expression mean±SEM plots in By dataset. Dataset dots share one x-position so comparisons
+  read vertically. Zero-eligible datasets and undefined positive-cell means are excluded from the
+  relevant plot summary rather than silently contributing zero.
+- ✅ **Aggregate summary consolidated into Overview (2026-10-01).** Moved the pooled positive /
+  negative donut, dataset-average versus cell-pooled selector, metric formula popovers,
+  mean-expression scale, and detection chip into Overview beside the anatomy map. Removed the
+  duplicate Aggregate navigation tab; the app now has four tabs.
+- ✅ **Region-linked coexpression pilot implemented (2026-09-10).** Defined the canonical
+  four-quadrant contract in `docs/METRIC_SPEC.md` and extended `tools/export_fvp_metrics.py` to
+  export all six pairs among `Pomc`, `Agrp`, `Ccn1`, and `Fam237b`, with exact per-dataset counts
+  for every nonblank HypoMap region. Replaced the Context placeholder with a
+  Coexpression tab that fixes the browsed gene as gene A and provides an alias-aware autocomplete
+  for selecting a different vertical-slice partner, alongside one live
+  donut/legend/quadrant-matrix card in the shared blue theme. The card uses the full content width,
+  with the matrix beside the donut and legend. Its region follows the remembered
+  Overview-map selection and defaults to Whole hypothalamus when no region is selected, matching
+  the By dataset tab. All datasets are selected by default; subsequent selections
+  are applied by summing integer counts and recomputing cell-pooled percentages. Blank
+  `hypomap_region` cells remain in Whole hypothalamus and are excluded only from named-region
+  denominators. Session-close validation covers all six pairs × 16 contexts × three datasets plus
+  pooled results: 384 structural/arithmetic metric blocks pass, all four unit tests pass, the app
+  and export JSON copies are byte-identical, and the Vite production build succeeds.
 - ✅ **Fam237b vertical slice added (2026-08-13).** Expanded the static metric export and
   `gene-explorer-js` lookup from three to four canonical genes. `Fam237b` resolves through
   MGI:3646213 to the native `Gm8773` feature in GSE207736, GSE172461, and GSE93374; both symbols
   are searchable and lead to the same record. Whole-dataset detection is 3/3 datasets (1,224 /
   102,195 pooled expressing cells, 1.198%).
+- ✅ **Npy vertical slice added (2026-09-18).** Expanded the static metric export and
+  `gene-explorer-js` lookup from four to five canonical genes. `Npy` resolves directly to the
+  native `Npy` feature in GSE207736, GSE172461, and GSE93374 and participates in all ten
+  selectable coexpression pairs. Whole-dataset detection is 3/3 datasets (14,521 / 102,195
+  pooled expressing cells, 14.209%).
 - ✅ **Gene-specific anatomy schematic added (2026-08-13).** The Overview coronal map now uses
   raw-count-positive cell number for region colour intensity and prints the same positive-cell
   counts inside each mapped region. Values react to the active gene and selected datasets; a
   linear gene-specific scale runs from zero to the largest positive-cell count among the mapped
   regions. Off-plane regions show both positive count and percentage on the same clamped scale.
   The legend explicitly states that raw detections use ≥1 count and are not ambient-RNA corrected.
+- ✅ **Blue visual system applied (2026-09-15).** Replaced the prior red/coral accents throughout
+  `gene-explorer-js` with a coherent blue hierarchy covering primary controls, active states,
+  anatomy intensity, dataset identities, Aggregate charts, and Coexpression quadrants. Neutral and
+  warning colours remain semantically distinct.
+- ✅ **Standalone gene-navigation prototype documented and iterated (2026-10-08).** Added
+  `hypomap-viz/gene-explorer-js/public/navigation-prototype.html`, a self-contained, hardcoded
+  review route with a gene-search landing page, gene-specific co-expression recommendations,
+  the original coronal spatial schematic, whole-hypothalamus expressing-cell donut and mean
+  expression, formula `?` popovers, and a By dataset view. The dataset view has paired
+  `% expressing` and mean-expression charts with stacked, color-coded points; selecting points
+  accumulates dataset detail cards in selection order, with a compact yellow selected-point halo.
+  Details and formulas are in `docs/NAVIGATION_PROTOTYPE_SPEC.md`. This route does not replace or
+  change navigation in the data-backed FVP app.
 
 **hypomap-viz app — in progress.** Interactive explorer for the **Romanov_10x** dataset (GEO
 GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hypomap-viz/`
@@ -278,14 +434,30 @@ GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hy
 - **`gene-explorer-js/`** — JS/Vite static Gene Explorer for the current FVP vertical slice.
   Plain HTML/CSS/JS, no framework; reads
   `public/data/gene_metrics_vertical_slice.json`. Current scope: `Pomc`, `Agrp`,
-  `Ccn1`/`Cyr61`, and `Fam237b`/`Gm8773`, defaulting to Dowsett10xnuc while allowing the three
-  target datasets to be selected. The five-tab app is wired to real metric exports where
-  supported: Overview, Aggregate, By dataset, and `hypomap_C25` Cell Identity values.
-  Context/coexpression and non-C25 cell-identity hierarchy levels remain blocked on metric/export
-  definitions rather than filled with modeled values.
+  `Ccn1`/`Cyr61`, `Fam237b`/`Gm8773`, and `Npy`, defaulting to all three target datasets selected. The
+  four-tab app is wired to real metric exports where
+  supported: Overview (including the former Aggregate summary), By dataset, `hypomap_C25` Cell Identity values, and flexible
+  region-linked Coexpression for any pair of the five exported genes, with the browsed gene fixed,
+  the second gene chosen through an alias-aware partner search, and the Overview-map region carried
+  across tabs. Atlas-wide arbitrary gene pairs and
+  non-C25 cell-identity hierarchy levels remain outside the current vertical slice rather than
+  being filled with modeled values.
 
 ## Files Modified
 <!-- Owned by Claude Code -->
+- **Documentation and GitHub handoff (2026-10-09):** refreshed READMEs, current
+  navigation/metric specifications, and validation report for the compact
+  coexpression layout, shared UniProt descriptions, and generated-export build
+  prerequisite. Validation screenshots are preserved in `docs/navigation-demos/`.
+  Source changes and the supporting five-gene FVP reference are prepared for the
+  configured root GitHub repository; generated navigation payloads stay local.
+
+- **Navigation checkpoints 1–5 and subsequent refinements:** `hypomap-viz/gene-explorer-js/public/navigation-prototype.html`,
+  `public/navigation-export-client.mjs`, `public/navigation-metrics.mjs`,
+  `vite.config.js`, `tests/navigation.test.mjs`, and `tests/navigation-audit.mjs`
+  (paths relative to the app).
+  Loader precedence fix also lives in `tools/navigation_export_client.mjs` and the
+  generated `navigation_export/load.mjs`. Integration Markdown is updated above.
 Deliverables authored / maintained by the Code track (source-controlled; regenerated outputs
 excluded):
 
@@ -315,15 +487,27 @@ excluded):
   rules for metric/UI code.
 - **FVP static metric export tool (tracked source tool)** — `tools/export_fvp_metrics.py`.
   Generates `fvp_export/gene_metrics_vertical_slice.json` for the lightweight
-  `Pomc`/`Agrp`/`Ccn1`/`Fam237b` vertical slice using raw counts, verified LogNormalize matrices, MGI
-  resolver mappings, annotation coverage buckets, and region-scoped `hypomap_C25` groups.
+  `Pomc`/`Agrp`/`Ccn1`/`Fam237b`/`Npy` vertical slice using raw counts, verified LogNormalize matrices, MGI
+  resolver mappings, annotation coverage buckets, region-scoped `hypomap_C25` groups, and the
+  complete set of ten selectable coexpression pairs among the five vertical-slice genes, each
+  exported across Whole hypothalamus and every nonblank HypoMap region (16 contexts).
+- **Coexpression validation (tracked source tools)** — `tests/test_coexpression_metrics.py` and
+  `tools/validate_coexpression_export.py`. Unit-check quadrant math, pooling, swap symmetry, and
+  undefined zero-denominator behavior; validate all real exported dataset and pooled blocks.
 - **FVP static app data (generated, tracked if app deployment needs it)** —
   `hypomap-viz/gene-explorer-js/public/data/gene_metrics_vertical_slice.json`, copied from
   `fvp_export/gene_metrics_vertical_slice.json` after regeneration.
 - **FVP static app UI** — `hypomap-viz/gene-explorer-js/src/main.js` and `src/style.css`, including
   dynamic gene autocomplete sourced from the loaded metric export, canonical/alias labels,
-  keyboard selection behavior, and the gene-specific anatomy schematic (raw-count-positive cell
-  colour and labels, with an explicit ambient-RNA caveat).
+  keyboard selection behavior, the gene-specific anatomy schematic (raw-count-positive cell
+  colour and labels in the current blue visual system, with an explicit ambient-RNA caveat),
+  all-dataset fresh-session defaults, and
+  the region-linked single-card coexpression view with fixed browsed gene, partner autocomplete,
+  and a horizontal donut/legend/quadrant layout.
+- **Standalone navigation review prototype** —
+  `hypomap-viz/gene-explorer-js/public/navigation-prototype.html`; HTML/CSS with ES modules loading the exported index and expression/recommendation
+  payloads; curated descriptions are shared through `gene-descriptions.mjs`. Behavior and visual guidance are documented in
+  `docs/NAVIGATION_PROTOTYPE_SPEC.md`.
 - **ARC Gene Explorer handoff (Design source copied into app workspace)** —
   `hypomap-viz/gene-explorer-js/handoff/ARC_Gene_Explorer.html` and
   `hypomap-viz/gene-explorer-js/handoff/RECREATE.md`, extracted from
@@ -338,14 +522,28 @@ excluded):
   `HypoMap_rawdata_classification.csv`, `HypoMap_cellcount_vs_original.csv`, SOFT dumps).
 - **Generated importer output** — `processed/GSE207736|GSE172461|GSE93374/` (gitignored,
   regenerable).
-- **Visualizer** — `hypomap-viz/` (separate git repo): `shinyApp/`, `gene-explorer/`,
+- **Visualizer** — `hypomap-viz/` (tracked in the current root repository): `shinyApp/`, `gene-explorer/`,
   `gene-explorer-js/`, `prepare_app.R`, `compute_gene_stats.R`.
 - **Data/status docs** — `DATASET_SUMMARIES.md`, `EXTERNAL_ANNOTATION_STRATEGY.md`, and the
   Code-owned half of this file.
 
 ## Known Bugs
 <!-- Owned by Claude Code -->
-No open correctness bugs. Behavioral watch-outs and constraints to respect:
+- **Build prerequisite:** generated `navigation_export/` payloads are excluded from Git.
+  A fresh clone/hosted build must regenerate or receive the validated export before
+  building. The current root checkout uses `Helenel430/hypoexplorer-mini`; older
+  nested-repository instructions do not describe this checkout.
+
+No open correctness bugs in the current `gene-explorer-js` FVP. Behavioral watch-outs and
+constraints to respect:
+
+- **Legacy Romanov R/Shiny gene explorer:** `compute_gene_stats.R` reads the Seurat `RNA` assay
+  `data` layer and labels it log-normalized, but does not persist that source object's
+  normalization method/scale factor. It also stores mean expression as `0` for genes with no
+  expressing cells, whereas the current metric contract requires an undefined/not-detected
+  state. This does not affect `gene-explorer-js`, which uses independently verified
+  LogNormalize layers; regenerate the legacy `gene_stats.rds` with explicit provenance and
+  missing-value handling before treating that older app as quantitatively interchangeable.
 
 - The raw GEO downloads (~820 MB) and `processed/` (~600 MB) are **gitignored** — regenerable,
   do not commit. Keep raw inputs locally to re-run the importer.
@@ -376,13 +574,17 @@ No open correctness bugs. Behavioral watch-outs and constraints to respect:
 
 ## Next Development Task
 <!-- Owned by Claude Code -->
+The standalone navigation integration's five checkpoints are complete. Its remaining
+data extension is measured C7 pair profiles/compositions (and arbitrary-pair counts),
+which needs a separate measured pair data layer. Do not substitute population totals
+for quadrant composition.
+
 Primary next tasks (pick per Design's priority order above):
 
-1. Define canonical coexpression formulas/denominators before exporting or wiring quadrant values.
-2. Decide whether PVN/VMH/DMH should remain compact header options only or expose the full
+1. Decide whether PVN/VMH/DMH should remain compact header options only or expose the full
    available `hypomap_region` list in a future design pass.
-3. Batch-run the importer across the remaining 15 datasets.
-4. **UI export** — convert the display card (and optionally per-sample CSVs) to whatever the
+2. Batch-run the importer across the remaining 15 datasets.
+3. **UI export** — convert the display card (and optionally per-sample CSVs) to whatever the
    exploration tool consumes (likely JSON). Do this last, after the data is locked.
 
 Optional / on-request only:

@@ -1,0 +1,343 @@
+{
+  "date": "2026-10-09",
+  "status": "passed",
+  "expression_blocks_checked": 255,
+  "recommendation_pairs_checked": 25,
+  "aliases_checked": [
+    {
+      "alias": "Cyr61",
+      "symbol": "Ccn1"
+    },
+    {
+      "alias": "Gm8773",
+      "symbol": "Fam237b"
+    },
+    {
+      "alias": "pOmC",
+      "symbol": "Pomc"
+    }
+  ],
+  "genes": [
+    {
+      "symbol": "Pomc",
+      "positive": 16803,
+      "eligible": 102195,
+      "percent": 16.442095992954645,
+      "mean": 1.4740355516765216,
+      "partners": [
+        {
+          "symbol": "Malat1",
+          "both_positive": 16781,
+          "conditional_percent": 99.86907099922632,
+          "quadrants": {
+            "both": 16781,
+            "queryOnly": 22,
+            "partnerOnly": 85198,
+            "neither": 194
+          }
+        },
+        {
+          "symbol": "Meg3",
+          "both_positive": 15946,
+          "conditional_percent": 94.8997202880438,
+          "quadrants": {
+            "both": 15946,
+            "queryOnly": 857,
+            "partnerOnly": 78471,
+            "neither": 6921
+          }
+        },
+        {
+          "symbol": "Snhg11",
+          "both_positive": 15762,
+          "conditional_percent": 93.80467773611855,
+          "quadrants": {
+            "both": 15762,
+            "queryOnly": 1041,
+            "partnerOnly": 76493,
+            "neither": 8899
+          }
+        },
+        {
+          "symbol": "Gnas",
+          "both_positive": 15700,
+          "conditional_percent": 93.43569600666548,
+          "quadrants": {
+            "both": 15700,
+            "queryOnly": 1103,
+            "partnerOnly": 75082,
+            "neither": 10310
+          }
+        },
+        {
+          "symbol": "Rbm39",
+          "both_positive": 15502,
+          "conditional_percent": 92.25733499970244,
+          "quadrants": {
+            "both": 15502,
+            "queryOnly": 1301,
+            "partnerOnly": 77257,
+            "neither": 8135
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "Agrp",
+      "positive": 29471,
+      "eligible": 102195,
+      "percent": 28.838005773276578,
+      "mean": 1.367688325541586,
+      "partners": [
+        {
+          "symbol": "Malat1",
+          "both_positive": 29451,
+          "conditional_percent": 99.93213667673307,
+          "quadrants": {
+            "both": 29451,
+            "queryOnly": 20,
+            "partnerOnly": 72528,
+            "neither": 196
+          }
+        },
+        {
+          "symbol": "Meg3",
+          "both_positive": 28628,
+          "conditional_percent": 97.13956092429846,
+          "quadrants": {
+            "both": 28628,
+            "queryOnly": 843,
+            "partnerOnly": 65789,
+            "neither": 6935
+          }
+        },
+        {
+          "symbol": "Snhg11",
+          "both_positive": 28567,
+          "conditional_percent": 96.9325777883343,
+          "quadrants": {
+            "both": 28567,
+            "queryOnly": 904,
+            "partnerOnly": 63688,
+            "neither": 9036
+          }
+        },
+        {
+          "symbol": "Rbm39",
+          "both_positive": 28319,
+          "conditional_percent": 96.09107257982423,
+          "quadrants": {
+            "both": 28319,
+            "queryOnly": 1152,
+            "partnerOnly": 64440,
+            "neither": 8284
+          }
+        },
+        {
+          "symbol": "Lsamp",
+          "both_positive": 28218,
+          "conditional_percent": 95.74836279732618,
+          "quadrants": {
+            "both": 28218,
+            "queryOnly": 1253,
+            "partnerOnly": 62552,
+            "neither": 10172
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "Ccn1",
+      "positive": 4570,
+      "eligible": 102195,
+      "percent": 4.471843045158765,
+      "mean": 2.3943593072030422,
+      "partners": [
+        {
+          "symbol": "Malat1",
+          "both_positive": 4568,
+          "conditional_percent": 99.9562363238512,
+          "quadrants": {
+            "both": 4568,
+            "queryOnly": 2,
+            "partnerOnly": 97411,
+            "neither": 214
+          }
+        },
+        {
+          "symbol": "Cst3",
+          "both_positive": 4452,
+          "conditional_percent": 97.417943107221,
+          "quadrants": {
+            "both": 4452,
+            "queryOnly": 118,
+            "partnerOnly": 72367,
+            "neither": 25258
+          }
+        },
+        {
+          "symbol": "Itm2b",
+          "both_positive": 4334,
+          "conditional_percent": 94.83588621444201,
+          "quadrants": {
+            "both": 4334,
+            "queryOnly": 236,
+            "partnerOnly": 71431,
+            "neither": 26194
+          }
+        },
+        {
+          "symbol": "Fth1",
+          "both_positive": 4311,
+          "conditional_percent": 94.33260393873086,
+          "quadrants": {
+            "both": 4311,
+            "queryOnly": 259,
+            "partnerOnly": 61973,
+            "neither": 35652
+          }
+        },
+        {
+          "symbol": "Hsp90ab1",
+          "both_positive": 4294,
+          "conditional_percent": 93.96061269146608,
+          "quadrants": {
+            "both": 4294,
+            "queryOnly": 276,
+            "partnerOnly": 65106,
+            "neither": 32519
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "Fam237b",
+      "positive": 1224,
+      "eligible": 102195,
+      "percent": 1.197710259797446,
+      "mean": 1.223991720346746,
+      "partners": [
+        {
+          "symbol": "Malat1",
+          "both_positive": 1222,
+          "conditional_percent": 99.83660130718954,
+          "quadrants": {
+            "both": 1222,
+            "queryOnly": 2,
+            "partnerOnly": 100757,
+            "neither": 214
+          }
+        },
+        {
+          "symbol": "Ttc3",
+          "both_positive": 1199,
+          "conditional_percent": 97.95751633986929,
+          "quadrants": {
+            "both": 1199,
+            "queryOnly": 25,
+            "partnerOnly": 87378,
+            "neither": 13593
+          }
+        },
+        {
+          "symbol": "Snhg11",
+          "both_positive": 1197,
+          "conditional_percent": 97.79411764705883,
+          "quadrants": {
+            "both": 1197,
+            "queryOnly": 27,
+            "partnerOnly": 91058,
+            "neither": 9913
+          }
+        },
+        {
+          "symbol": "Ahi1",
+          "both_positive": 1194,
+          "conditional_percent": 97.54901960784314,
+          "quadrants": {
+            "both": 1194,
+            "queryOnly": 30,
+            "partnerOnly": 87473,
+            "neither": 13498
+          }
+        },
+        {
+          "symbol": "Gnas",
+          "both_positive": 1193,
+          "conditional_percent": 97.4673202614379,
+          "quadrants": {
+            "both": 1193,
+            "queryOnly": 31,
+            "partnerOnly": 89589,
+            "neither": 11382
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "Npy",
+      "positive": 14521,
+      "eligible": 102195,
+      "percent": 14.209110034737511,
+      "mean": 1.9496547541355398,
+      "partners": [
+        {
+          "symbol": "Malat1",
+          "both_positive": 14492,
+          "conditional_percent": 99.80028923627849,
+          "quadrants": {
+            "both": 14492,
+            "queryOnly": 29,
+            "partnerOnly": 87487,
+            "neither": 187
+          }
+        },
+        {
+          "symbol": "Gnas",
+          "both_positive": 13827,
+          "conditional_percent": 95.22071482680256,
+          "quadrants": {
+            "both": 13827,
+            "queryOnly": 694,
+            "partnerOnly": 76955,
+            "neither": 10719
+          }
+        },
+        {
+          "symbol": "Meg3",
+          "both_positive": 13673,
+          "conditional_percent": 94.16018180566077,
+          "quadrants": {
+            "both": 13673,
+            "queryOnly": 848,
+            "partnerOnly": 80744,
+            "neither": 6930
+          }
+        },
+        {
+          "symbol": "Ttc3",
+          "both_positive": 13457,
+          "conditional_percent": 92.6726809448385,
+          "quadrants": {
+            "both": 13457,
+            "queryOnly": 1064,
+            "partnerOnly": 75120,
+            "neither": 12554
+          }
+        },
+        {
+          "symbol": "Ahi1",
+          "both_positive": 13255,
+          "conditional_percent": 91.28159217684733,
+          "quadrants": {
+            "both": 13255,
+            "queryOnly": 1266,
+            "partnerOnly": 75412,
+            "neither": 12262
+          }
+        }
+      ]
+    }
+  ],
+  "production_payloads_checked": 158
+}

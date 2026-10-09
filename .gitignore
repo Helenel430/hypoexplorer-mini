@@ -17,3 +17,9 @@ GSE207736_RAW/
 
 # Generated importer output — regenerate with:  python -m importer <dataset_id>
 processed/
+
+# Generated all-gene navigation export and local review scratch files
+/navigation_export/*
+!/navigation_export/README.md
+/navigation_export.zip
+/tmp/

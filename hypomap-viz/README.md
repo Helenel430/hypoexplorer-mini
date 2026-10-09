@@ -104,3 +104,12 @@ hypomap-viz/
 
 > See [`gene-explorer-js/README.md`](gene-explorer-js/README.md) for the JS app's dev/build/
 > deploy steps. It targets a future four-tab design — see the repo-root `DESIGN_SPEC.md`.
+
+The standalone gene-navigation route is served at
+[`gene-explorer-js/public/navigation-prototype.html`](gene-explorer-js/public/navigation-prototype.html).
+Search, expression, and measured Top 5 conditional co-detection scores now use the
+root all-gene `navigation_export/`. Loading, missing-gene, and zero-expression states
+and final five-gene/count/browser validation are complete (checkpoint 5).
+See [`docs/NAVIGATION_VALIDATION.md`](../docs/NAVIGATION_VALIDATION.md) for results. Vite serves the root
+export locally and copies it into production builds. Its layout and interactions are documented in the root
+[`docs/NAVIGATION_PROTOTYPE_SPEC.md`](../docs/NAVIGATION_PROTOTYPE_SPEC.md).

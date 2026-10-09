@@ -16,7 +16,9 @@ Working repository for two related tracks of the HypoMap project:
 | [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) | Why this project exists, the two work tracks, authoritative sources, and the hard rules. Stable background. |
 | [DATASET_SUMMARIES.md](DATASET_SUMMARIES.md) | All 18 HypoMap datasets: accession, technology, region, cell counts, format quirks, and import status. |
 | [DESIGN_SPEC.md](DESIGN_SPEC.md) | Canonical UI/UX spec for the HypoMap visualizer (owned by Claude Design). |
+| [docs/NAVIGATION_PROTOTYPE_SPEC.md](docs/NAVIGATION_PROTOTYPE_SPEC.md) | Current standalone gene-search, gene-page, co-expression card, and By dataset prototype layout and interactions. |
 | [CURRENT_STATE.md](CURRENT_STATE.md) | Live status — what's done, what's pending, known issues. Split into Design-owned and Code-owned sections. Updated as work proceeds. |
+| [docs/NAVIGATION_VALIDATION.md](docs/NAVIGATION_VALIDATION.md) | Final five-checkpoint gene-navigation validation results, limitations, and local preview. |
 | [docs/SHARED_SCHEMA.md](docs/SHARED_SCHEMA.md) | Canonical processed-data schema: exact dataset/sample/cell/gene/matrix metadata columns and missing-annotation rules. |
 | [docs/METRIC_SPEC.md](docs/METRIC_SPEC.md) | Canonical quantitative definitions for Gene Explorer metrics. |
 | [docs/GSE172461_SAMPLE_ID_REPAIR.md](docs/GSE172461_SAMPLE_ID_REPAIR.md) | Provenance and validation record for repairing GSE172461 blank `sample_id` / inherited `condition` values from Cell Ranger aggregate suffixes. |
@@ -62,7 +64,7 @@ Claude/
 ├── fvp_export/                      ← GENERATED static Gene Explorer metric export
 │   └── gene_metrics_vertical_slice.json
 │
-├── hypomap-viz/                     ← visualizer (SEPARATE nested git repo)
+├── hypomap-viz/                     ← visualizer app stacks
 │   ├── README.md
 │   ├── shinyApp/  gene-explorer/  gene-explorer-js/
 │   └── prepare_app.R  compute_gene_stats.R
@@ -75,6 +77,26 @@ Claude/
 └── <raw GEO downloads>              ← large source inputs (gitignored, local only)
     GSE172461_*.gz, GSE93374_*.gz, GSE207736_RAW/
 ```
+
+The current checkout is one Git repository at this root, with `origin` pointing to
+[Helenel430/hypoexplorer-mini](https://github.com/Helenel430/hypoexplorer-mini).
+Older setup notes describe a separate visualizer repository; verify the current
+checkout with `git rev-parse --show-toplevel` and `git remote -v` before publishing.
+
+## Standalone gene explorer
+
+The navigation prototype now resolves 39,583 genes, loads expression shards, and
+shows measured Top 5 conditional co-detection and whole-population quadrants.
+It includes loading/retry, missing-gene, and zero-expression states, plus the
+previous curated UniProt descriptions for five pilot genes. C7 population totals
+are measured; C7 pair counts and arbitrary pairs outside Top 5 remain unavailable.
+See the [app setup](hypomap-viz/gene-explorer-js/README.md),
+[export regeneration](navigation_export/README.md), and
+[validation report](docs/NAVIGATION_VALIDATION.md).
+
+Generated navigation payloads are local artifacts. A fresh clone needs a regenerated
+or separately provisioned `navigation_export/` before the app build and integration
+checks can run. This source commit does not publish or provision a hosted preview.
 
 ## Quickstart — running the importer
 
@@ -124,12 +146,14 @@ This writes `annotation_coverage_report.json`, including retained blank
 Generate the lightweight FVP metric vertical slice with:
 
 ```bash
-python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1 Fam237b
+python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1 Fam237b Npy
 ```
 
 This writes `fvp_export/gene_metrics_vertical_slice.json` with whole-dataset,
-`hypomap_region`, and `hypomap_C25` metrics for the four-gene slice, including
-MGI-backed alias resolution for `Ccn1`/`Cyr61` and `Fam237b`/`Gm8773`.
+`hypomap_region`, and `hypomap_C25` metrics for the five-gene slice, including
+MGI-backed alias resolution for `Ccn1`/`Cyr61` and `Fam237b`/`Gm8773`. It also
+exports all ten gene-pair coexpression combinations across Whole hypothalamus
+and the 15 nonblank HypoMap regions.
 
 ## What lives where
 

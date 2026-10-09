@@ -100,7 +100,7 @@ This package is intentionally self-contained with modeled values. When you want
 real numbers, the pipeline already produces them:
 
 - Regenerate the metric export:
-  `python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1`
+  `python3 tools/export_fvp_metrics.py --genes Pomc Agrp Ccn1 Fam237b Npy`
   → `fvp_export/gene_metrics_vertical_slice.json`.
 - That JSON keys metrics by real `hypomap_region` and `hypomap_C25` labels, per
   dataset, with `cross_dataset` pooled/average modes and expression histograms
