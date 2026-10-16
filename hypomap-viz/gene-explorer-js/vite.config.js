@@ -5,7 +5,10 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
 const exportDirectory = fileURLToPath(new URL('../../navigation_export/', import.meta.url));
+const comparisonProxy = { '/api': { target: 'http://127.0.0.1:8765' } };
 export default defineConfig({
+  server: { proxy: comparisonProxy },
+  preview: { proxy: comparisonProxy },
   plugins: [{
     name: 'navigation-export',
     configureServer(server) {

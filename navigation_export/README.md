@@ -133,17 +133,19 @@ and exact marginal-count bounds.
 Top 5 results for all five pilot genes are independently checked against an
 exhaustive candidate scan. Temporary bitsets are not shipped.
 
-## C7 comparisons
+## C7 and arbitrary-pair comparisons
 
-The metadata includes C7 labels, eligible counts, and an explicit unannotated
-bucket. Measured C7 gene-pair results are **not** included. The navigation UI now provides
-one population selector with real eligible counts. Selecting C7 shows a compact
-unavailable state; expanding a quadrant shows its count and one C7 availability
-message. C7 pair values and quadrant compositions remain explicitly unavailable. Arbitrary comparisons
-require a separate backend using raw-count positivity and `hypomap_C7` annotations,
-returning four quadrant counts per selected dataset and population. Backend
-implementation, caching, and UI integration remain separate work. Top 5 lists
-are not C7-stratified and do not replace this comparison endpoint.
+Static metadata includes C7 population counts and an explicit unannotated bucket;
+static recommendation records do not contain C7 pair intersections. As of
+2026-10-15, the standalone route obtains measured arbitrary-pair and C7 counts
+from a separate local comparison service. It supports dataset subsets, measured
+quadrants within C7 groups, and C7 composition of each whole-population quadrant.
+Top 5 rankings retain their original exported scope and are not C7-stratified.
+
+The private generated detection index is not copied into this static export.
+Run the service alongside Vite dev/preview; hosted builds need a service and
+same-origin reverse proxy. See [comparison service](../docs/COMPARISON_SERVICE.md)
+for setup, API, provenance validation, measured size, and expansion workflow.
 
 ## Validation and size
 
@@ -164,5 +166,5 @@ planning budget, not a required minimum; no padding is added to meet it.
 - Reference expression checks: 250 existing pilot metric blocks.
 - Top 5 ranking checked exhaustively for all five pilot anchors.
 
-The C7 comparison backend is not included. Recommendations can have fewer than
+The C7 comparison backend is separate from this static export. Recommendations can have fewer than
 five partners where no co-detection or insufficient supported partners exist.

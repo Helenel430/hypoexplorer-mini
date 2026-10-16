@@ -3,7 +3,7 @@
 Live working status. Update as work proceeds. *(Not intended for Claude Project knowledge —
 it changes often; the stable docs are PROJECT_OVERVIEW / DATASET_SUMMARIES / DESIGN_SPEC.)*
 
-_Last updated: 2026-08-10_
+_Last updated: 2026-10-01_
 
 This file merges the two working tracks. **Claude Design** owns UX/spec sections; **Claude
 Code** owns data, importer, and app-implementation sections. Keep edits within your track's
@@ -67,6 +67,81 @@ without a follow-up design pass.
 
 ## Implementation Status
 <!-- Owned by Claude Code -->
+
+**Navigation UI and export updates (2026-10-16).** The HypoMap brand links back
+to the home gene search. Spatial summaries are compact and top-aligned with the
+map card. The Whole hypothalamus reset appears only for a selected region, below
+the spatial heading. Off this plane lists the eight other named exported regions
+with detection percentages; selection updates the summary and carries into the
+By dataset region dropdown. Unassigned cells are not labeled as a nucleus.
+
+By dataset uses larger checkbox legends to reveal detail cards. Both graphs
+continue to summarize all supported datasets, while CSV previews/downloads contain
+only checked datasets; exports are disabled with no selection. Plot points retain
+hover values but no longer toggle cards. Chart typography and navigation controls
+are standardized.
+
+Co-expression uses numbered Top 5 rows with left-aligned genes and right-aligned
+scores. Partner changes preserve scroll and reserve comparison height while loading.
+Neutral comparison dataset checkboxes are incorporated at the bottom of the same
+card. The population dropdown labels the all-cell option All hypothalamic cells;
+C7 choices remain measured subsets. Spatial region selections do not filter pair
+comparisons: their anatomical scope remains Whole hypothalamus.
+
+All Export CSV controls open a modal table preview with Close, Escape dismissal,
+and Download CSV. Preview/download share a captured snapshot. Spatial CSV includes
+all exported contexts, full names, detection percentages and mean detected expression
+in ln(1 + counts per 10k). Dataset CSV uses the current region and checked datasets.
+Comparison CSV has a context title and two sections: detection categories ordered
+as eligible cells → category count → percentage, and conditional co-detection with
+query-positive, partner-positive and both-positive totals. Pooled rows are Aggregate.
+The preview uses stacked fractions matching the help popovers; CSV retains plain
+text formulas. Undefined values are blank, true zeros remain zero, and values are
+unrounded. CSV uses UTF-8 BOM, quoted fields and CRLF for Excel compatibility.
+
+Navigation integration checks cover region scope/reset, checkbox card/export
+selection, CSV precision/escaping/nulls, comparison marginals and formulas, and
+modal rendering/lifecycle. Browser checks verified regional values, actual spatial
+CSV download, comparison preview, visible partner switching without scroll movement,
+summary alignment and donut count fit. Production build passes.
+
+**Nucleus-scoped navigation summaries (2026-10-15).** Selecting any of the seven
+mapped nuclei now updates the expression-summary heading, positive/eligible counts,
+detection percentage, and positive-cell mean using exported regional values.
+Selection also carries into By dataset. Map regions support mouse and Enter/Space,
+with a visible selected outline; selecting the same nucleus or Whole hypothalamus
+resets the scope. New gene searches reset to Whole hypothalamus. Top 5 and pair
+comparison scopes retain their separately labeled controls. Integration checks
+verify ARC counts/mean, dataset context, and reset.
+
+**Measured arbitrary-pair and C7 comparisons (2026-10-15).** The standalone
+navigation route now uses `tools/comparison_service.py` for any two distinct
+canonical genes with unique mappings in selected datasets. A separate
+`tools/build_comparison_index.py` builds 511,259,299 bytes of server-side packed
+raw-count detection bits and annotation masks for 39,583 genes / 102,195 imported
+cells across GSE207736, GSE172461, and GSE93374. Dataset checkboxes, measured C7
+quadrants, and quadrant C7 composition retain Unannotated C7 and disclose unsupported
+mappings. Zero denominators remain undefined. Top 5 rankings and the five-gene FVP
+are unchanged. API and UI caching, retry, and stale-response protection are included.
+Raw-matrix validation passes 369 population blocks over 14 pairs, including
+single-dataset and regional API checks; edge-case tests, navigation integration,
+255-block/25-pair export audit, and production build pass. Browser checks confirm
+Pomc × Agrp and measured GLU quadrants/composition. Local preview uses Vite's
+same-origin API proxy. Startup, regeneration, contract, and deployment limits:
+`docs/COMPARISON_SERVICE.md`. Earlier notes below describing C7/arbitrary pairs as
+unavailable record superseded checkpoints.
+
+**Functional annotation vertical slice (2026-10-09).** Added a source-checked
+editorial reproduction slice in `annotations/reproduction_slice/`: four mouse
+genes, two KEGG pathways, and two GO terms, with JSON, review CSV, source links
+and mapping rationale. Refined into three reusable browsing topics (4, 2, and 3 entities),
+with 15 specific mechanisms retained as detail tags and sourced individually.
+Coverage is recorded by entity kind; the two-entity steroid topic is provisional.
+The broad GO anchor has no invented narrower tags. Four gene identities match the navigation index. Gnaq
+does not inherit reproduction from pathway membership. GO:0000003 is obsolete;
+GO:0022414 is the replacement grouping anchor. Gene-level GO annotation retrieval
+and hypothalamic expression evidence are not assessed; application integration
+is not performed. Record integrity and identity checks pass.
 
 **Navigation integration — checkpoints 1–5 complete (2026-10-09).** The standalone
 route resolves the exported all-gene index (case, aliases, explicit ambiguity), then
@@ -445,6 +520,11 @@ GSE132730, Romanov et al. 2020; mouse 10x, E15.5–P23). Its own git repo at `hy
 
 ## Files Modified
 <!-- Owned by Claude Code -->
+- **Measured comparisons (2026-10-15):** new index builder, local API, raw-matrix
+  validator and edge-case tests in `tools/`; navigation pair/C7 rendering and
+  dataset controls; Vite API proxy; navigation UI tests and measured fixtures;
+  `docs/COMPARISON_SERVICE.md` and validation results. Generated index remains
+  gitignored under `processed/`.
 - **Documentation and GitHub handoff (2026-10-09):** refreshed READMEs, current
   navigation/metric specifications, and validation report for the compact
   coexpression layout, shared UniProt descriptions, and generated-export build
@@ -529,6 +609,10 @@ excluded):
 
 ## Known Bugs
 <!-- Owned by Claude Code -->
+- **Comparison hosting:** arbitrary-pair and C7 results require the running Python
+  comparison service plus its private generated index; Vite dev/preview proxy it
+  locally. A static hosted build alone cannot supply these results. See
+  `docs/COMPARISON_SERVICE.md`.
 - **Build prerequisite:** generated `navigation_export/` payloads are excluded from Git.
   A fresh clone/hosted build must regenerate or receive the validated export before
   building. The current root checkout uses `Helenel430/hypoexplorer-mini`; older
@@ -574,10 +658,10 @@ constraints to respect:
 
 ## Next Development Task
 <!-- Owned by Claude Code -->
-The standalone navigation integration's five checkpoints are complete. Its remaining
-data extension is measured C7 pair profiles/compositions (and arbitrary-pair counts),
-which needs a separate measured pair data layer. Do not substitute population totals
-for quadrant composition.
+The standalone navigation integration and the three-dataset measured pair/C7 service
+are complete. Follow-up work is hosted service deployment if requested, and expansion
+to additional validated datasets. Regional queries are supported by the API; regional
+comparison UI controls remain future scope.
 
 Primary next tasks (pick per Design's priority order above):
 

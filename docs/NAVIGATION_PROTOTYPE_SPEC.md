@@ -193,3 +193,75 @@ single population selector and donut + legend + quadrant matrix.
 - Loading and failure/retry states remain inside the comparison card. No new tabs
   or pages are added. Top 5 intersections plus partner shards still supply measured
   whole-population quadrants; arbitrary pairs remain unavailable.
+
+## 8. Measured comparison extension (2026-10-15)
+
+The existing comparison card now obtains arbitrary gene-pair and C7 quadrants from
+the local comparison API. Dataset checkboxes apply only to that comparison. The
+population selector shows measured within-C7 results; expanding a whole-population
+quadrant shows measured C7 composition including Unannotated C7. Top 5 buttons
+retain their exported ranking/scope. Earlier unavailable pair/C7 states above
+are superseded when the service is running. Service failures expose Retry;
+unsupported mappings and zero denominators remain explicit. See
+[COMPARISON_SERVICE.md](COMPARISON_SERVICE.md) for data contracts and setup.
+
+## 9. Nucleus-scoped expression summaries (2026-10-15)
+
+Selecting PVN, ZI, LHA, DMH, VMH, PVp, or ARC on the map updates Cells expressing,
+its eligible denominator and percentage, and Mean expression when detected to
+that region's exported metrics. The summary heading names the region. Selection
+carries into By dataset; selecting the same nucleus again or Whole hypothalamus
+resets it. New gene searches start at Whole hypothalamus. Map selections support
+Enter/Space and show a selected outline. ME stays unavailable. Recommendations
+and pair comparisons retain their separately labeled population scopes.
+
+## 10. Current navigation and export controls (2026-10-16)
+
+This section supersedes earlier point-selection, compact partner-button and
+unavailable-C7 checkpoints above.
+
+- The HypoMap brand returns to the home gene search. Back to Spatial view shares
+  the filled rounded navigation-button style used for By dataset.
+- Spatial expression has a compact summary card aligned to its top. The reset
+  button sits under the spatial heading and appears only with a selected region.
+  Off this plane restores the earlier explorer list for eight named exported
+  regions absent from the schematic. Rows show full names and detection percentages;
+  clicking selects that region, clicking again resets. ME remains unavailable.
+- By dataset has a region dropdown for Whole hypothalamus and every named exported
+  region. The dropdown updates both plots, detail cards and dataset exports.
+  Larger checkbox legends control card visibility and which datasets enter CSV.
+  Graph statistics still use all supported datasets; checking boxes does not
+  recalculate the graphs. Points retain tooltips and do not toggle cards.
+- Top 5 partners appear as ranked rows (1–5), genes left and percentages right.
+  Selection preserves scroll during loading and completion. Comparison datasets
+  use neutral checkboxes at the bottom of the co-expression card. Their scope is
+  independent of By dataset checkboxes and the spatial region.
+- Comparison Region stays Whole hypothalamus. Cell population selects All
+  hypothalamic cells or a measured C7 class, including Unannotated C7. Top 5
+  recommendation rankings retain their original whole-hypothalamus scope.
+
+### CSV preview and download
+
+Every export opens a native modal with a scrollable table, Close, Escape dismissal
+and Download CSV. Both preview and download use one data snapshot.
+
+| Export | Content |
+|---|---|
+| Spatial | All exported contexts, full region names, gene-positive percentage, mean detected expression with ln(1 + counts per 10k) units |
+| Each dataset plot | Checked dataset labels/accessions and the plot's unrounded metric for the current region; disabled with no selection |
+| Pair comparison | Active gene pair, anatomical region and cell population in a title; detection-category and conditional co-detection tables |
+
+Comparison detection rows give Dataset, Detection category, All eligible cells
+(named population), Cells in this detection category, and % of all eligible cells.
+Eligible includes neither-detected cells from datasets supporting both genes.
+The second table gives Dataset, query-positive denominator, partner-positive total,
+both-positive numerator, and conditional percentage. Aggregate pools counts over
+supported selected datasets. Percentages are calculated after pooling.
+
+The preview uses stacked fractions and brief definitions consistent with the help
+popovers. CSV contains the same title, both sections and plain-text formulas.
+Detection-category % = category cells / eligible cells × 100. Conditional % =
+both-positive / query-positive cells × 100. Partner-positive total is context,
+not the conditional denominator. Unavailable/undefined values are blank; true
+zero stays zero. Downloads retain full precision, quote fields, use CRLF and a
+UTF-8 BOM, and open in Excel. This is CSV support, not native XLSX authoring.

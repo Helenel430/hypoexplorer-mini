@@ -198,9 +198,10 @@ Only genes with an existing curated summary receive this block.
 Current accessions are Pomc `P01193`, Agrp `P56473`, Ccn1 `P18406`, Fam237b
 `Q3UQ24`, and Npy `P57774`.
 
-In **By dataset**, select a point on either plot to open that dataset's detail
-card. Cards appear beside one another as points are selected and can be closed
-individually. The points also work with the keyboard.
+In **By dataset**, use the Region dropdown to change expression scope and the
+checkbox legend to show dataset cards. CSV exports contain only checked datasets;
+the graphs continue to summarize all supported datasets. Plot points retain hover
+values. Export CSV opens a table preview before download.
 
 ## Coexpression formatting and C7 scope
 
@@ -210,8 +211,28 @@ partner opens the measured comparison directly; Compare genes submits typed quer
 Exact conditional counts remain in tooltips/accessibility labels. Dismissible `?`
 popovers explain formulas, denominators, dataset scope, and interpretation limits.
 
-C7 population totals are measured over the pair's recommendation datasets and include
-Unannotated C7. The population selector displays those totals. Measured C7 pair
-values are absent: selecting C7 shows one compact unavailable state; clicking a
-whole-population quadrant shows its count with one C7 availability message. The
-previous duplicated population navigation and unavailable rows have been removed.
+The population dropdown offers All hypothalamic cells and measured C7 classes,
+including Unannotated C7. Comparison datasets use neutral checkboxes at the bottom
+of the co-expression card. These controls affect the pair comparison, independently
+of spatial region selection and By dataset checkboxes. Pair Region remains Whole
+hypothalamus. Top 5 partners use numbered rows; partner switching preserves scroll.
+
+## CSV previews
+
+Spatial, dataset-plot and comparison exports show a modal table before download.
+Spatial exports include all contexts with full region names, detection percentage,
+and mean detected expression units. Comparison exports label pooled rows Aggregate
+and separate detection categories from conditional co-detection. The preview shows
+stacked fraction formulas; the CSV includes plain-text formulas and a context title.
+Undefined values remain blank and numeric precision is retained. CSV files open
+in Excel; native XLSX export is not implemented. See the
+[current navigation specification](../../docs/NAVIGATION_PROTOTYPE_SPEC.md#10-current-navigation-and-export-controls-2026-10-16)
+for the complete interaction and export contract.
+
+## Measured pair comparisons
+
+The standalone navigation prototype now supports arbitrary gene pairs, comparison
+dataset selection, measured C7 quadrants, and C7 composition. Start the separate
+local Python API in addition to Vite; the generated 511 MB detection index remains
+server-side and gitignored. See the [comparison service guide](../../docs/COMPARISON_SERVICE.md)
+for build/start commands, validation, and hosting requirements.

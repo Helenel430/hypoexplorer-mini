@@ -164,3 +164,11 @@ and the 15 nonblank HypoMap regions.
   and are gitignored — keep them locally but do not commit them.
 - **`processed/`** is 100% regenerable from raw inputs via the importer plus derived-layer tools
   and is gitignored.
+
+## Measured pair comparisons
+
+The standalone navigation prototype now supports arbitrary gene pairs, comparison
+dataset selection, measured C7 quadrants, and C7 composition. Start the separate
+local Python API in addition to Vite; the generated 511 MB detection index remains
+server-side and gitignored. See the [comparison service guide](docs/COMPARISON_SERVICE.md)
+for build/start commands, validation, and hosting requirements.

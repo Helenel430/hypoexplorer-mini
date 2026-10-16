@@ -527,6 +527,24 @@ Both / A+, a separate denominator. Loading a partner shard does not change the
 export; arbitrary pairs outside the Top 5 still need measured intersections from
 a backend or additional pair export.
 
+### Measured on-demand comparisons (2026-10-15)
+
+The standalone route now also supports arbitrary distinct canonical gene pairs,
+selected dataset subsets, and measured C7 quadrants/composition through the
+[comparison service](COMPARISON_SERVICE.md). The Top 5 reconstruction above
+remains the static-export contract; the service independently measures raw-count
+intersections. Its dataset population includes only selected datasets where both
+genes map uniquely, with excluded datasets disclosed. All imported cells remain
+eligible for Whole hypothalamus. C7 partitions include Unannotated C7.
+
+Within-C7 quadrant percentages divide by the C7 eligible population. C7 composition
+within a whole-population quadrant divides each C7 count by that quadrant's total.
+Conditional co-detection divides Both by query-positive cells in the selected
+population, and is undefined with no query-positive cells. Zero eligible population
+makes quadrant percentages undefined. The API also supports region masks; the
+navigation comparison UI currently exposes Whole/C7 scope only. Existing static
+Top 5 rankings are not recomputed when comparison dataset or C7 selection changes.
+
 ## UI Explanation Source Text
 
 Every displayed metric must have a corresponding "How it's calculated"
